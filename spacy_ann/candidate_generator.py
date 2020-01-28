@@ -175,7 +175,7 @@ class CandidateGenerator:
                 "Not initialized. Run create_tfidf_ann_index or load a pretrained ann_index using from_disk"
             )
         if self.verbose:
-            print(f"Generating candidates for {len(batch_mention_texts)} mentions")
+            print(f"Generating candidates for {len(mention_texts)} mentions")
 
         # tfidf vectorizer crashes on an empty array, so we return early here
         if mention_texts == []:
@@ -196,7 +196,7 @@ class CandidateGenerator:
 
         batch_candidates = []
         for mention, neighbors, distances in zip(
-            mention_texts[start:end], batch_neighbors[start:end], batch_distances[start:end]
+            mention_texts, batch_neighbors, batch_distances
         ):
             if mention in short_alias_strings:
                 batch_candidates.append(self.kb.get_candidates(mention))

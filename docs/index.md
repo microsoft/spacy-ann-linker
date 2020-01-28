@@ -1,16 +1,16 @@
 <p align="center">
-  <a href="https://typer.tiangolo.com"><img src="https://typer.tiangolo.com/img/logo-margin/logo-margin-vector.svg" alt="Typer"></a>
+  <a href="https://microsoft.github.io/spacy-ann-linker"><img src="https://typer.tiangolo.com/img/logo-margin/logo-margin-vector.svg" alt="spaCy ANN Linker"></a>
 </p>
 <p align="center">
-    <em>Typer, build great CLIs. Easy to code. Based on Python type hints.</em>
+    <em>spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.</em>
 </p>
 <p align="center">
-<a href="https://travis-ci.com/tiangolo/typer" target="_blank">
+<!-- <a href="https://travis-ci.com/tiangolo/typer" target="_blank">
     <img src="https://travis-ci.com/tiangolo/typer.svg?branch=master" alt="Build Status">
 </a>
 <a href="https://codecov.io/gh/tiangolo/typer" target="_blank">
     <img src="https://codecov.io/gh/tiangolo/typer/branch/master/graph/badge.svg" alt="Coverage">
-</a>
+</a> -->
 <a href="https://pypi.org/project/typer" target="_blank">
     <img src="https://badge.fury.io/py/typer.svg" alt="Package version">
 </a>
@@ -18,15 +18,13 @@
 
 ---
 
-**Documentation**: <a href="https://typer.tiangolo.com" target="_blank">https://typer.tiangolo.com</a>
+**Documentation**: <a href="https://microsoft.github.io/spacy-ann-linker" target="_blank">https://microsoft.github.io/spacy-ann-linker</a>
 
-**Source Code**: <a href="https://github.com/tiangolo/typer" target="_blank">https://github.com/tiangolo/typer</a>
+**Source Code**: <a href="https://github.com/microsoft/spacy-ann-linker" target="_blank">https://github.com/microsoft/spacy-ann-linker</a>
 
 ---
 
-Typer is library to build <abbr title="command line interface, programs executed from a terminal">CLI</abbr> applications that users will love using and developers will love creating. Based on Python 3.6+ type hints.
-
-**Typer** is <a href="https://fastapi.tiangolo.com" class="external-link" target="_blank">FastAPI</a>'s little sibling. And it's intended to be the FastAPI of CLIs.
+spaCy ANN Linker is a <a href="https://github.com/explosion/spaCy" target="_blank">spaCy</a> a pipeline component for generating alias candidates for spaCy entities in `doc.ents`. It provides an optional interface for linking ambiguous aliases based on descriptions for each entity.
 
 The key features are:
 
