@@ -101,3 +101,6 @@ stages:
       - script: |
           bash scripts/deploy.sh
         displayName: Deploy
+        env:
+          - FLIT_USERNAME: $(FLIT_USERNAME)
+          - FLIT_PASSWORD: $(FLIT_PASSWORD)

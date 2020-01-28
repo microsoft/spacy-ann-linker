@@ -1,18 +1,12 @@
 <p align="center">
   <a href="https://microsoft.github.io/spacy-ann-linker"><img src="https://typer.tiangolo.com/img/logo-margin/logo-margin-vector.svg" alt="spaCy ANN Linker"></a>
 </p>
-<p align="center">
+<p>
     <em>spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.</em>
 </p>
-<p align="center">
-<!-- <a href="https://travis-ci.com/tiangolo/typer" target="_blank">
-    <img src="https://travis-ci.com/tiangolo/typer.svg?branch=master" alt="Build Status">
-</a>
-<a href="https://codecov.io/gh/tiangolo/typer" target="_blank">
-    <img src="https://codecov.io/gh/tiangolo/typer/branch/master/graph/badge.svg" alt="Coverage">
-</a> -->
-<a href="https://pypi.org/project/typer" target="_blank">
-    <img src="https://badge.fury.io/py/typer.svg" alt="Package version">
+<p>
+<a href="https://dev.azure.com/kakh/spacy-ann-linker/_apis/build/status/microsoft.spacy-ann-linker?branchName=master" target="_blank">
+    <img src="https://dev.azure.com/kakh/spacy-ann-linker/_apis/build/status/microsoft.spacy-ann-linker?branchName=master" alt="Build Status">
 </a>
 </p>
 
@@ -28,26 +22,29 @@ spaCy ANN Linker is a <a href="https://github.com/explosion/spaCy" target="_blan
 
 The key features are:
 
-* **Intuitive to write**: Great editor support. <abbr title="also known as auto-complete, autocompletion, IntelliSense">Completion</abbr> everywhere. Less time debugging. Designed to be easy to use and learn. Less time reading docs.
-* **Easy to use**: It's easy to use for the final users. Automatic help, and (optional) automatic completion for all shells.
-* **Short**: Minimize code duplication. Multiple features from each parameter declaration. Fewer bugs.
-* **Start simple**: The simplest example adds only 2 lines of code to your app: **1 import, 1 function call**.
-* **Grow large**: Grow in complexity as much as you want, create arbitrarily complex trees of commands and groups subcommands, with options and arguments.
+* **Easy CLI Index Creation**: Simply run `spacy create_index` with your data to create an Approximate Nearest Neighbors index from your data, make an `ann_linker` pipeline component and save a spaCy model.
+
+* **Built in Web API** for easy deployment 
 
 ## Requirements
 
 Python 3.6+
 
-Typer stands on the shoulders of a giant. Its only internal dependency is <a href="https://click.palletsprojects.com/" class="external-link" target="_blank">Click</a>.
+spaCy ANN Linker is convenient wrapper built on a few comprehensive, high-performing packages.
+
+* <a href="https://spacy.io" class="external-link" target="_blank">spaCy</a>
+* <a href="https://github.com/nmslib/nmslib" class="external-link" target="_blank">nmslib</a>.
+* <a href="https://typer.tiangolo.com" class="external-link" target="_blank">Typer (CLI)</a>.
+* <a href="https://fastapi.tiangolo.com" class="external-link" target="_blank">FastAPI (Web Service)</a>.
 
 ## Installation
 
 <div class="termy">
 
 ```console
-$ pip install typer
+$ pip install spacy-ann-linker
 ---> 100%
-Successfully installed typer
+Successfully installed spacy-ann-linker
 ```
 
 </div>
