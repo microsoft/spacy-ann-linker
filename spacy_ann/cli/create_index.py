@@ -127,4 +127,4 @@ def _print_kb(kb):
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    typer.run(create_index)
