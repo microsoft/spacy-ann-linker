@@ -1,0 +1,1199 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
+      
+      
+        <link rel="canonical" href="https://kabirkhan.github.com/spacy-ann-linker/tutorial/first-steps/">
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../img/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+    
+    
+      
+        <title>First Steps - spaCy ANN Linker</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
+      
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#2196f3">
+      
+    
+    
+      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../../css/termynal.css">
+    
+      <link rel="stylesheet" href="../../css/custom.css">
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-155009830-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="teal">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#the-simplest-example" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-header-nav__button md-logo">
+          
+            <img src="../../img/icon-white.svg" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              spaCy ANN Linker
+            </span>
+            <span class="md-header-nav__topic">
+              
+                First Steps
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    microsoft/spacy-ann-linker
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-nav__button md-logo">
+      
+        <img src="../../img/icon-white.svg" width="48" height="48">
+      
+    </a>
+    spaCy ANN Linker
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    microsoft/spacy-ann-linker
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../.." title="Debug" class="md-nav__link">
+      Debug
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../features/" title="Features" class="md-nav__link">
+      Features
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3" checked>
+    
+    <label class="md-nav__link" for="nav-3">
+      Tutorial - User Guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Tutorial - User Guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../" title="Tutorial - User Guide - Intro" class="md-nav__link">
+      Tutorial - User Guide - Intro
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        First Steps
+      </label>
+    
+    <a href="./" title="First Steps" class="md-nav__link md-nav__link--active">
+      First Steps
+    </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-simplest-example" class="md-nav__link">
+    The simplest example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-cli-argument" class="md-nav__link">
+    What is a CLI argument
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-a-cli-argument" class="md-nav__link">
+    Add a CLI argument
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-cli-arguments" class="md-nav__link">
+    Two CLI arguments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-cli-option" class="md-nav__link">
+    What is a CLI option
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-one-cli-option" class="md-nav__link">
+    Add one CLI option
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-cli-option-with-a-value" class="md-nav__link">
+    A CLI option with a value
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#document-your-cli-app" class="md-nav__link">
+    Document your CLI app
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arguments-options-parameters-optional-required" class="md-nav__link">
+    Arguments, options, parameters, optional, required
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#in-python" class="md-nav__link">
+    In Python
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python-default-values" class="md-nav__link">
+    Python default values
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-clis" class="md-nav__link">
+    In CLIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-typer" class="md-nav__link">
+    In Typer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../printing/" title="CLI" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../alternatives/" title="Alternatives, Inspiration and Comparisons" class="md-nav__link">
+      Alternatives, Inspiration and Comparisons
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../help-typer/" title="Help Typer - Get Help" class="md-nav__link">
+      Help Typer - Get Help
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../contributing/" title="Development - Contributing" class="md-nav__link">
+      Development - Contributing
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../release-notes/" title="Release Notes" class="md-nav__link">
+      Release Notes
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#the-simplest-example" class="md-nav__link">
+    The simplest example
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-cli-argument" class="md-nav__link">
+    What is a CLI argument
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-a-cli-argument" class="md-nav__link">
+    Add a CLI argument
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#two-cli-arguments" class="md-nav__link">
+    Two CLI arguments
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-is-a-cli-option" class="md-nav__link">
+    What is a CLI option
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#add-one-cli-option" class="md-nav__link">
+    Add one CLI option
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#a-cli-option-with-a-value" class="md-nav__link">
+    A CLI option with a value
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#document-your-cli-app" class="md-nav__link">
+    Document your CLI app
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#arguments-options-parameters-optional-required" class="md-nav__link">
+    Arguments, options, parameters, optional, required
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#in-python" class="md-nav__link">
+    In Python
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#python-default-values" class="md-nav__link">
+    Python default values
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-clis" class="md-nav__link">
+    In CLIs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#in-typer" class="md-nav__link">
+    In Typer
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>First Steps</h1>
+                
+                <h2 id="the-simplest-example">The simplest example<a class="headerlink" href="#the-simplest-example" title="Permanent link">&para;</a></h2>
+<p>The simplest Typer file could look like this:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;Hello World&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You will learn more about <code>typer.echo()</code> later in the docs.</p>
+</div>
+<p>Copy that to a file <code>main.py</code>.</p>
+<p>Test it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py
+
+<span class="go">Hello World</span>
+
+<span class="go">// It just prints &quot;Hello World&quot;.</span>
+
+<span class="go">// Now check the --help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">Usage: main.py [OPTIONS]</span>
+
+<span class="go">Options:</span>
+<span class="go">  --install-completion  Install completion for the current shell.</span>
+<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                Show this message and exit.</span>
+</pre></div>
+
+
+
+</div>
+
+<p>...but this program is still not very useful. Let's extend it.</p>
+<h2 id="what-is-a-cli-argument">What is a <strong>CLI argument</strong><a class="headerlink" href="#what-is-a-cli-argument" title="Permanent link">&para;</a></h2>
+<p>Here we will use the word <strong>CLI argument</strong> to refer to <strong>CLI parameters</strong> passed in some specific order to the CLI application. By default, they are <em>required</em>.</p>
+<p>If you go to your terminal and type:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span>$ ls ./myproject
+
+first-steps.md  intro.md
+</pre></div>
+
+
+
+</div>
+
+<p><code>ls</code> will show the contents of the directory <code>./myproject</code>.</p>
+<ul>
+<li><code>ls</code> is the <em>program</em> (or "command", "CLI app").</li>
+<li><code>./myproject</code> is a <em>CLI argument</em>, in this case it refers to the path of a directory.</li>
+</ul>
+<p>They are a bit different from <strong>CLI options</strong> that you will see later below.</p>
+<h2 id="add-a-cli-argument">Add a CLI argument<a class="headerlink" href="#add-a-cli-argument" title="Permanent link">&para;</a></h2>
+<p>Update the previous example with an argument <code>name</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span class="hll">    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py
+
+<span class="go">// If you run it without the argument, it shows a nice error</span>
+
+<span class="go">Usage: main.py [OPTIONS] NAME</span>
+<span class="go">Try &quot;main.py --help&quot; for help.</span>
+
+<span class="go">Error: Missing argument &quot;NAME&quot;.</span>
+
+<span class="go">// Now pass that NAME CLI argument</span>
+<span class="gp">$</span> python main.py Camila
+
+<span class="go">Hello Camila</span>
+
+<span class="go">// Here &quot;Camila&quot; is the CLI argument</span>
+
+<span class="go">// To pass a name with spaces for the same CLI argument, use quotes</span>
+<span class="gp">$</span> python main.py <span class="s2">&quot;Camila Gutiérrez&quot;</span>
+
+<span class="go">Hello Camila Gutiérrez</span>
+</pre></div>
+
+
+
+</div>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>If you need to pass a single value that contains spaces to a <em>CLI argument</em>, use quotes (<code>"</code>) around it.</p>
+</div>
+<h2 id="two-cli-arguments">Two CLI arguments<a class="headerlink" href="#two-cli-arguments" title="Permanent link">&para;</a></h2>
+<p>Now let's say we want to have the name and last name separated.</p>
+<p>So, extend that to have 2 arguments, <code>name</code> and <code>lastname</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lastname</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+</span><span class="hll">    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello </span><span class="si">{name}</span><span class="s2"> </span><span class="si">{lastname}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Check the main --help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">Usage: main.py [OPTIONS] NAME LASTNAME</span>
+
+<span class="go">Options:</span>
+<span class="go">  --help  Show this message and exit.</span>
+
+<span class="go">// There are now 2 CLI arguments, name and lastname</span>
+
+<span class="go">// Now pass a single name argument</span>
+<span class="gp">$</span> python main.py Camila
+
+<span class="go">Usage: main.py [OPTIONS] NAME LASTNAME</span>
+<span class="go">Try &quot;main.py --help&quot; for help.</span>
+
+<span class="go">Error: Missing argument &quot;LASTNAME&quot;.</span>
+
+<span class="go">// These 2 arguments are required, so, pass both:</span>
+<span class="gp">$</span> python main.py Camila Gutiérrez
+
+<span class="go">Hello Camila Gutiérrez</span>
+</pre></div>
+
+
+
+</div>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Notice that the order is important. The last name has to go after the first name.</p>
+<p>If you called it with:</p>
+<p><code>$ python main.py Gutiérrez Camila</code></p>
+<p>your app wouldn't have a way to know which is the <code>name</code> and which the <code>lastname</code>. It expects the first <em>CLI argument</em> to be the <code>name</code> and the second <em>CLI argument</em> to be the <code>lastname</code>.</p>
+</div>
+<h2 id="what-is-a-cli-option">What is a <strong>CLI option</strong><a class="headerlink" href="#what-is-a-cli-option" title="Permanent link">&para;</a></h2>
+<p>Here we will use the word <strong>CLI option</strong> to refer to <em>CLI parameters</em> passed to the CLI application with a specific name. For example, if you go to your terminal and type:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> ls ./myproject --size
+
+<span class="go">12 first-steps.md   4 intro.md</span>
+</pre></div>
+
+
+
+</div>
+
+<p><code>ls</code> will show the contents of the directory <code>./myproject</code> with their <code>size</code>.</p>
+<ul>
+<li><code>ls</code> is the <em>program</em> (or "command", "CLI app").</li>
+<li><code>./myproject</code> is a <em>CLI argument</em>.</li>
+<li><code>--size</code> is an optional <em>CLI option</em>.</li>
+</ul>
+<p>The program knows it has to show the size because it sees <code>--size</code>, not because of the order.</p>
+<p>A <em>CLI option</em> like <code>--size</code> doesn't depend on the order like a <em>CLI argument</em>.</p>
+<p>So, if you put the <code>--size</code> <em>before</em> the <em>CLI argument</em>, it still works:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> ls --size ./myproject
+
+<span class="go">12 first-steps.md   4 intro.md</span>
+</pre></div>
+
+
+
+</div>
+
+<p>The main visual difference between a <em>CLI option</em> and and a <em>CLI argument</em> is that the <em>CLI option</em> has <code>--</code> prepended to the name, like in "<code>--size</code>".</p>
+<p>A <em>CLI option</em> doesn't depend on the order because it has a predefined name (here it's <code>--size</code>). This is because the CLI app is looking specifically for a literal <code>--size</code> parameter (also known as "flag" or "switch"), with that specific "name" (here the specific name is "<code>--size</code>"). The CLI app will check if you typed it or not, it will be actively looking for <code>--size</code> even if you didn't type it (to check if it's there or not).</p>
+<p>In contrast, the CLI app is not actively looking for the <em>CLI argument</em> with a text "<code>./myproject</code>", it has no way to know if you would type <code>./myproject</code> or <code>./my-super-awesome-project</code> or anything else. It's just waiting to get whatever you give it. The only way to know that you refer to a specific <em>CLI argument</em> is because of the order. The same way that it knows that the first <em>CLI argument</em> was the <code>name</code> and the second was the <code>lastname</code>, but if you mixed the order, it wouldn't be able to handle it.</p>
+<p>Instead, with a <em>CLI option</em>, the order doesn't matter.</p>
+<p>Also, by default, a <em>CLI option</em> is <em>optional</em> (not <em>required</em>).</p>
+<p>So, by default:</p>
+<ul>
+<li>A <em>CLI argument</em> is <strong>required</strong></li>
+<li>A <em>CLI option</em> is <strong>optional</strong></li>
+</ul>
+<p>But the <em>required</em> and <em>optional</em> defaults can be changed.</p>
+<p>So, the main and <strong>most important</strong> difference is that:</p>
+<ul>
+<li><em>CLI options</em> <strong>start with <code>--</code></strong> and don't depend on the order</li>
+<li><em>CLI arguments</em> depend on the <strong>sequence order</strong></li>
+</ul>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In this example above the <em>CLI option</em> <code>--size</code> is just a "flag" or "switch" that will contain a boolean value, <code>True</code> or <code>False</code>, depending on if it was added to the command or not.</p>
+<p>This one doesn't receive any values. But <em>CLI options</em> can also receive values like <em>CLI arguments</em>. You'll see how later.</p>
+</div>
+<h2 id="add-one-cli-option">Add one <em>CLI option</em><a class="headerlink" href="#add-one-cli-option" title="Permanent link">&para;</a></h2>
+<p>Now add a <code>--formal</code> <em>CLI option</em>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lastname</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">formal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span><span class="hll">    <span class="k">if</span> <span class="n">formal</span><span class="p">:</span>
+</span>        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Good day Ms. </span><span class="si">{name}</span><span class="s2"> </span><span class="si">{lastname}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello </span><span class="si">{name}</span><span class="s2"> </span><span class="si">{lastname}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Here <code>formal</code> is a <code>bool</code> that is <code>False</code> by default.</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Get the help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">Usage: main.py [OPTIONS] NAME LASTNAME</span>
+
+<span class="go">Options:</span>
+<span class="go">  --formal / --no-formal</span>
+<span class="go">  --help                  Show this message and exit.</span>
+</pre></div>
+
+
+
+</div>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Notice that it automatically creates a <code>--formal</code> and a <code>--no-formal</code> because it detected that <code>formal</code> is a <code>bool</code>.</p>
+</div>
+<p>Now call it normally:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py Camila Gutiérrez
+
+<span class="go">Hello Camila Gutiérrez</span>
+
+<span class="go">// But if you pass --formal</span>
+<span class="gp">$</span> python main.py Camila Gutiérrez --formal
+
+<span class="go">Good day Ms. Camila Gutiérrez.</span>
+
+<span class="go">// And as --formal is a CLI option you can put it anywhere in this command</span>
+<span class="gp">$</span> python main.py Camila --formal Gutiérrez
+
+<span class="go">Good day Ms. Camila Gutiérrez.</span>
+
+<span class="gp">$</span> python main.py --formal Camila Gutiérrez
+
+<span class="go">Good day Ms. Camila Gutiérrez.</span>
+</pre></div>
+
+
+
+</div>
+
+<h2 id="a-cli-option-with-a-value">A <em>CLI option</em> with a value<a class="headerlink" href="#a-cli-option-with-a-value" title="Permanent link">&para;</a></h2>
+<p>To convert the <code>lastname</code> from a <em>CLI argument</em> to a <em>CLI option</em>, give it a default value of <code>""</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lastname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">formal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+</span>    <span class="k">if</span> <span class="n">formal</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Good day Ms. </span><span class="si">{name}</span><span class="s2"> </span><span class="si">{lastname}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello </span><span class="si">{name}</span><span class="s2"> </span><span class="si">{lastname}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<p>As <code>lastname</code> now has a default value of <code>""</code> (an empty string) it is no longer required in the function, and <strong>Typer</strong> will now by default make it an optional <em>CLI option</em>.</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py --help
+
+<span class="go">Usage: main.py [OPTIONS] NAME</span>
+
+<span class="go">Options:</span>
+<span class="go">  --lastname TEXT</span>
+<span class="go">  --formal / --no-formal</span>
+<span class="go">  --help                  Show this message and exit.</span>
+</pre></div>
+
+
+
+</div>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Notice the <code>--lastname</code>, and notice that it takes a textual value.</p>
+<p>A <em>CLI option</em> with a value like <code>--lastname</code> (contrary to a <em>CLI option</em> without a value, a <code>bool</code> flag, like <code>--formal</code> or <code>--size</code>) takes as its value whatever is at the <em>right side</em> of the <em>CLI option</em>.</p>
+</div>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Call it without a --lastname</span>
+<span class="gp">$</span> python main.py Camila
+
+<span class="go">Hello Camila</span>
+
+<span class="go">// Pass the --lastname</span>
+<span class="gp">$</span> python main.py Camila --lastname Gutiérrez
+
+<span class="go">Hello Camila Gutiérrez</span>
+</pre></div>
+
+
+
+</div>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Notice that "<code>Gutiérrez</code>" is at the right side of <code>--lastname</code>. A <em>CLI option</em> with a value takes as its value whatever is at the <em>right side</em>.</p>
+</div>
+<p>And as <code>--lastname</code> is now a <em>CLI option</em> that doesn't depend on the order, you can pass it before the name:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py --lastname Gutiérrez Camila
+
+<span class="go">// and it will still work normally</span>
+
+<span class="go">Hello Camila Gutiérrez</span>
+</pre></div>
+
+
+
+</div>
+
+<h2 id="document-your-cli-app">Document your CLI app<a class="headerlink" href="#document-your-cli-app" title="Permanent link">&para;</a></h2>
+<p>If you add a <abbr title="a multi-line string as the first expression inside a function (not assigned to any variable) used for documentation">docstring</abbr> to your function it will be used in the help text:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lastname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">formal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="hll">    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class="hll"><span class="sd">    Say hi to NAME, optionally with a --lastname.</span>
+</span><span class="hll">
+</span><span class="hll"><span class="sd">    If --formal is used, say hi very formally.</span>
+</span><span class="hll"><span class="sd">    &quot;&quot;&quot;</span>
+</span>    <span class="k">if</span> <span class="n">formal</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Good day Ms. </span><span class="si">{name}</span><span class="s2"> </span><span class="si">{lastname}</span><span class="s2">.&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello </span><span class="si">{name}</span><span class="s2"> </span><span class="si">{lastname}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Now see it with the <code>--help</code> option:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py --help
+
+<span class="go">Usage: main.py [OPTIONS] NAME</span>
+
+<span class="go">  Say hi to NAME, optionally with a --lastname.</span>
+
+<span class="go">  If --formal is used, say hi very formally.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --lastname TEXT</span>
+<span class="go">  --formal / --no-formal</span>
+<span class="go">  --install-completion    Install completion for the current shell.</span>
+<span class="go">  --show-completion       Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                  Show this message and exit.</span>
+</pre></div>
+
+
+
+</div>
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>You should document the <em>CLI arguments</em> in the docstring.</p>
+<p>There is another place to document the <em>CLI options</em> that will show up next to them in the help text as with <code>--install-completion</code> or <code>--help</code>, you will learn that later in the tutorial.</p>
+<p>But <em>CLI arguments</em> are normally used for the most necessary things, so you should document them here in the <em>docstring</em>.</p>
+</div>
+<h2 id="arguments-options-parameters-optional-required">Arguments, options, parameters, optional, required<a class="headerlink" href="#arguments-options-parameters-optional-required" title="Permanent link">&para;</a></h2>
+<p>Be aware that these terms refer to multiple things depending on the context, and sadly, those "contexts" mix frequently, so it's easy to get confused.</p>
+<h3 id="in-python">In Python<a class="headerlink" href="#in-python" title="Permanent link">&para;</a></h3>
+<p>In Python, the names of the variables in a function, like <code>name</code> and <code>lastname</code>:</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lastname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<p>are called "Python function parameters" or "Python function arguments".</p>
+<div class="admonition note">
+<p class="admonition-title">Technical Details</p>
+<p>There's actually a very small distinction in Python between "parameter" and "argument".</p>
+<p>It's quite technical... and somewhat pedantic.</p>
+<p>One refers to the variable name in a function <em>declaration</em>. Like:</p>
+<p><code>def bring_person(name: str, lastname: str = ""):
+    pass</code></p>
+<p>The other refers to the value passed when <em>calling</em> a function. Like:</p>
+<p><code>person = bring_person("Camila", lastname="Gutiérrez")</code></p>
+<p>...but you will probably see them used interchangeably in most of the places (including here).</p>
+</div>
+<h4 id="python-default-values">Python default values<a class="headerlink" href="#python-default-values" title="Permanent link">&para;</a></h4>
+<p>In Python, in a function, a parameter with a <em>default value</em> like <code>lastname</code> in:</p>
+<div class="codehilite"><pre><span></span><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lastname</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+
+
+<p>is considered an "optional parameter" (or "optional argument").</p>
+<p>The default value can be anything, like <code>""</code> or <code>None</code>.</p>
+<p>And a parameter like <code>name</code>, that doesn't have a default value, is considered <em>required</em>.</p>
+<h3 id="in-clis">In CLIs<a class="headerlink" href="#in-clis" title="Permanent link">&para;</a></h3>
+<p>When talking about command line interfaces/applications, the words <strong>"argument"</strong> and <strong>"parameter"</strong> are commonly used to refer to that data passed to a CLI app, those parameters.</p>
+<p>But those words <strong>don't imply</strong> anything about the data being required, needing to be passed in a certain order, nor having a flag like <code>--lastname</code>.</p>
+<p>The parameters that come with a name like <code>--lastname</code> (and optionally a value) are commonly optional, not required. So, when talking about CLIs it's common to call them <strong>optional arguments</strong> or <strong>optional parameters</strong>. Sometimes these <em>optional parameters</em> that start with <code>--</code> are also called a <strong>flag</strong> or a <strong>switch</strong>.</p>
+<p>In reality, the parameters that require an order can be made <em>optional</em> too. And the ones that come with a flag (like <code>--lastname</code>) can be <em>required</em> too.</p>
+<h3 id="in-typer">In <strong>Typer</strong><a class="headerlink" href="#in-typer" title="Permanent link">&para;</a></h3>
+<p>To try and make it a bit easier, we'll normally use the words "parameter" or "argument" to refer to Python functions.</p>
+<p>We'll use <strong><em>CLI argument</em></strong> to refer to those <em>CLI parameters</em> that depend on an order. That are <strong>required</strong> by default.</p>
+<p>And we'll use <strong><em>CLI option</em></strong> to refer to those <em>CLI parameters</em> that depend on a name that starts with <code>--</code> (like <code>--lastname</code>). That are <strong>optional</strong> by default.</p>
+<p>We will use <strong><em>CLI parameter</em></strong> to refer to both, <em>CLI arguments</em> and <em>CLI options</em>.</p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../" title="Tutorial - User Guide - Intro" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Tutorial - User Guide - Intro
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../printing/" title="CLI" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                CLI
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/kabirkhan/spacy-data-debug" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/kabir_khan14" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://www.linkedin.com/in/tiangolo" class="md-footer-social__link fa fa-linkedin"></a>
+    
+      <a href="https://dev.to/tiangolo" class="md-footer-social__link fa fa-rss"></a>
+    
+      <a href="https://medium.com/@tiangolo" class="md-footer-social__link fa fa-medium"></a>
+    
+      <a href="https://tiangolo.com" class="md-footer-social__link fa fa-globe"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../assets/javascripts/application.808e90bb.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
+      
+        <script src="../../js/termynal.js"></script>
+      
+        <script src="../../js/custom.js"></script>
+      
+    
+  </body>
+</html>

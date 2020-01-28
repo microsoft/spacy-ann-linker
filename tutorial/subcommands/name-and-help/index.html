@@ -1,0 +1,1232 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
+      
+      
+        <link rel="canonical" href="https://kabirkhan.github.com/spacy-ann-linker/tutorial/subcommands/name-and-help/">
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../img/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+    
+    
+      
+        <title>Name and help - spaCy ANN Linker</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.1b62728e.css">
+      
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#2196f3">
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.268332fc.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../../../css/termynal.css">
+    
+      <link rel="stylesheet" href="../../../css/custom.css">
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-155009830-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="teal">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#add-a-help-text" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-header-nav__button md-logo">
+          
+            <img src="../../../img/icon-white.svg" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              spaCy ANN Linker
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Name and help
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    microsoft/spacy-ann-linker
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-nav__button md-logo">
+      
+        <img src="../../../img/icon-white.svg" width="48" height="48">
+      
+    </a>
+    spaCy ANN Linker
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    microsoft/spacy-ann-linker
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Debug" class="md-nav__link">
+      Debug
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../features/" title="Features" class="md-nav__link">
+      Features
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Tutorial - User Guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Tutorial - User Guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../" title="Tutorial - User Guide - Intro" class="md-nav__link">
+      Tutorial - User Guide - Intro
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../first-steps/" title="First Steps" class="md-nav__link">
+      First Steps
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../printing/" title="CLI" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../alternatives/" title="Alternatives, Inspiration and Comparisons" class="md-nav__link">
+      Alternatives, Inspiration and Comparisons
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../help-typer/" title="Help Typer - Get Help" class="md-nav__link">
+      Help Typer - Get Help
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../contributing/" title="Development - Contributing" class="md-nav__link">
+      Development - Contributing
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../release-notes/" title="Release Notes" class="md-nav__link">
+      Release Notes
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#add-a-help-text" class="md-nav__link">
+    Add a help text
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#inferring-name-and-help-from-callback" class="md-nav__link">
+    Inferring name and help from callback
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inferring-a-commands-name-and-help" class="md-nav__link">
+    Inferring a command's name and help
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inferring-name-and-help-from-appcallback" class="md-nav__link">
+    Inferring name and help from @app.callback()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name-and-help-from-callback-parameter-in-typertyper" class="md-nav__link">
+    Name and help from callback parameter in typer.Typer()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#override-a-callback-set-in-typertyper-with-appcallback" class="md-nav__link">
+    Override a callback set in typer.Typer() with @app.callback()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infer-name-and-help-from-callback-in-appadd_typer" class="md-nav__link">
+    Infer name and help from callback in app.add_typer()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enough-inferring" class="md-nav__link">
+    Enough inferring
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#set-the-name-and-help" class="md-nav__link">
+    Set the name and help
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#name-and-help-in-typertyper" class="md-nav__link">
+    Name and help in typer.Typer()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name-and-help-in-appcallback" class="md-nav__link">
+    Name and help in @app.callback()
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#name-and-help-in-appadd_typer" class="md-nav__link">
+    Name and help in app.add_typer()
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#recap" class="md-nav__link">
+    Recap
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Name and help</h1>
+                
+                <p>When adding a Typer app to another we have seen how to set the <code>name</code> to use for the command.</p>
+<p>For example to set the command to <code>users</code>:</p>
+<div class="codehilite"><pre><span></span><span class="n">app</span><span class="o">.</span><span class="n">add_typer</span><span class="p">(</span><span class="n">users</span><span class="o">.</span><span class="n">app</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;users&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<h2 id="add-a-help-text">Add a help text<a class="headerlink" href="#add-a-help-text" title="Permanent link">&para;</a></h2>
+<p>We can also set the <code>help</code> while adding a Typer:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+
+<span class="n">users_app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+<span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">add_typer</span><span class="p">(</span><span class="n">users_app</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;users&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Manage users in the app.&quot;</span><span class="p">)</span>
+</span>
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating user: </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="p">()</span>
+</pre></div>
+
+
+<p>And then we get that help text for that command in the <em>CLI program</em>:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Check the main help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">Options:</span>
+<span class="go">  --install-completion  Install completion for the current shell.</span>
+<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  users  Manage users in the app.</span>
+
+<span class="go">// Check the help for the users command</span>
+<span class="gp">$</span> python main.py users --help
+
+<span class="go">Usage: main.py users [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">  Manage users in the app.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --help  Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  create</span>
+</pre></div>
+
+
+
+</div>
+
+<p>We can set the <code>name</code> and <code>help</code> in several places, each one taking precedence over the other, overriding the previous value.</p>
+<p>Let's see those locations.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>There are other attributes that can be set in that same way in the same places we'll see next.</p>
+<p>But those are documented later in another section.</p>
+</div>
+<h2 id="inferring-name-and-help-from-callback">Inferring name and help from callback<a class="headerlink" href="#inferring-name-and-help-from-callback" title="Permanent link">&para;</a></h2>
+<h3 id="inferring-a-commands-name-and-help">Inferring a command's name and help<a class="headerlink" href="#inferring-a-commands-name-and-help" title="Permanent link">&para;</a></h3>
+<p>When you create a command with <code>@app.command()</code>, by default, it generates the name from the function name.</p>
+<p>And by default, the help text is extracted from the function's docstring.</p>
+<p>For example:</p>
+<div class="codehilite"><pre><span></span><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Create an item.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating item: </span><span class="si">{item}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<p>...will create a command <code>create</code> with a help text of <code>Create an item</code>.</p>
+<h3 id="inferring-name-and-help-from-appcallback">Inferring name and help from <code>@app.callback()</code><a class="headerlink" href="#inferring-name-and-help-from-appcallback" title="Permanent link">&para;</a></h3>
+<p>The same way, if you define a callback in a <code>typer.Typer()</code>, the help text is extracted from the callback function's docstring.</p>
+<p>And if that Typer app is added to another Typer app, the default name of the command is generated from the name of the callback function.</p>
+<p>Here's an example:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+
+<span class="n">users_app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+<span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">add_typer</span><span class="p">(</span><span class="n">users_app</span><span class="p">)</span>
+</span>
+
+<span class="hll"><span class="nd">@users_app</span><span class="o">.</span><span class="n">callback</span><span class="p">()</span>
+</span><span class="hll"><span class="k">def</span> <span class="nf">users</span><span class="p">():</span>
+</span><span class="hll">    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class="hll"><span class="sd">    Manage users in the app.</span>
+</span><span class="hll"><span class="sd">    &quot;&quot;&quot;</span>
+</span>
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating user: </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Notice that now we added the sub-Typer without specifying a <code>name</code> nor a <code>help</code>.</p>
+<p>They are now inferred from the callback function.</p>
+<p>The command name will be the same callback function's name: <code>users</code>.</p>
+<p>And the help text for that <code>users</code> command will be the callback function's docstring: <code>Manage users in the app.</code>.</p>
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Check the main help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">// Notice the command name &quot;users&quot; and the help text &quot;Manage users in the app.&quot;</span>
+<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">Options:</span>
+<span class="go">  --install-completion  Install completion for the current shell.</span>
+<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  users  Manage users in the app.</span>
+
+<span class="go">// Check the help for the users command</span>
+<span class="gp">$</span> python main.py users --help
+
+<span class="go">// Notice the main description: &quot;Manage users in the app.&quot;</span>
+<span class="go">Usage: main.py users [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">  Manage users in the app.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --help  Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  create</span>
+</pre></div>
+
+
+
+</div>
+
+<h3 id="name-and-help-from-callback-parameter-in-typertyper">Name and help from callback parameter in <code>typer.Typer()</code><a class="headerlink" href="#name-and-help-from-callback-parameter-in-typertyper" title="Permanent link">&para;</a></h3>
+<p>If you pass a <code>callback</code> parameter while creating a <code>typer.Typer(callback=some_function)</code> it will be used to infer the name and help text.</p>
+<p>This has the lowest priority, we'll see later what has a higher priority and can override it.</p>
+<p>Check the code:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">users</span><span class="p">():</span>
+</span><span class="hll">    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class="hll"><span class="sd">    Manage users in the app.</span>
+</span><span class="hll"><span class="sd">    &quot;&quot;&quot;</span>
+</span>
+
+<span class="hll"><span class="n">users_app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">users</span><span class="p">)</span>
+</span><span class="n">app</span><span class="o">.</span><span class="n">add_typer</span><span class="p">(</span><span class="n">users_app</span><span class="p">)</span>
+
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating user: </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="p">()</span>
+</pre></div>
+
+
+<p>This achieves exactly the same as the previous example.</p>
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Check the main help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">// Notice the command name &quot;users&quot; and the help text &quot;Manage users in the app.&quot;</span>
+<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">Options:</span>
+<span class="go">  --install-completion  Install completion for the current shell.</span>
+<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  users  Manage users in the app.</span>
+
+<span class="go">// Check the help for the users command</span>
+<span class="gp">$</span> python main.py users --help
+
+<span class="go">// Notice the main description: &quot;Manage users in the app.&quot;</span>
+<span class="go">Usage: main.py users [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">  Manage users in the app.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --help  Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  create</span>
+</pre></div>
+
+
+
+</div>
+
+<h3 id="override-a-callback-set-in-typertyper-with-appcallback">Override a callback set in <code>typer.Typer()</code> with <code>@app.callback()</code><a class="headerlink" href="#override-a-callback-set-in-typertyper-with-appcallback" title="Permanent link">&para;</a></h3>
+<p>The same as with normal <strong>Typer</strong> apps, if you pass a <code>callback</code> to <code>typer.Typer(callback=some_function)</code> and then override it with <code>@app.callback()</code>, the name and help text will be inferred from the new callback:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">old_callback</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Old callback help.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="n">users_app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">old_callback</span><span class="p">)</span>
+<span class="n">app</span><span class="o">.</span><span class="n">add_typer</span><span class="p">(</span><span class="n">users_app</span><span class="p">)</span>
+
+
+<span class="hll"><span class="nd">@users_app</span><span class="o">.</span><span class="n">callback</span><span class="p">()</span>
+</span><span class="hll"><span class="k">def</span> <span class="nf">users</span><span class="p">():</span>
+</span><span class="hll">    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class="hll"><span class="sd">    Manage users in the app.</span>
+</span><span class="hll"><span class="sd">    &quot;&quot;&quot;</span>
+</span>
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating user: </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Now the name of the command will be <code>users</code> instead of <code>old-callback</code>, and the help text will be <code>Manage users in the app.</code> instead of <code>Old callback help.</code>.</p>
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Check the main help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">// Notice the command name &quot;users&quot; and the help text &quot;Manage users in the app.&quot;</span>
+<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">Options:</span>
+<span class="go">  --install-completion  Install completion for the current shell.</span>
+<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  users  Manage users in the app.</span>
+
+<span class="go">// Check the help for the users command</span>
+<span class="gp">$</span> python main.py users --help
+
+<span class="go">// Notice the main description: &quot;Manage users in the app.&quot;</span>
+<span class="go">Usage: main.py users [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">  Manage users in the app.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --help  Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  create</span>
+</pre></div>
+
+
+
+</div>
+
+<h3 id="infer-name-and-help-from-callback-in-appadd_typer">Infer name and help from callback in <code>app.add_typer()</code><a class="headerlink" href="#infer-name-and-help-from-callback-in-appadd_typer" title="Permanent link">&para;</a></h3>
+<p>If you override the callback in <code>app.add_typer()</code> when including a sub-app, the name and help will be inferred from this callback function.</p>
+<p>This takes precedence over inferring the name and help from a callback set in <code>@sub_app.callback()</code> and <code>typer.Typer(callback=sub_app_callback)</code>.</p>
+<p>Check the code:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">old_callback</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Old callback help.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="n">users_app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">old_callback</span><span class="p">)</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">new_users</span><span class="p">():</span>
+</span><span class="hll">    <span class="sd">&quot;&quot;&quot;</span>
+</span><span class="hll"><span class="sd">    I have the highland! Create some users.</span>
+</span><span class="hll"><span class="sd">    &quot;&quot;&quot;</span>
+</span>
+
+<span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">add_typer</span><span class="p">(</span><span class="n">users_app</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">new_users</span><span class="p">)</span>
+</span>
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">callback</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">users</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manage users in the app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating user: </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="p">()</span>
+</pre></div>
+
+
+<p>Now the command will be <code>new-users</code> instead of <code>users</code>. And the help text will be <code>I have the highland! Create some users.</code> instead of the previous ones.</p>
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Check the main help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">// Check the command new-users and its help text</span>
+
+<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">Options:</span>
+<span class="go">  --install-completion  Install completion for the current shell.</span>
+<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  new-users  I have the highland! Create some users.</span>
+
+<span class="go">// Now check the help for the new-users command</span>
+<span class="gp">$</span> python main.py new-users --help
+
+<span class="go">// Notice the help text</span>
+<span class="go">Usage: main.py new-users [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">  I have the highland! Create some users.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --help  Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  create</span>
+</pre></div>
+
+
+
+</div>
+
+<h3 id="enough-inferring">Enough inferring<a class="headerlink" href="#enough-inferring" title="Permanent link">&para;</a></h3>
+<p>So, when inferring a name and help text, the precedence order from lowest priority to highest is:</p>
+<ul>
+<li><code>sub_app = typer.Typer(callback=some_function)</code></li>
+<li><code>@sub_app.callback()</code></li>
+<li><code>app.add_typer(sub_app, callback=new_function)</code></li>
+</ul>
+<p>That's for inferring the name and help text from functions.</p>
+<p>But if you set the name and help text explicitly, that has a higher priority than these.</p>
+<h2 id="set-the-name-and-help">Set the name and help<a class="headerlink" href="#set-the-name-and-help" title="Permanent link">&para;</a></h2>
+<p>Let's now see the places where you can set the command name and help text, from lowest priority to highest.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Setting the name and help text explicitly always has a higher precedence than inferring from a callback function.</p>
+</div>
+<h3 id="name-and-help-in-typertyper">Name and help in <code>typer.Typer()</code><a class="headerlink" href="#name-and-help-in-typertyper" title="Permanent link">&para;</a></h3>
+<p>You could have all the callbacks and overrides we defined before, but the name and help text was inferred from the function name and docstring.</p>
+<p>If you set it explicitly, that takes precedence over inferring.</p>
+<p>You can set it when creating a new <code>typer.Typer()</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">old_callback</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Old callback help.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="hll"><span class="n">users_app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">old_callback</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;exp-users&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Explicit help.&quot;</span><span class="p">)</span>
+</span>
+
+<span class="k">def</span> <span class="nf">new_users</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    I have the highland! Create some users.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="n">app</span><span class="o">.</span><span class="n">add_typer</span><span class="p">(</span><span class="n">users_app</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">new_users</span><span class="p">)</span>
+
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">callback</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">users</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manage users in the app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating user: </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="p">()</span>
+</pre></div>
+
+
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>The rest of the callbacks and overrides are there only to show you that they don't affect the name and help text when you set it explicitly.</p>
+</div>
+<p>We set an explicit name <code>exp-users</code>, and an explicit help <code>Explicit help.</code>.</p>
+<p>So that will take precedence now.</p>
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Check the main help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">// Notice the command name is exp-users and the help text is &quot;Explicit help.&quot;</span>
+<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">Options:</span>
+<span class="go">  --install-completion  Install completion for the current shell.</span>
+<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  exp-users  Explicit help.</span>
+
+<span class="go">// Check the help for the exp-users command</span>
+<span class="gp">$</span> python main.py exp-users --help
+
+<span class="go">// Notice the main help text</span>
+<span class="go">Usage: main.py exp-users [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">  Explicit help.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --help  Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  create</span>
+</pre></div>
+
+
+
+</div>
+
+<h3 id="name-and-help-in-appcallback">Name and help in <code>@app.callback()</code><a class="headerlink" href="#name-and-help-in-appcallback" title="Permanent link">&para;</a></h3>
+<p>Any parameter that you use when creating a <code>typer.Typer()</code> app can be overridden in the parameters of <code>@app.callback()</code>.</p>
+<p>Continuing with the previous example, we now override the values in <code>@user_app.callback()</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">old_callback</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Old callback help.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="n">users_app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">old_callback</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;exp-users&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Explicit help.&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">new_users</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    I have the highland! Create some users.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="n">app</span><span class="o">.</span><span class="n">add_typer</span><span class="p">(</span><span class="n">users_app</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="n">new_users</span><span class="p">)</span>
+
+
+<span class="hll"><span class="nd">@users_app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s2">&quot;call-users&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Help from callback for users.&quot;</span><span class="p">)</span>
+</span><span class="k">def</span> <span class="nf">users</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manage users in the app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating user: </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="p">()</span>
+</pre></div>
+
+
+<p>And now the command name will be <code>call-users</code> and the help text will be <code>Help from callback for users.</code>.</p>
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Check the help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">// The command name now is call-users and the help text is &quot;Help from callback for users.&quot;.</span>
+<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">Options:</span>
+<span class="go">  --install-completion  Install completion for the current shell.</span>
+<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  call-users  Help from callback for users.</span>
+
+<span class="go">// Check the call-users command help</span>
+<span class="gp">$</span> python main.py call-users --help
+
+<span class="go">// Notice the main help text</span>
+<span class="go">Usage: main.py call-users [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">  Help from callback for users.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --help  Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  create</span>
+</pre></div>
+
+
+
+</div>
+
+<h3 id="name-and-help-in-appadd_typer">Name and help in <code>app.add_typer()</code><a class="headerlink" href="#name-and-help-in-appadd_typer" title="Permanent link">&para;</a></h3>
+<p>And finally, with the highest priority, you can override all that by explicitly setting the <code>name</code> and <code>help</code> in <code>app.add_typer()</code>, just like we did on the first example above:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
+
+
+<span class="k">def</span> <span class="nf">old_callback</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Old callback help.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="n">users_app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">old_callback</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;exp-users&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Explicit help.&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">new_users</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    I have the highland! Create some users.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="hll"><span class="n">app</span><span class="o">.</span><span class="n">add_typer</span><span class="p">(</span>
+</span>    <span class="n">users_app</span><span class="p">,</span>
+    <span class="n">callback</span><span class="o">=</span><span class="n">new_users</span><span class="p">,</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">&quot;cake-sith-users&quot;</span><span class="p">,</span>
+    <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Unlimited powder! Eh, users.&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">callback</span><span class="p">(</span><span class="s2">&quot;call-users&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Help from callback for users.&quot;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">users</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manage users in the app.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+
+<span class="nd">@users_app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">create</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Creating user: </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">app</span><span class="p">()</span>
+</pre></div>
+
+
+<p>And now, with the highest priorities of them all, the command name will now be <code>cake-sith-users</code> and the help text will be <code>Unlimited powder! Eh, users.</code>.</p>
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Check the help</span>
+<span class="gp">$</span> python main.py --help
+
+<span class="go">// Notice the command name cake-sith-users and the new help text &quot;Unlimited powder! Eh, users.&quot;</span>
+<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">Options:</span>
+<span class="go">  --install-completion  Install completion for the current shell.</span>
+<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
+<span class="go">  --help                Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  cake-sith-users  Unlimited powder! Eh, users.</span>
+
+<span class="go">// And check the help for the command cake-sith-users</span>
+<span class="gp">$</span> python main.py cake-sith-users --help
+
+<span class="go">// Notice the main help text</span>
+<span class="go">Usage: main.py cake-sith-users [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">  Unlimited powder! Eh, users.</span>
+
+<span class="go">Options:</span>
+<span class="go">  --help  Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">  create</span>
+</pre></div>
+
+
+
+</div>
+
+<h2 id="recap">Recap<a class="headerlink" href="#recap" title="Permanent link">&para;</a></h2>
+<p>The precedence to generate a command's name and help, from lowest priority to highest, is:</p>
+<ul>
+<li>Implicitly inferred from <code>sub_app = typer.Typer(callback=some_function)</code></li>
+<li>Implicitly inferred from the callback function under <code>@sub_app.callback()</code></li>
+<li>Implicitly inferred from <code>app.add_typer(sub_app, callback=some_function)</code></li>
+<li>Explicitly set on <code>sub_app = typer.Typer(name="some-name", help="Some help.")</code></li>
+<li>Explicitly set on <code>@sub_app.callback("some-name", help="Some help.")</code></li>
+<li>Explicitly set on <code>app.add_typer(sub_app, name="some-name", help="Some help.")</code></li>
+</ul>
+<p>So, <code>app.add_typer(sub_app, name="some-name", help="Some help.")</code> always wins.</p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/kabirkhan/spacy-data-debug" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/kabir_khan14" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://www.linkedin.com/in/tiangolo" class="md-footer-social__link fa fa-linkedin"></a>
+    
+      <a href="https://dev.to/tiangolo" class="md-footer-social__link fa fa-rss"></a>
+    
+      <a href="https://medium.com/@tiangolo" class="md-footer-social__link fa fa-medium"></a>
+    
+      <a href="https://tiangolo.com" class="md-footer-social__link fa fa-globe"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.808e90bb.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../../.."}})</script>
+      
+        <script src="../../../js/termynal.js"></script>
+      
+        <script src="../../../js/custom.js"></script>
+      
+    
+  </body>
+</html>

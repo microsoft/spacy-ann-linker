@@ -1,0 +1,638 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
+      
+      
+        <link rel="canonical" href="https://kabirkhan.github.com/spacy-ann-linker/contributing/">
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../img/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+    
+    
+      
+        <title>Development - Contributing - spaCy ANN Linker</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/application.1b62728e.css">
+      
+        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#2196f3">
+      
+    
+    
+      <script src="../assets/javascripts/modernizr.268332fc.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../css/termynal.css">
+    
+      <link rel="stylesheet" href="../css/custom.css">
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-155009830-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="teal">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-header-nav__button md-logo">
+          
+            <img src="../img/icon-white.svg" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              spaCy ANN Linker
+            </span>
+            <span class="md-header-nav__topic">
+              
+                Development - Contributing
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    microsoft/spacy-ann-linker
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-nav__button md-logo">
+      
+        <img src="../img/icon-white.svg" width="48" height="48">
+      
+    </a>
+    spaCy ANN Linker
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    microsoft/spacy-ann-linker
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href=".." title="Debug" class="md-nav__link">
+      Debug
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../features/" title="Features" class="md-nav__link">
+      Features
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Tutorial - User Guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Tutorial - User Guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tutorial/" title="Tutorial - User Guide - Intro" class="md-nav__link">
+      Tutorial - User Guide - Intro
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tutorial/first-steps/" title="First Steps" class="md-nav__link">
+      First Steps
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../tutorial/printing/" title="CLI" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../alternatives/" title="Alternatives, Inspiration and Comparisons" class="md-nav__link">
+      Alternatives, Inspiration and Comparisons
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../help-typer/" title="Help Typer - Get Help" class="md-nav__link">
+      Help Typer - Get Help
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+  
+
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+    
+    <a href="./" title="Development - Contributing" class="md-nav__link md-nav__link--active">
+      Development - Contributing
+    </a>
+    
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../release-notes/" title="Release Notes" class="md-nav__link">
+      Release Notes
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>Development - Contributing</h1>
+                
+                <p>First, you might want to see the basic ways to <a class="internal-link" href="../help-typer/" target="_blank">help Typer and get help</a>.</p>
+<p>Coming soon...</p>
+<!-- ## Developing
+
+If you already cloned the repository and you know that you need to deep dive in the code, here are some guidelines to set up your environment.
+
+
+### Pipenv
+
+If you are using <a href="https://pipenv.readthedocs.io/en/latest/" target="_blank">Pipenv</a>, you can create a virtual environment and install the packages with:
+
+
+<div class="codehilite"><pre><span></span>pipenv install --dev
+</pre></div>
+
+
+
+Then you can activate that virtual environment with:
+
+
+<div class="codehilite"><pre><span></span>pipenv shell
+</pre></div>
+
+
+
+
+### No Pipenv
+
+If you are not using Pipenv, you can create a virtual environment with your preferred tool, and install the packages listed in the file `Pipfile`.
+
+
+### Flit
+
+**FastAPI** uses <a href="https://flit.readthedocs.io/en/latest/index.html" target="_blank">Flit</a> to build, package and publish the project.
+
+If you installed the development dependencies with one of the methods above, you already have the `flit` command.
+
+To install your local version of FastAPI as a package in your local environment, run:
+
+
+<div class="codehilite"><pre><span></span>flit install --symlink
+</pre></div>
+
+
+
+It will install your local FastAPI in your local environment.
+
+
+#### Using your local FastAPI
+
+If you create a Python file that imports and uses FastAPI, and run it with the Python from your local environment, it will use your local FastAPI source code.
+
+And if you update that local FastAPI source code, as it is installed with `--symlink`, when you run that Python file again, it will use the fresh version of FastAPI you just edited.
+
+That way, you don't have to "install" your local version to be able to test every change.
+
+
+### Format
+
+There is a script that you can run that will format and clean all your code:
+
+
+<div class="codehilite"><pre><span></span>bash scripts/lint.sh
+</pre></div>
+
+
+
+It will also auto-sort all your imports.
+
+For it to sort them correctly, you need to have FastAPI installed locally in your environment, with the command in the section above:
+
+
+<div class="codehilite"><pre><span></span>flit install --symlink
+</pre></div>
+
+
+
+
+### Docs
+
+The documentation uses <a href="https://www.mkdocs.org/" target="_blank">MkDocs</a>.
+
+All the documentation is in Markdown format in the directory `./docs`.
+
+Many of the tutorials have blocks of code.
+
+In most of the cases, these blocks of code are actual complete applications that can be run as is.
+
+In fact, those blocks of code are not written inside the Markdown, they are Python files in the `./docs/src/` directory.
+
+And those Python files are included/injected in the documentation when generating the site.
+
+
+#### Docs for tests
+
+Most of the tests actually run against the example source files in the documentation.
+
+This helps making sure that:
+
+* The documentation is up to date.
+* The documentation examples can be run as is.
+* Most of the features are covered by the documentation, ensured by the coverage tests.
+
+During local development, there is a script that builds the site and checks for any changes, live-reloading:
+
+
+<div class="codehilite"><pre><span></span>bash scripts/docs-live.sh
+</pre></div>
+
+
+
+It will serve the documentation on `http://0.0.0.0:8008`.
+
+That way, you can edit the documentation/source files and see the changes live.
+
+#### Apps and docs at the same time
+
+And if you run the examples with, e.g.:
+
+
+<div class="codehilite"><pre><span></span>uvicorn tutorial001:app --reload
+</pre></div>
+
+
+
+as Uvicorn by default will use the port `8000`, the documentation on port `8008` won't clash.
+
+
+### Tests
+
+There is a script that you can run locally to test all the code and generate coverage reports in HTML:
+
+
+<div class="codehilite"><pre><span></span>bash scripts/test-cov-html.sh
+</pre></div>
+
+
+
+This command generates a directory `./htmlcov/`, if you open the file `./htmlcov/index.html` in your browser, you can explore interactively the regions of code that are covered by the tests, and notice if there is any region missing. -->
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../help-typer/" title="Help Typer - Get Help" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Help Typer - Get Help
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../release-notes/" title="Release Notes" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Release Notes
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/kabirkhan/spacy-data-debug" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/kabir_khan14" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://www.linkedin.com/in/tiangolo" class="md-footer-social__link fa fa-linkedin"></a>
+    
+      <a href="https://dev.to/tiangolo" class="md-footer-social__link fa fa-rss"></a>
+    
+      <a href="https://medium.com/@tiangolo" class="md-footer-social__link fa fa-medium"></a>
+    
+      <a href="https://tiangolo.com" class="md-footer-social__link fa fa-globe"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../assets/javascripts/application.808e90bb.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      
+        <script src="../js/termynal.js"></script>
+      
+        <script src="../js/custom.js"></script>
+      
+    
+  </body>
+</html>

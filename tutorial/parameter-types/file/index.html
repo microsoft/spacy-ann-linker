@@ -1,0 +1,825 @@
+
+
+
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      <meta http-equiv="x-ua-compatible" content="ie=edge">
+      
+        <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
+      
+      
+        <link rel="canonical" href="https://kabirkhan.github.com/spacy-ann-linker/tutorial/parameter-types/file/">
+      
+      
+      
+        <meta name="lang:clipboard.copy" content="Copy to clipboard">
+      
+        <meta name="lang:clipboard.copied" content="Copied to clipboard">
+      
+        <meta name="lang:search.language" content="en">
+      
+        <meta name="lang:search.pipeline.stopwords" content="True">
+      
+        <meta name="lang:search.pipeline.trimmer" content="True">
+      
+        <meta name="lang:search.result.none" content="No matching documents">
+      
+        <meta name="lang:search.result.one" content="1 matching document">
+      
+        <meta name="lang:search.result.other" content="# matching documents">
+      
+        <meta name="lang:search.tokenizer" content="[\s\-]+">
+      
+      <link rel="shortcut icon" href="../../../img/favicon.png">
+      <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
+    
+    
+      
+        <title>File - spaCy ANN Linker</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/application.1b62728e.css">
+      
+        <link rel="stylesheet" href="../../../assets/stylesheets/application-palette.a8b3c06d.css">
+      
+      
+        
+        
+        <meta name="theme-color" content="#2196f3">
+      
+    
+    
+      <script src="../../../assets/javascripts/modernizr.268332fc.js"></script>
+    
+    
+      
+        <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,400i,700%7CRoboto+Mono&display=fallback">
+        <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
+      
+    
+    <link rel="stylesheet" href="../../../assets/fonts/material-icons.css">
+    
+    
+      <link rel="stylesheet" href="../../../css/termynal.css">
+    
+      <link rel="stylesheet" href="../../../css/custom.css">
+    
+    
+      
+        
+<script>
+  window.ga = window.ga || function() {
+    (ga.q = ga.q || []).push(arguments)
+  }
+  ga.l = +new Date
+  /* Setup integration and send page view */
+  ga("create", "UA-155009830-1", "auto")
+  ga("set", "anonymizeIp", true)
+  ga("send", "pageview")
+  /* Register handler to log search on blur */
+  document.addEventListener("DOMContentLoaded", () => {
+    if (document.forms.search) {
+      var query = document.forms.search.query
+      query.addEventListener("blur", function() {
+        if (this.value) {
+          var path = document.location.pathname;
+          ga("send", "pageview", path + "?q=" + this.value)
+        }
+      })
+    }
+  })
+</script>
+<script async src="https://www.google-analytics.com/analytics.js"></script>
+      
+    
+    
+  </head>
+  
+    
+    
+    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="teal">
+  
+    <svg class="md-svg">
+      <defs>
+        
+        
+          <svg xmlns="http://www.w3.org/2000/svg" width="416" height="448" viewBox="0 0 416 448" id="__github"><path fill="currentColor" d="M160 304q0 10-3.125 20.5t-10.75 19T128 352t-18.125-8.5-10.75-19T96 304t3.125-20.5 10.75-19T128 256t18.125 8.5 10.75 19T160 304zm160 0q0 10-3.125 20.5t-10.75 19T288 352t-18.125-8.5-10.75-19T256 304t3.125-20.5 10.75-19T288 256t18.125 8.5 10.75 19T320 304zm40 0q0-30-17.25-51T296 232q-10.25 0-48.75 5.25Q229.5 240 208 240t-39.25-2.75Q130.75 232 120 232q-29.5 0-46.75 21T56 304q0 22 8 38.375t20.25 25.75 30.5 15 35 7.375 37.25 1.75h42q20.5 0 37.25-1.75t35-7.375 30.5-15 20.25-25.75T360 304zm56-44q0 51.75-15.25 82.75-9.5 19.25-26.375 33.25t-35.25 21.5-42.5 11.875-42.875 5.5T212 416q-19.5 0-35.5-.75t-36.875-3.125-38.125-7.5-34.25-12.875T37 371.5t-21.5-28.75Q0 312 0 260q0-59.25 34-99-6.75-20.5-6.75-42.5 0-29 12.75-54.5 27 0 47.5 9.875t47.25 30.875Q171.5 96 212 96q37 0 70 8 26.25-20.5 46.75-30.25T376 64q12.75 25.5 12.75 54.5 0 21.75-6.75 42 34 40 34 99.5z"/></svg>
+        
+      </defs>
+    </svg>
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" data-md-component="overlay" for="__drawer"></label>
+    
+      <a href="#filetext-reading" tabindex="1" class="md-skip">
+        Skip to content
+      </a>
+    
+    
+      <header class="md-header" data-md-component="header">
+  <nav class="md-header-nav md-grid">
+    <div class="md-flex">
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-header-nav__button md-logo">
+          
+            <img src="../../../img/icon-white.svg" width="24" height="24">
+          
+        </a>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        <label class="md-icon md-icon--menu md-header-nav__button" for="__drawer"></label>
+      </div>
+      <div class="md-flex__cell md-flex__cell--stretch">
+        <div class="md-flex__ellipsis md-header-nav__title" data-md-component="title">
+          
+            <span class="md-header-nav__topic">
+              spaCy ANN Linker
+            </span>
+            <span class="md-header-nav__topic">
+              
+                File
+              
+            </span>
+          
+        </div>
+      </div>
+      <div class="md-flex__cell md-flex__cell--shrink">
+        
+          <label class="md-icon md-icon--search md-header-nav__button" for="__search"></label>
+          
+<div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="query" data-md-state="active">
+      <label class="md-icon md-search__icon" for="__search"></label>
+      <button type="reset" class="md-icon md-search__icon" data-md-component="reset" tabindex="-1">
+        &#xE5CD;
+      </button>
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="result">
+          <div class="md-search-result__meta">
+            Type to start searching
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+        
+      </div>
+      
+        <div class="md-flex__cell md-flex__cell--shrink">
+          <div class="md-header-nav__source">
+            
+
+
+  
+
+<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    microsoft/spacy-ann-linker
+  </div>
+</a>
+          </div>
+        </div>
+      
+    </div>
+  </nav>
+</header>
+    
+    <div class="md-container">
+      
+        
+      
+      
+      <main class="md-main" role="main">
+        <div class="md-main__inner md-grid" data-md-component="container">
+          
+            
+              <div class="md-sidebar md-sidebar--primary" data-md-component="navigation">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    <nav class="md-nav md-nav--primary" data-md-level="0">
+  <label class="md-nav__title md-nav__title--site" for="__drawer">
+    <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-nav__button md-logo">
+      
+        <img src="../../../img/icon-white.svg" width="48" height="48">
+      
+    </a>
+    spaCy ANN Linker
+  </label>
+  
+    <div class="md-nav__source">
+      
+
+
+  
+
+<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+  
+    <div class="md-source__icon">
+      <svg viewBox="0 0 24 24" width="24" height="24">
+        <use xlink:href="#__github" width="24" height="24"></use>
+      </svg>
+    </div>
+  
+  <div class="md-source__repository">
+    microsoft/spacy-ann-linker
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../.." title="Debug" class="md-nav__link">
+      Debug
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../features/" title="Features" class="md-nav__link">
+      Features
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
+    
+    <label class="md-nav__link" for="nav-3">
+      Tutorial - User Guide
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-3">
+        Tutorial - User Guide
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../" title="Tutorial - User Guide - Intro" class="md-nav__link">
+      Tutorial - User Guide - Intro
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../first-steps/" title="First Steps" class="md-nav__link">
+      First Steps
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="../../printing/" title="CLI" class="md-nav__link">
+      CLI
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../alternatives/" title="Alternatives, Inspiration and Comparisons" class="md-nav__link">
+      Alternatives, Inspiration and Comparisons
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../help-typer/" title="Help Typer - Get Help" class="md-nav__link">
+      Help Typer - Get Help
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../contributing/" title="Development - Contributing" class="md-nav__link">
+      Development - Contributing
+    </a>
+  </li>
+
+    
+      
+      
+      
+
+
+  <li class="md-nav__item">
+    <a href="../../../release-notes/" title="Release Notes" class="md-nav__link">
+      Release Notes
+    </a>
+  </li>
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="toc">
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+<nav class="md-nav md-nav--secondary">
+  
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#filetext-reading" class="md-nav__link">
+    FileText reading
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filetextwrite" class="md-nav__link">
+    FileTextWrite
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filebinaryread" class="md-nav__link">
+    FileBinaryRead
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#filebinarywrite" class="md-nav__link">
+    FileBinaryWrite
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#file-cli-parameter-configurations" class="md-nav__link">
+    File CLI parameter configurations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#advanced-mode" class="md-nav__link">
+    Advanced mode
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#note-about-filetextwrite" class="md-nav__link">
+    Note about FileTextWrite
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#customize-mode" class="md-nav__link">
+    Customize mode
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#about-the-different-types" class="md-nav__link">
+    About the different types
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="md-content">
+            <article class="md-content__inner md-typeset">
+              
+                
+                
+                  <h1>File</h1>
+                
+                <p>Apart from <code>Path</code> <em>CLI parameters</em> you can also declare some types of "files".</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>In most of the cases you are probably fine just using <code>Path</code>.</p>
+<p>You can read and write data with <code>Path</code> the same way.</p>
+</div>
+<p>The difference is that these types will give you a Python <a href="https://docs.python.org/3/glossary.html#term-file-object" class="external-link" target="_blank">file-like object</a> instead of a Python <a href="https://docs.python.org/3/library/pathlib.html#basic-use" class="external-link" target="_blank">Path</a>.</p>
+<p>A "file-like object" is the same type of object returned by <code>open()</code> as in:</p>
+<div class="codehilite"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;file.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="c1"># Here f is the file-like object</span>
+    <span class="n">read_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">read_data</span><span class="p">)</span>
+</pre></div>
+
+
+<p>But in some special use cases you might want to use these special types. For example if you are migrating an existing application.</p>
+<h2 id="filetext-reading"><code>FileText</code> reading<a class="headerlink" href="#filetext-reading" title="Permanent link">&para;</a></h2>
+<p><code>typer.FileText</code> gives you a file-like object for reading text, you will get <code>str</code> data from it.</p>
+<p>This means that even if your file has text written in a non-english language, e.g. a <code>text.txt</code> file with:</p>
+<div class="codehilite"><pre><span></span>la cigüeña trae al niño
+</pre></div>
+
+
+<p>You will have a <code>str</code> with the text inside, e.g.:</p>
+<div class="codehilite"><pre><span></span><span class="n">content</span> <span class="o">=</span> <span class="s2">&quot;la cigüeña trae al niño&quot;</span>
+</pre></div>
+
+
+<p>instead of having <code>bytes</code>, e.g.:</p>
+<div class="codehilite"><pre><span></span><span class="n">content</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;la cig</span><span class="se">\xc3\xbc</span><span class="s2">e</span><span class="se">\xc3\xb1</span><span class="s2">a trae al ni</span><span class="se">\xc3\xb1</span><span class="s2">o&quot;</span>
+</pre></div>
+
+
+<p>You will get all the correct editor support, attributes, methods, etc for the file-like object:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">FileText</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="o">...</span><span class="p">)):</span>
+</span>    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">config</span><span class="p">:</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Config line: </span><span class="si">{line}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">// Create a quick text config</span>
+<span class="gp">$</span> <span class="nb">echo</span> <span class="s2">&quot;some settings&quot;</span> &gt; config.txt
+
+<span class="go">// Add another line to the config to test it</span>
+<span class="gp">$</span> <span class="nb">echo</span> <span class="s2">&quot;some more settings&quot;</span> &gt;&gt; config.txt
+
+<span class="go">// Now run your program</span>
+<span class="gp">$</span> python main.py --config config.txt
+
+<span class="go">Config line: some settings</span>
+
+<span class="go">Config line: some more settings</span>
+</pre></div>
+
+
+
+</div>
+
+<h2 id="filetextwrite"><code>FileTextWrite</code><a class="headerlink" href="#filetextwrite" title="Permanent link">&para;</a></h2>
+<p>For writing text, you can use <code>typer.FileTextWrite</code>:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">FileTextWrite</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="o">...</span><span class="p">)):</span>
+</span><span class="hll">    <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;Some config written by the app&quot;</span><span class="p">)</span>
+</span>    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;Config written&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<p>This would be for writing human text, like:</p>
+<div class="codehilite"><pre><span></span>some settings
+la cigüeña trae al niño
+</pre></div>
+
+
+<p>...not to write binary <code>bytes</code>.</p>
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py --config text.txt
+
+<span class="go">Config written</span>
+
+<span class="go">// Check the contents of the file</span>
+<span class="gp">$</span> cat text.txt
+
+<span class="go">Some config written by the app</span>
+</pre></div>
+
+
+
+</div>
+
+<div class="admonition info">
+<p class="admonition-title">Technical Details</p>
+<p><code>typer.FileTextWrite</code> is a just a convenience class.</p>
+<p>It's the same as using <code>typer.FileText</code> and setting <code>mode="w"</code>. You will learn about <code>mode</code> later below.</p>
+</div>
+<h2 id="filebinaryread"><code>FileBinaryRead</code><a class="headerlink" href="#filebinaryread" title="Permanent link">&para;</a></h2>
+<p>To read binary data you can use <code>typer.FileBinaryRead</code>.</p>
+<p>You will receive <code>bytes</code> from it.</p>
+<p>It's useful for reading binary files like images:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">FileBinaryRead</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="o">...</span><span class="p">)):</span>
+</span>    <span class="n">processed_total</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">bytes_chunk</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+        <span class="c1"># Process the bytes in bytes_chunk</span>
+        <span class="n">processed_total</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">bytes_chunk</span><span class="p">)</span>
+        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processed bytes total: </span><span class="si">{processed_total}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py --file lena.jpg
+
+<span class="go">Processed bytes total: 512</span>
+<span class="go">Processed bytes total: 1024</span>
+<span class="go">Processed bytes total: 1536</span>
+<span class="go">Processed bytes total: 2048</span>
+</pre></div>
+
+
+
+</div>
+
+<h2 id="filebinarywrite"><code>FileBinaryWrite</code><a class="headerlink" href="#filebinarywrite" title="Permanent link">&para;</a></h2>
+<p>To write binary data you can use <code>typer.FileBinaryWrite</code>.</p>
+<p>You would write <code>bytes</code> to it.</p>
+<p>It's useful for writing binary files like images.</p>
+<p>Have in mind that you have to pass <code>bytes</code> to its <code>.write()</code> method, not <code>str</code>.</p>
+<p>If you have a <code>str</code>, you have to encode it first to get <code>bytes</code>.</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">FileBinaryWrite</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="o">...</span><span class="p">)):</span>
+</span>    <span class="n">first_line_str</span> <span class="o">=</span> <span class="s2">&quot;some settings</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="c1"># You cannot write str directly to a binary file, you have to encode it to get bytes</span>
+    <span class="n">first_line_bytes</span> <span class="o">=</span> <span class="n">first_line_str</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+    <span class="c1"># Then you can write the bytes</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">first_line_bytes</span><span class="p">)</span>
+    <span class="c1"># This is already bytes, it starts with b&quot;</span>
+    <span class="n">second_line</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;la cig</span><span class="se">\xc3\xbc</span><span class="s2">e</span><span class="se">\xc3\xb1</span><span class="s2">a trae al ni</span><span class="se">\xc3\xb1</span><span class="s2">o&quot;</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">second_line</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;Binary file written&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py --file binary.dat
+
+<span class="go">Binary file written</span>
+
+<span class="go">// Check the binary file was created</span>
+<span class="gp">$</span> ls ./binary.dat
+
+<span class="go">./binary.dat</span>
+</pre></div>
+
+
+
+</div>
+
+<h2 id="file-cli-parameter-configurations">File <em>CLI parameter</em> configurations<a class="headerlink" href="#file-cli-parameter-configurations" title="Permanent link">&para;</a></h2>
+<p>You can use several configuration parameters for these types (classes) in <code>typer.Option()</code> and <code>typer.Argument()</code>:</p>
+<ul>
+<li><code>mode</code>: controls the "<a href="https://docs.python.org/3/library/functions.html#open" class="external-link" target="_blank">mode</a>" to open the file with.<ul>
+<li>It's automatically set for you by using the classes above.</li>
+<li>Read more about it below.</li>
+</ul>
+</li>
+<li><code>encoding</code>: to force a specific encoding, e.g. <code>"utf-8"</code>.</li>
+<li><code>lazy</code>: delay <abbr title="input and output, reading and writing files">I/O</abbr> operations. Automatic by default.<ul>
+<li>By default, when writing files, Click will generate a file-like object that is not yet the actual file. Once you start writing, it will go, open the file and start writing to it, but not before. This is mainly useful to avoid creating the file until you start writing to it. It's normally safe to leave this automatic. But you can overwrite it setting <code>lazy=False</code>. By default, it's <code>lazy=True</code> for writing and <code>lazy=False</code> for reading.</li>
+</ul>
+</li>
+<li><code>atomic</code>: if true, all writes will actually go to a temporal file and then moved to the final destination after completing. This is useful with files modified frequently by several users/programs.</li>
+</ul>
+<h2 id="advanced-mode">Advanced <code>mode</code><a class="headerlink" href="#advanced-mode" title="Permanent link">&para;</a></h2>
+<p>By default, <strong>Typer</strong> will configure the <a href="https://docs.python.org/3/library/functions.html#open" class="external-link" target="_blank"><code>mode</code></a> for you:</p>
+<ul>
+<li><code>typer.FileText</code>: <code>mode="r"</code>, to read text.</li>
+<li><code>typer.FileTextWrite</code>: <code>mode="w"</code>, to write text.</li>
+<li><code>typer.FileBinaryRead</code>: <code>mode="rb"</code>, to read binary data.</li>
+<li><code>typer.FileBinaryWrite</code>: <code>mode="wb"</code>, to write binary data.</li>
+</ul>
+<h3 id="note-about-filetextwrite">Note about <code>FileTextWrite</code><a class="headerlink" href="#note-about-filetextwrite" title="Permanent link">&para;</a></h3>
+<p><code>typer.FileTextWrite</code> is actually just a convenience class. It's the same as using <code>typer.FileText</code> with <code>mode="w"</code>.</p>
+<p>But it's probably shorter and more intuitive as you can get it with autocompletion in your editor by just starting to type <code>typer.File</code>... just like the other classes.</p>
+<h3 id="customize-mode">Customize <code>mode</code><a class="headerlink" href="#customize-mode" title="Permanent link">&para;</a></h3>
+<p>You can override the <code>mode</code> from the defaults above.</p>
+<p>For example, you could use <code>mode="a"</code> to write "appending" to the same file:</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
+
+
+<span class="hll"><span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="n">typer</span><span class="o">.</span><span class="n">FileText</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Option</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;a&quot;</span><span class="p">)):</span>
+</span>    <span class="n">config</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;This is a single line</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;Config line written&quot;</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>As you are manually setting <code>mode="a"</code>, you can use <code>typer.FileText</code> or <code>typer.FileTextWrite</code>, both will work.</p>
+</div>
+<p>Check it:</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> python main.py --config config.txt
+
+<span class="go">Config line written</span>
+
+<span class="go">// Run your program a couple more times to see how it appends instead of overwriting</span>
+<span class="gp">$</span> python main.py --config config.txt
+
+<span class="go">Config line written</span>
+
+<span class="gp">$</span> python main.py --config config.txt
+
+<span class="go">Config line written</span>
+
+<span class="go">// Check the contents of the file, it should have each of the 3 lines appended</span>
+<span class="gp">$</span> cat config.txt
+
+<span class="go">This is a single line</span>
+<span class="go">This is a single line</span>
+<span class="go">This is a single line</span>
+</pre></div>
+
+
+
+</div>
+
+<h2 id="about-the-different-types">About the different types<a class="headerlink" href="#about-the-different-types" title="Permanent link">&para;</a></h2>
+<div class="admonition info">
+<p class="admonition-title">Info</p>
+<p>These are technical details about why the different types/classes provided by <strong>Typer</strong>.</p>
+<p>But you don't need this information to be able to use them. You can skip it.</p>
+</div>
+<p><strong>Typer</strong> provides you these different types (classes) because they inherit directly from the actual Python implementation that will be provided underneath for each case.</p>
+<p>This way your editor will give you the right type checks and completion for each type.</p>
+<p>Even if you use <code>lazy</code>. When you use <code>lazy</code> Click creates a especial object to delay writes, and serves as a "proxy" to the actual file that will be written. But this especial proxy object doesn't expose the attributes and methods needed for type checks and completion in the editor. If you access those attributes or call the methods, the "proxy" lazy object will call them in the final object and it will all work. But you wouldn't get autocompletion for them.</p>
+<p>But because these <strong>Typer</strong> classes inherit from the actual implementation that will be provided underneath (not the lazy object), you will get all the autocompletion and type checks in the editor.</p>
+                
+                  
+                
+                
+              
+              
+                
+
+
+              
+            </article>
+          </div>
+        </div>
+      </main>
+      
+        
+<footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-footer-copyright">
+        
+        powered by
+        <a href="https://www.mkdocs.org">MkDocs</a>
+        and
+        <a href="https://squidfunk.github.io/mkdocs-material/">
+          Material for MkDocs</a>
+      </div>
+      
+  <div class="md-footer-social">
+    <link rel="stylesheet" href="../../../assets/fonts/font-awesome.css">
+    
+      <a href="https://github.com/kabirkhan/spacy-data-debug" class="md-footer-social__link fa fa-github"></a>
+    
+      <a href="https://twitter.com/kabir_khan14" class="md-footer-social__link fa fa-twitter"></a>
+    
+      <a href="https://www.linkedin.com/in/tiangolo" class="md-footer-social__link fa fa-linkedin"></a>
+    
+      <a href="https://dev.to/tiangolo" class="md-footer-social__link fa fa-rss"></a>
+    
+      <a href="https://medium.com/@tiangolo" class="md-footer-social__link fa fa-medium"></a>
+    
+      <a href="https://tiangolo.com" class="md-footer-social__link fa fa-globe"></a>
+    
+  </div>
+
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    
+      <script src="../../../assets/javascripts/application.808e90bb.js"></script>
+      
+      <script>app.initialize({version:"1.0.4",url:{base:"../../.."}})</script>
+      
+        <script src="../../../js/termynal.js"></script>
+      
+        <script src="../../../js/custom.js"></script>
+      
+    
+  </body>
+</html>
