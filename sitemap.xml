@@ -1,47 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-     <loc>https://kabirkhan.github.com/spacy-ann-linker/</loc>
+     <loc>https://microsoft.github.com/spacy-ann-linker/</loc>
      <lastmod>2020-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://kabirkhan.github.com/spacy-ann-linker/features/</loc>
+     <loc>https://microsoft.github.com/spacy-ann-linker/features/</loc>
      <lastmod>2020-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://kabirkhan.github.com/spacy-ann-linker/tutorial/</loc>
+     <loc>https://microsoft.github.com/spacy-ann-linker/tutorial/</loc>
      <lastmod>2020-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://kabirkhan.github.com/spacy-ann-linker/tutorial/first-steps/</loc>
+     <loc>https://microsoft.github.com/spacy-ann-linker/tutorial/first-steps/</loc>
      <lastmod>2020-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://kabirkhan.github.com/spacy-ann-linker/tutorial/printing/</loc>
+     <loc>https://microsoft.github.com/spacy-ann-linker/tutorial/printing/</loc>
      <lastmod>2020-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://kabirkhan.github.com/spacy-ann-linker/alternatives/</loc>
+     <loc>https://microsoft.github.com/spacy-ann-linker/alternatives/</loc>
      <lastmod>2020-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://kabirkhan.github.com/spacy-ann-linker/help-typer/</loc>
+     <loc>https://microsoft.github.com/spacy-ann-linker/contributing/</loc>
      <lastmod>2020-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://kabirkhan.github.com/spacy-ann-linker/contributing/</loc>
-     <lastmod>2020-01-28</lastmod>
-     <changefreq>daily</changefreq>
-    </url>
-    <url>
-     <loc>https://kabirkhan.github.com/spacy-ann-linker/release-notes/</loc>
+     <loc>https://microsoft.github.com/spacy-ann-linker/release-notes/</loc>
      <lastmod>2020-01-28</lastmod>
      <changefreq>daily</changefreq>
     </url>

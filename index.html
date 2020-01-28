@@ -13,7 +13,7 @@
         <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
       
       
-        <link rel="canonical" href="https://kabirkhan.github.com/spacy-ann-linker/">
+        <link rel="canonical" href="https://microsoft.github.com/spacy-ann-linker/">
       
       
       
@@ -104,7 +104,7 @@
   
     
     
-    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="teal">
+    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="orange">
   
     <svg class="md-svg">
       <defs>
@@ -127,7 +127,7 @@
   <nav class="md-header-nav md-grid">
     <div class="md-flex">
       <div class="md-flex__cell md-flex__cell--shrink">
-        <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-header-nav__button md-logo">
+        <a href="https://microsoft.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-header-nav__button md-logo">
           
             <img src="img/icon-white.svg" width="24" height="24">
           
@@ -144,7 +144,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Debug
+                Introduction
               
             </span>
           
@@ -219,7 +219,7 @@
                   <div class="md-sidebar__inner">
                     <nav class="md-nav md-nav--primary" data-md-level="0">
   <label class="md-nav__title md-nav__title--site" for="__drawer">
-    <a href="https://kabirkhan.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-nav__button md-logo">
+    <a href="https://microsoft.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-nav__button md-logo">
       
         <img src="img/icon-white.svg" width="48" height="48">
       
@@ -262,11 +262,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Debug
+        Introduction
       </label>
     
-    <a href="." title="Debug" class="md-nav__link md-nav__link--active">
-      Debug
+    <a href="." title="Introduction" class="md-nav__link md-nav__link--active">
+      Introduction
     </a>
     
       
@@ -474,18 +474,6 @@
 
 
   <li class="md-nav__item">
-    <a href="help-typer/" title="Help Typer - Get Help" class="md-nav__link">
-      Help Typer - Get Help
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
     <a href="contributing/" title="Development - Contributing" class="md-nav__link">
       Development - Contributing
     </a>
@@ -635,51 +623,51 @@
               
                 
                 
-                  <h1>Debug</h1>
+                  <h1>Introduction</h1>
                 
                 <p align="center">
-  <a href="https://typer.tiangolo.com"><img src="https://typer.tiangolo.com/img/logo-margin/logo-margin-vector.svg" alt="Typer"></a>
+  <a href="https://microsoft.github.io/spacy-ann-linker"><img src="https://typer.tiangolo.com/img/logo-margin/logo-margin-vector.svg" alt="spaCy ANN Linker"></a>
 </p>
 
-<p align="center">
-    <em>Typer, build great CLIs. Easy to code. Based on Python type hints.</em>
+<p>
+    <em>spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.</em>
 </p>
 
-<p align="center">
-<a href="https://travis-ci.com/tiangolo/typer" target="_blank">
-    <img src="https://travis-ci.com/tiangolo/typer.svg?branch=master" alt="Build Status">
-</a>
-<a href="https://codecov.io/gh/tiangolo/typer" target="_blank">
-    <img src="https://codecov.io/gh/tiangolo/typer/branch/master/graph/badge.svg" alt="Coverage">
-</a>
-<a href="https://pypi.org/project/typer" target="_blank">
-    <img src="https://badge.fury.io/py/typer.svg" alt="Package version">
+<p>
+<a href="https://dev.azure.com/kakh/spacy-ann-linker/_apis/build/status/microsoft.spacy-ann-linker?branchName=master" target="_blank">
+    <img src="https://dev.azure.com/kakh/spacy-ann-linker/_apis/build/status/microsoft.spacy-ann-linker?branchName=master" alt="Build Status">
 </a>
 </p>
 
 <hr />
-<p><strong>Documentation</strong>: <a href="https://typer.tiangolo.com" target="_blank">https://typer.tiangolo.com</a></p>
-<p><strong>Source Code</strong>: <a href="https://github.com/tiangolo/typer" target="_blank">https://github.com/tiangolo/typer</a></p>
+<p><strong>Documentation</strong>: <a href="https://microsoft.github.io/spacy-ann-linker" target="_blank">https://microsoft.github.io/spacy-ann-linker</a></p>
+<p><strong>Source Code</strong>: <a href="https://github.com/microsoft/spacy-ann-linker" target="_blank">https://github.com/microsoft/spacy-ann-linker</a></p>
 <hr />
-<p>Typer is library to build <abbr title="command line interface, programs executed from a terminal">CLI</abbr> applications that users will love using and developers will love creating. Based on Python 3.6+ type hints.</p>
-<p><strong>Typer</strong> is <a href="https://fastapi.tiangolo.com" class="external-link" target="_blank">FastAPI</a>'s little sibling. And it's intended to be the FastAPI of CLIs.</p>
+<p>spaCy ANN Linker is a <a href="https://github.com/explosion/spaCy" target="_blank">spaCy</a> a pipeline component for generating alias candidates for spaCy entities in <code>doc.ents</code>. It provides an optional interface for linking ambiguous aliases based on descriptions for each entity.</p>
 <p>The key features are:</p>
 <ul>
-<li><strong>Intuitive to write</strong>: Great editor support. <abbr title="also known as auto-complete, autocompletion, IntelliSense">Completion</abbr> everywhere. Less time debugging. Designed to be easy to use and learn. Less time reading docs.</li>
-<li><strong>Easy to use</strong>: It's easy to use for the final users. Automatic help, and (optional) automatic completion for all shells.</li>
-<li><strong>Short</strong>: Minimize code duplication. Multiple features from each parameter declaration. Fewer bugs.</li>
-<li><strong>Start simple</strong>: The simplest example adds only 2 lines of code to your app: <strong>1 import, 1 function call</strong>.</li>
-<li><strong>Grow large</strong>: Grow in complexity as much as you want, create arbitrarily complex trees of commands and groups subcommands, with options and arguments.</li>
+<li>
+<p><strong>Easy CLI Index Creation</strong>: Simply run <code>spacy create_index</code> with your data to create an Approximate Nearest Neighbors index from your data, make an <code>ann_linker</code> pipeline component and save a spaCy model.</p>
+</li>
+<li>
+<p><strong>Built in Web API</strong> for easy deployment </p>
+</li>
 </ul>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
 <p>Python 3.6+</p>
-<p>Typer stands on the shoulders of a giant. Its only internal dependency is <a href="https://click.palletsprojects.com/" class="external-link" target="_blank">Click</a>.</p>
+<p>spaCy ANN Linker is convenient wrapper built on a few comprehensive, high-performing packages.</p>
+<ul>
+<li><a href="https://spacy.io" class="external-link" target="_blank">spaCy</a></li>
+<li><a href="https://github.com/nmslib/nmslib" class="external-link" target="_blank">nmslib</a>.</li>
+<li><a href="https://typer.tiangolo.com" class="external-link" target="_blank">Typer (CLI)</a>.</li>
+<li><a href="https://fastapi.tiangolo.com" class="external-link" target="_blank">FastAPI (Web Service)</a>.</li>
+</ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <div class="termy">
 
-<div class="codehilite"><pre><span></span><span class="gp">$</span> pip install typer
+<div class="codehilite"><pre><span></span><span class="gp">$</span> pip install spacy-ann-linker
 <span class="go">---&gt; 100%</span>
-<span class="go">Successfully installed typer</span>
+<span class="go">Successfully installed spacy-ann-linker</span>
 </pre></div>
 
 
@@ -938,7 +926,7 @@
   <div class="md-footer-social">
     <link rel="stylesheet" href="assets/fonts/font-awesome.css">
     
-      <a href="https://github.com/kabirkhan/spacy-data-debug" class="md-footer-social__link fa fa-github"></a>
+      <a href="https://github.com/microsoft/spacy-ann-linker" class="md-footer-social__link fa fa-github"></a>
     
       <a href="https://twitter.com/kabir_khan14" class="md-footer-social__link fa fa-twitter"></a>
     
