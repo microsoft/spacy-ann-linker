@@ -3,7 +3,7 @@ requires = ["flit_core >=2,<3"]
 build-backend = "flit_core.buildapi"
 
 [tool.flit.metadata]
-module = "spacy_ann_linker"
+module = "spacy_ann"
 author = "Kabir Khan"
 author-email = "kakh@microsoft.com"
 home-page = "https://github.com/microsoft/spacy-ann-linker"
@@ -25,9 +25,14 @@ classifiers = [
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "License :: OSI Approved :: MIT License"
-    ]
+]
 requires = [
-    "spacy >= 2.2.1, <3.0.0"
+    "nmslib == 2.0.5",
+    "scikit-learn == 0.21.3",
+    "scipy >= 1.4.1, <1.5.0",
+    "spacy >= 2.2.1, <3.0.0",
+    "typer == 0.0.8",
+    "tqdm == 4.34.0"
 ]
 description-file = "README.md"
 requires-python = ">=3.6"
@@ -52,9 +57,6 @@ doc = [
     "mkdocs-material",
     "markdown-include"
 ]
-all = [
-    "nmslib==2.0.5",
-    "scikit-learn==0.21.3",
-    "spacy==2.2.3",
-    "tqdm==4.34.0"
-]
+
+[tool.flit.scripts]
+spacy_ann = "spacy_ann.cli:main"

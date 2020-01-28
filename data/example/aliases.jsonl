@@ -1,0 +1,6 @@
+{"alias": "ML", "entities": ["a1", "a2"], "probabilities": [0.5, 0.5]}
+{"alias": "Machine learning", "entities": ["a1"], "probabilities": [1.0]}
+{"alias": "Meta Language", "entities": ["a2"], "probabilities": [1.0]}
+{"alias": "NLP", "entities": ["a3", "a4"], "probabilities": [0.5, 0.5]}
+{"alias": "Natural language processing", "entities": ["a3"], "probabilities": [1.0]}
+{"alias": "Neuro-linguistic programming", "entities": ["a4"], "probabilities": [1.0]}

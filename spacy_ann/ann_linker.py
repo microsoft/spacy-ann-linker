@@ -1,11 +1,8 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-from __future__ import unicode_literals
-
 from collections import defaultdict
 import os
-
 import json
 import numpy as np
 import spacy

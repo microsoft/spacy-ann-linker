@@ -21,6 +21,7 @@ dist
 site
 .coverage
 htmlcov
+examples/tutorial/models/*
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
