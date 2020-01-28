@@ -1,0 +1,64 @@
+site_name: spaCy ANN Linker
+site_description: spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.
+site_url: https://kabirkhan.github.com/spacy-ann-linker
+
+theme:
+    name: 'material'
+    palette:
+        primary: 'blue'
+        accent: 'teal'
+    logo: 'img/icon-white.svg'
+    favicon: 'img/favicon.png'
+
+repo_name: microsoft/spacy-ann-linker
+repo_url: https://github.com/microsoft/spacy-ann-linker
+edit_uri: ''
+google_analytics:
+    - 'UA-155009830-1'
+    - 'auto'
+
+nav:
+    - Debug: 'index.md'
+    - Features: 'features.md'
+    - Tutorial - User Guide:
+        - Tutorial - User Guide - Intro: 'tutorial/index.md'
+        - First Steps: 'tutorial/first-steps.md'
+        - CLI: 'tutorial/printing.md'
+    - Alternatives, Inspiration and Comparisons: 'alternatives.md'
+    - Help Typer - Get Help: 'help-typer.md'
+    - Development - Contributing: 'contributing.md'
+    - Release Notes: release-notes.md
+
+markdown_extensions:
+    - toc:
+        permalink: true
+    - markdown.extensions.codehilite:
+        guess_lang: false
+    - markdown_include.include:
+        base_path: docs
+    - admonition
+    - codehilite
+    - extra
+
+extra:
+    social:
+        - type: 'github'
+          link: 'https://github.com/kabirkhan/spacy-data-debug'
+        - type: 'twitter'
+          link: 'https://twitter.com/kabir_khan14'
+        - type: 'linkedin'
+          link: 'https://www.linkedin.com/in/tiangolo'
+        - type: 'rss'
+          link: 'https://dev.to/tiangolo'
+        - type: 'medium'
+          link: 'https://medium.com/@tiangolo'
+        - type: 'globe'
+          link: 'https://tiangolo.com'
+
+extra_css:
+    - 'css/termynal.css'
+    - 'css/custom.css'
+
+extra_javascript:
+    - 'js/termynal.js'
+    - 'js/custom.js'
