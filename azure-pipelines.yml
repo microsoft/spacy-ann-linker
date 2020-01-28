@@ -98,9 +98,10 @@ stages:
           pip install flit
           flit install --deps=develop --symlink
         displayName: 'Install dependencies'
+
       - script: |
           bash scripts/deploy.sh
         displayName: Deploy
         env:
-          - FLIT_USERNAME: $(FLIT_USERNAME)
-          - FLIT_PASSWORD: $(FLIT_PASSWORD)
+          FLIT_USERNAME: $(FLIT_USERNAME)
+          FLIT_PASSWORD: $(FLIT_PASSWORD)
