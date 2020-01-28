@@ -75,9 +75,9 @@ jobs:
       bash scripts/test.sh
     displayName: Test
   
-  - script: |
-      bash <(curl -s https://codecov.io/bash)
-    displayName: Codecov
+  # - script: |
+  #     bash <(curl -s https://codecov.io/bash)
+  #   displayName: Codecov
   
   - script: |
       bash scripts/deploy.sh

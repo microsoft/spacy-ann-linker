@@ -53,6 +53,8 @@ doc = [
     "markdown-include"
 ]
 all = [
-    "colorama",
-    "click-completion"
+    "nmslib==2.0.5",
+    "scikit-learn==0.21.3",
+    "spacy==2.2.3",
+    "tqdm==4.34.0"
 ]
