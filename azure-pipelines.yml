@@ -77,9 +77,9 @@ stages:
         flit install --deps=develop --symlink
       displayName: 'Install dependencies'
 
-    - script: |
-        bash scripts/test.sh
-      displayName: Test
+    # - script: |
+    #     bash scripts/test.sh
+    #   displayName: Test
 
 - stage: Publish
   displayName: 'Publish to PyPI'
