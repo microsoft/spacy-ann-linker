@@ -3,9 +3,6 @@ trigger:
   branches:
     include:
     - '*'
-  tags:
-    include:
-    - *
   paths:
     exclude:
     - 'docs/*'
