@@ -7,6 +7,9 @@ trigger:
     exclude:
     - 'docs/*'
     - '*.md'
+  tags:
+    include:
+    - v*
 pr:
   paths:
     exclude:
@@ -30,49 +33,49 @@ stages:
         pip install flake8
         python -m flake8 spacy_ann --count --select=E901,E999,F821,F822,F823 --show-source --statistics
       displayName: 'flake8'
-  - job: 'Test'
-    dependsOn: 'Validate'
-    strategy:
-      matrix:
-        Python36Linux:
-          imageName: 'ubuntu-16.04'
-          python.version: '3.6'
-        Python36Windows:
-          imageName: 'vs2017-win2016'
-          python.version: '3.6'
-        Python36Mac:
-          imageName: 'macos-10.13'
-          python.version: '3.6'
-        Python37Linux:
-          imageName: 'ubuntu-16.04'
-          python.version: '3.7'
-        Python37Windows:
-          imageName: 'vs2017-win2016'
-          python.version: '3.7'
-        Python37Mac:
-          imageName: 'macos-10.13'
-          python.version: '3.7'
-        Python38Linux:
-          imageName: 'ubuntu-16.04'
-          python.version: '3.8'
-        Python38Windows:
-          imageName: 'vs2017-win2016'
-          python.version: '3.8'
-        Python38Mac:
-          imageName: 'macos-10.13'
-          python.version: '3.8'
-      maxParallel: 4
+  # - job: 'Test'
+  #   dependsOn: 'Validate'
+  #   strategy:
+  #     matrix:
+  #       Python36Linux:
+  #         imageName: 'ubuntu-16.04'
+  #         python.version: '3.6'
+  #       Python36Windows:
+  #         imageName: 'vs2017-win2016'
+  #         python.version: '3.6'
+  #       Python36Mac:
+  #         imageName: 'macos-10.13'
+  #         python.version: '3.6'
+  #       Python37Linux:
+  #         imageName: 'ubuntu-16.04'
+  #         python.version: '3.7'
+  #       Python37Windows:
+  #         imageName: 'vs2017-win2016'
+  #         python.version: '3.7'
+  #       Python37Mac:
+  #         imageName: 'macos-10.13'
+  #         python.version: '3.7'
+  #       Python38Linux:
+  #         imageName: 'ubuntu-16.04'
+  #         python.version: '3.8'
+  #       Python38Windows:
+  #         imageName: 'vs2017-win2016'
+  #         python.version: '3.8'
+  #       Python38Mac:
+  #         imageName: 'macos-10.13'
+  #         python.version: '3.8'
+  #     maxParallel: 4
 
-    steps:
-    - task: UsePythonVersion@0
-      inputs:
-        versionSpec: '$(python.version)'
-        architecture: 'x64'
+  #   steps:
+  #   - task: UsePythonVersion@0
+  #     inputs:
+  #       versionSpec: '$(python.version)'
+  #       architecture: 'x64'
 
-    - script: |
-        pip install flit
-        flit install --deps=develop --symlink
-      displayName: 'Install dependencies'
+  #   - script: |
+  #       pip install flit
+  #       flit install --deps=develop --symlink
+  #     displayName: 'Install dependencies'
 
     # - script: |
     #     bash scripts/test.sh
@@ -80,6 +83,8 @@ stages:
 
 - stage: Publish
   displayName: 'Publish to PyPI'
+  dependsOn: test_and_validate
+  condition: and(succeeded(), startsWith(variables['build.sourceBranch'], 'refs/tags'))
   pool:
     vmImage: 'ubuntu-16.04'
   jobs:
