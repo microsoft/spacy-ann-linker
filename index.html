@@ -292,23 +292,23 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    Example
+  <a href="#data-prerequisites" class="md-nav__link">
+    Data Prerequisites
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-absolute-minimum" class="md-nav__link">
-    The absolute minimum
+  <a href="#entitiesjsonl-record-format" class="md-nav__link">
+    entities.jsonl Record Format
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#run-it" class="md-nav__link">
-    Run it
+  <a href="#aliasesjsonl-record-format" class="md-nav__link">
+    aliases.jsonl Record Format
   </a>
   
 </li>
@@ -319,26 +319,19 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-upgrade" class="md-nav__link">
-    Example upgrade
+  <a href="#spacy-prerequisites" class="md-nav__link">
+    spaCy prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#an-example-with-two-subcommands" class="md-nav__link">
-    An example with two subcommands
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#run-the-upgraded-example" class="md-nav__link">
-    Run the upgraded example
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#recap" class="md-nav__link">
@@ -525,23 +518,23 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example" class="md-nav__link">
-    Example
+  <a href="#data-prerequisites" class="md-nav__link">
+    Data Prerequisites
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#the-absolute-minimum" class="md-nav__link">
-    The absolute minimum
+  <a href="#entitiesjsonl-record-format" class="md-nav__link">
+    entities.jsonl Record Format
   </a>
   
 </li>
         
           <li class="md-nav__item">
-  <a href="#run-it" class="md-nav__link">
-    Run it
+  <a href="#aliasesjsonl-record-format" class="md-nav__link">
+    aliases.jsonl Record Format
   </a>
   
 </li>
@@ -552,26 +545,19 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#example-upgrade" class="md-nav__link">
-    Example upgrade
+  <a href="#spacy-prerequisites" class="md-nav__link">
+    spaCy prerequisites
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#usage" class="md-nav__link">
+    Usage
   </a>
   
     <nav class="md-nav">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#an-example-with-two-subcommands" class="md-nav__link">
-    An example with two subcommands
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#run-the-upgraded-example" class="md-nav__link">
-    Run the upgraded example
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#recap" class="md-nav__link">
@@ -625,9 +611,9 @@
                 
                   <h1>Introduction</h1>
                 
-                <p align="center">
-  <a href="https://microsoft.github.io/spacy-ann-linker"><img src="https://typer.tiangolo.com/img/logo-margin/logo-margin-vector.svg" alt="spaCy ANN Linker"></a>
-</p>
+                <!-- <p align="center">
+  <a href="https://microsoft.github.io/spacy-ann-linker"><img src="https://typer.tiangolo.com/img/logo-margin/logo-margin-vectoar.svg" alt="spaCy ANN Linker"></a>
+</p> -->
 
 <p>
     <em>spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.</em>
@@ -649,11 +635,12 @@
 <p>spaCy ANN Linker is a <a href="https://github.com/explosion/spaCy" target="_blank">spaCy</a> a pipeline component for generating alias candidates for spaCy entities in <code>doc.ents</code>. It provides an optional interface for linking ambiguous aliases based on descriptions for each entity.</p>
 <p>The key features are:</p>
 <ul>
+<li><strong>Easy spaCy Integration</strong>: spaCy ANN Linker provides completely serializable spaCy pipeline components that integrate directly into your existing spaCy model.</li>
 <li>
-<p><strong>Easy CLI Index Creation</strong>: Simply run <code>spacy create_index</code> with your data to create an Approximate Nearest Neighbors index from your data, make an <code>ann_linker</code> pipeline component and save a spaCy model.</p>
+<p><strong>CLI for simple Index Creation</strong>: Simply run <code>spacy create_index</code> with your data to create an Approximate Nearest Neighbors index from your data, make an <code>ann_linker</code> pipeline component and save a spaCy model.</p>
 </li>
 <li>
-<p><strong>Built in Web API</strong> for easy deployment </p>
+<p><strong>Built in Web API</strong> for easy deployment and Batch Entity Linking queries</p>
 </li>
 </ul>
 <h2 id="requirements">Requirements<a class="headerlink" href="#requirements" title="Permanent link">&para;</a></h2>
@@ -661,8 +648,9 @@
 <p>spaCy ANN Linker is convenient wrapper built on a few comprehensive, high-performing packages.</p>
 <ul>
 <li><a href="https://spacy.io" class="external-link" target="_blank">spaCy</a></li>
-<li><a href="https://github.com/nmslib/nmslib" class="external-link" target="_blank">nmslib</a>.</li>
-<li><a href="https://typer.tiangolo.com" class="external-link" target="_blank">Typer (CLI)</a>.</li>
+<li><a href="https://github.com/nmslib/nmslib" class="external-link" target="_blank">nmslib (ANN Index)</a>.</li>
+<li><a href="https://github.com/nmslib/nmslib" class="external-link" target="_blank">nmslib (ANN Index)</a>.</li>
+<li><a href="https://scikit-learn.org/stable/" class="external-link" target="_blank">scikit-learn (TF-IDF)</a>.</li>
 <li><a href="https://fastapi.tiangolo.com" class="external-link" target="_blank">FastAPI (Web Service)</a>.</li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
@@ -677,157 +665,144 @@
 
 </div>
 
-<h2 id="example">Example<a class="headerlink" href="#example" title="Permanent link">&para;</a></h2>
-<h3 id="the-absolute-minimum">The absolute minimum<a class="headerlink" href="#the-absolute-minimum" title="Permanent link">&para;</a></h3>
-<ul>
-<li>Create a file <code>main.py</code> with:</li>
-</ul>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
-
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">)</span>
+<h2 id="data-prerequisites">Data Prerequisites<a class="headerlink" href="#data-prerequisites" title="Permanent link">&para;</a></h2>
+<p>To use this spaCy ANN Linker you need pre-existing Knowledge Base data.
+spaCy ANN Linker expects data to exist in 2 JSONL files together in a directory</p>
+<div class="codehilite"><pre><span></span>kb_dir
+│   aliases.jsonl
+│   entities.jsonl
 </pre></div>
 
 
-<h3 id="run-it">Run it<a class="headerlink" href="#run-it" title="Permanent link">&para;</a></h3>
-<p>Run your application:</p>
+<p>For testing the package, you can use the example data in <code>examples/tutorial/data</code></p>
+<div class="codehilite"><pre><span></span>examples/tutorial/data
+│   aliases.jsonl
+│   entities.jsonl
+</pre></div>
+
+
+<h3 id="entitiesjsonl-record-format"><strong>entities.jsonl Record Format</strong><a class="headerlink" href="#entitiesjsonl-record-format" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Canonical Entity Id&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity Description used for Disambiguation&quot;</span><span class="p">}</span>
+</pre></div>
+
+
+<p><strong>Example data</strong></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Machine learning (ML) is the scientific study of algorithms and statistical models...&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a2&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;ML (\&quot;Meta Language\&quot;) is a general-purpose functional programming language. It has roots in Lisp, and has been characterized as \&quot;Lisp with types\&quot;.&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a3&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Natural language processing (NLP) is a subfield of linguistics, computer science, information engineering, and artificial intelligence concerned with the interactions between computers and human (natural) languages, in particular how to program computers to process and analyze large amounts of natural language data.&quot;</span><span class="p">}</span>
+<span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a4&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Neuro-linguistic programming (NLP) is a pseudoscientific approach to communication, personal development, and psychotherapy created by Richard Bandler and John Grinder in California, United States in the 1970s.&quot;</span><span class="p">}</span>
+<span class="err">...</span>
+</pre></div>
+
+
+<h3 id="aliasesjsonl-record-format"><strong>aliases.jsonl Record Format</strong><a class="headerlink" href="#aliasesjsonl-record-format" title="Permanent link">&para;</a></h3>
+<div class="codehilite"><pre><span></span><span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;alias string&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="s2">&quot;of&quot;</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="s2">&quot;ids&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]}</span>
+</pre></div>
+
+
+<p><strong>Example data</strong></p>
+<div class="codehilite"><pre><span></span><span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;ML&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="s2">&quot;a2&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]}</span>
+<span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Machine learning&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a1&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]}</span>
+<span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Meta Language&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a2&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]}</span>
+<span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;NLP&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a3&quot;</span><span class="p">,</span> <span class="s2">&quot;a4&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]}</span>
+<span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Natural language processing&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a3&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]}</span>
+<span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Neuro-linguistic programming&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a4&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]}</span>
+<span class="err">...</span>
+</pre></div>
+
+
+<h2 id="spacy-prerequisites">spaCy prerequisites<a class="headerlink" href="#spacy-prerequisites" title="Permanent link">&para;</a></h2>
+<p>If you don't have a pretrained spaCy model, download one now. The model needs to have vectors
+so download a model bigger than <code>en_core_web_sm</code></p>
 <div class="termy">
 
-<div class="codehilite"><pre><span></span><span class="go">// Run your application</span>
-<span class="gp">$</span> python main.py
-
-<span class="go">// You get a nice error, you are missing NAME</span>
-<span class="go">Usage: main.py [OPTIONS] NAME</span>
-<span class="go">Try &quot;main.py --help&quot; for help.</span>
-
-<span class="go">Error: Missing argument &quot;NAME&quot;.</span>
-
-<span class="go">// You get a --help for free</span>
-<span class="gp">$</span> python main.py --help
-
-<span class="go">Usage: main.py [OPTIONS] NAME</span>
-
-<span class="go">Options:</span>
-<span class="go">  --install-completion  Install completion for the current shell.</span>
-<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
-<span class="go">  --help                Show this message and exit.</span>
-
-<span class="go">// You get ✨ auto completion ✨ for free, installed with --install-completion</span>
-
-<span class="go">// Now pass the NAME argument</span>
-<span class="gp">$</span> python main.py Camila
-
-<span class="go">Hello Camila</span>
-
-<span class="go">// It works! 🎉</span>
+<div class="codehilite"><pre><span></span><span class="gp">$</span> spacy download en_core_web_md
+<span class="go">---&gt; 100%</span>
+<span class="go">Successfully installed en_core_web_md</span>
 </pre></div>
 
 
 
 </div>
 
-<h2 id="example-upgrade">Example upgrade<a class="headerlink" href="#example-upgrade" title="Permanent link">&para;</a></h2>
-<p>This was the simplest example possible.</p>
-<p>Now let's see one a bit more complex.</p>
-<h3 id="an-example-with-two-subcommands">An example with two subcommands<a class="headerlink" href="#an-example-with-two-subcommands" title="Permanent link">&para;</a></h3>
-<p>Modify the file <code>main.py</code>.</p>
-<p>Create a <code>typer.Typer()</code> app, and create two subcommands with their parameters.</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">typer</span>
-
-<span class="hll"><span class="n">app</span> <span class="o">=</span> <span class="n">typer</span><span class="o">.</span><span class="n">Typer</span><span class="p">()</span>
-</span>
-
-<span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-</span><span class="k">def</span> <span class="nf">hello</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Hello </span><span class="si">{name}</span><span class="s2">&quot;</span><span class="p">)</span>
-
-
-<span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-</span><span class="k">def</span> <span class="nf">goodbye</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">formal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">formal</span><span class="p">:</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Goodbye Ms. </span><span class="si">{name}</span><span class="s2">. Have a good day.&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">typer</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Bye </span><span class="si">{name}</span><span class="s2">!&quot;</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
-<span class="hll">    <span class="n">app</span><span class="p">()</span>
-</span></pre></div>
-
-
-<p>And that will:</p>
-<ul>
-<li>Explicitly create a <code>typer.Typer</code> app.<ul>
-<li>The previous <code>typer.run</code> actually creates one implicitly for you.</li>
-</ul>
-</li>
-<li>Add two subcommands with <code>@app.command()</code>.</li>
-<li>Execute the <code>app()</code> itself, as if it was a function (instead of <code>typer.run</code>).</li>
-</ul>
-<h3 id="run-the-upgraded-example">Run the upgraded example<a class="headerlink" href="#run-the-upgraded-example" title="Permanent link">&para;</a></h3>
+<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
+<p>Once you have your data, and a spaCy model with vectors, compute the nearest neighbors index for your Aliases.</p>
+<p>Run the <code>create_index</code> help command to understand the required arguments.</p>
 <div class="termy">
 
-<div class="codehilite"><pre><span></span><span class="go">// Check the --help</span>
-<span class="gp">$</span> python main.py --help
+<div class="codehilite"><pre><span></span><span class="gp">$</span> spacy_ann create_index --help 
+<span class="go">spacy_ann create_index --help</span>
+<span class="go">Usage: spacy_ann create_index [OPTIONS] MODEL KB_DIR OUTPUT_DIR</span>
 
-<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+<span class="go">  Create an ApproxNearestNeighborsLinker based on the Character N-Gram TF-</span>
+<span class="go">  IDF vectors for aliases in a KnowledgeBase</span>
 
-<span class="go">Options:</span>
-<span class="go">  --install-completion  Install completion for the current shell.</span>
-<span class="go">  --show-completion     Show completion for the current shell, to copy it or customize the installation.</span>
-<span class="go">  --help                Show this message and exit.</span>
+<span class="go">  model (str): spaCy language model directory or name to load kb_dir (Path):</span>
+<span class="go">  path to the directory with kb entities.jsonl and aliases.jsonl files</span>
+<span class="go">  output_dir (Path): path to output_dir for spaCy model with ann_linker pipe</span>
 
-<span class="go">Commands:</span>
-<span class="go">  goodbye</span>
-<span class="go">  hello</span>
+<span class="go">  kb File Formats</span>
 
-<span class="go">// You have 2 subcommands (the 2 functions): goodbye and hello</span>
+<span class="go">  e.g. entities.jsonl</span>
 
-<span class="go">// Now get the --help for hello</span>
+<span class="go">  {&quot;id&quot;: &quot;a1&quot;, &quot;description&quot;: &quot;Machine learning (ML) is the scientific study</span>
+<span class="go">  of algorithms and statistical models...&quot;} {&quot;id&quot;: &quot;a2&quot;, &quot;description&quot;: &quot;ML</span>
+<span class="go">  (&quot;Meta Language&quot;) is a general-purpose functional programming language. It</span>
+<span class="go">  has roots in Lisp, and has been characterized as &quot;Lisp with types&quot;.&quot;}</span>
 
-<span class="gp">$</span> python main.py hello --help
-
-<span class="go">Usage: main.py hello [OPTIONS] NAME</span>
-
-<span class="go">Options:</span>
-<span class="go">  --help  Show this message and exit.</span>
-
-<span class="go">// And now get the --help for goodbye</span>
-
-<span class="gp">$</span> python main.py goodbye --help
-
-<span class="go">Usage: main.py goodbye [OPTIONS] NAME</span>
+<span class="go">  e.g. aliases.jsonl {&quot;alias&quot;: &quot;ML&quot;, &quot;entities&quot;: [&quot;a1&quot;, &quot;a2&quot;],</span>
+<span class="go">  &quot;probabilities&quot;: [0.5, 0.5]}</span>
 
 <span class="go">Options:</span>
-<span class="go">  --formal / --no-formal</span>
-<span class="go">  --help                  Show this message and exit.</span>
-
-<span class="go">// Automatic --formal and --no-formal for the bool option 🎉</span>
-
-<span class="go">// And if you use it with the hello command</span>
-
-<span class="gp">$</span> python main.py hello Camila
-
-<span class="go">Hello Camila</span>
-
-<span class="go">// And with the goodbye command</span>
-
-<span class="gp">$</span> python main.py goodbye Camila
-
-<span class="go">Bye Camila!</span>
-
-<span class="go">// And with --formal</span>
-
-<span class="gp">$</span> python main.py goodbye --formal Camila
-
-<span class="go">Goodbye Ms. Camila. Have a good day.</span>
+<span class="go">  --new-model-name TEXT</span>
+<span class="go">  --cg-threshold FLOAT</span>
+<span class="go">  --n-iter INTEGER</span>
+<span class="go">  --verbose / --no-verbose</span>
+<span class="go">  --install-completion      Install completion for the current shell.</span>
+<span class="go">  --show-completion         Show completion for the current shell, to copy it</span>
+<span class="go">                            or customize the installation.</span>
+<span class="go">  --help                    Show this message and exit.</span>
 </pre></div>
 
+
+
+</div>
+
+<p>Now provide the required arguments. I'm using the example data but at this step use your own.
+the <code>create_index</code> command will run a few steps and you should see an output like the one below.</p>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="go">spacy_ann create_index en_core_web_md examples/tutorial/data examples/tutorial/models</span>
+
+<span class="go">// The create_index command runs a few steps</span>
+
+<span class="go">// Load the model passed as the first positional argument (en_core_web_md)</span>
+<span class="go">===================== Load Model ======================</span>
+<span class="go">⠹ Loading model en_core_web_md✔ Done.</span>
+<span class="go">ℹ 0 entities without a description</span>
+
+<span class="go">// Train an EntityEncoder on the descriptions of each Entity</span>
+<span class="go">================= Train EntityEncoder =================</span>
+<span class="go">⠸ Starting training EntityEncoder✔ Done Training</span>
+
+<span class="go">// Apply the EntityEncoder to get the final vectors for each entity</span>
+<span class="go">================= Apply EntityEncoder =================</span>
+<span class="go">⠙ Applying EntityEncoder to descriptions✔ Finished, embeddings created</span>
+<span class="go">✔ Done adding entities and aliases to kb</span>
+
+<span class="go">// Create Nearest Neighbors index from the Aliases in kb_dir/aliases.jsonl</span>
+<span class="go">================== Create ANN Index ===================</span>
+<span class="go">Fitting tfidf vectorizer on 6 aliases</span>
+<span class="go">Fitting and saving vectorizer took 0.012949 seconds</span>
+<span class="go">Finding empty (all zeros) tfidf vectors</span>
+<span class="go">Deleting 2/6 aliases because their tfidf is empty</span>
+<span class="go">Fitting ann index on 4 aliases</span>
+
+<span class="go">0%   10   20   30   40   50   60   70   80   90   100%</span>
+<span class="go">|----|----|----|----|----|----|----|----|----|----|</span>
+<span class="go">***************************************************</span>
+<span class="go">Fitting ann index took 0.030826 seconds</span>
+</pre></div>
 
 
 </div>
