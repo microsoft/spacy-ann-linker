@@ -1,14 +1,272 @@
+<p align="center">
+  <a href="https://microsoft.github.io/spacy-ann-linker"><img src="https://typer.tiangolo.com/img/logo-margin/logo-margin-vector.svg" alt="spaCy ANN Linker"></a>
+</p>
+<p>
+    <em>spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.</em>
+</p>
+<p align="center">
+<a href="https://dev.azure.com/kakh/spacy-ann-linker/_apis/build/status/microsoft.spacy-ann-linker?branchName=master" target="_blank">
+    <img src="https://dev.azure.com/kakh/spacy-ann-linker/_apis/build/status/microsoft.spacy-ann-linker?branchName=master" alt="Build Status">
+</a>
+<a href="https://pypi.org/project/spacy-ann-linker" target="_blank">
+    <img src="https://badge.fury.io/py/spacy-ann-linker.svg" alt="Package version">
+</a>
+</p>
 
-# Contributing
+---
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+**Documentation**: <a href="https://microsoft.github.io/spacy-ann-linker" target="_blank">https://microsoft.github.io/spacy-ann-linker</a>
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+**Source Code**: <a href="https://github.com/microsoft/spacy-ann-linker" target="_blank">https://github.com/microsoft/spacy-ann-linker</a>
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
-For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
-contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+---
+
+spaCy ANN Linker is a <a href="https://github.com/explosion/spaCy" target="_blank">spaCy</a> a pipeline component for generating alias candidates for spaCy entities in `doc.ents`. It provides an optional interface for linking ambiguous aliases based on descriptions for each entity.
+
+The key features are:
+
+* **Easy CLI Index Creation**: Simply run `spacy create_index` with your data to create an Approximate Nearest Neighbors index from your data, make an `ann_linker` pipeline component and save a spaCy model.
+
+* **Built in Web API** for easy deployment 
+
+## Requirements
+
+Python 3.6+
+
+spaCy ANN Linker is convenient wrapper built on a few comprehensive, high-performing packages.
+
+* <a href="https://spacy.io" class="external-link" target="_blank">spaCy</a>
+* <a href="https://github.com/nmslib/nmslib" class="external-link" target="_blank">nmslib</a>.
+* <a href="https://typer.tiangolo.com" class="external-link" target="_blank">Typer (CLI)</a>.
+* <a href="https://fastapi.tiangolo.com" class="external-link" target="_blank">FastAPI (Web Service)</a>.
+
+## Installation
+
+<div class="termy">
+
+```console
+$ pip install spacy-ann-linker
+---> 100%
+Successfully installed spacy-ann-linker
+```
+
+</div>
+
+## Example
+
+### The absolute minimum
+
+* Create a file `main.py` with:
+
+```Python
+import typer
+
+
+def main(name: str):
+    typer.echo(f"Hello {name}")
+
+
+if __name__ == "__main__":
+    typer.run(main)
+```
+
+### Run it
+
+Run your application:
+
+<div class="termy">
+
+```console
+// Run your application
+$ python main.py
+
+// You get a nice error, you are missing NAME
+Usage: main.py [OPTIONS] NAME
+Try "main.py --help" for help.
+
+Error: Missing argument "NAME".
+
+// You get a --help for free
+$ python main.py --help
+
+Usage: main.py [OPTIONS] NAME
+
+Options:
+  --install-completion  Install completion for the current shell.
+  --show-completion     Show completion for the current shell, to copy it or customize the installation.
+  --help                Show this message and exit.
+
+// You get ✨ auto completion ✨ for free, installed with --install-completion
+
+// Now pass the NAME argument
+$ python main.py Camila
+
+Hello Camila
+
+// It works! 🎉
+```
+
+</div>
+
+## Example upgrade
+
+This was the simplest example possible.
+
+Now let's see one a bit more complex.
+
+### An example with two subcommands
+
+Modify the file `main.py`.
+
+Create a `typer.Typer()` app, and create two subcommands with their parameters.
+
+```Python hl_lines="3  6  11  20"
+import typer
+
+app = typer.Typer()
+
+
+@app.command()
+def hello(name: str):
+    typer.echo(f"Hello {name}")
+
+
+@app.command()
+def goodbye(name: str, formal: bool = False):
+    if formal:
+        typer.echo(f"Goodbye Ms. {name}. Have a good day.")
+    else:
+        typer.echo(f"Bye {name}!")
+
+
+if __name__ == "__main__":
+    app()
+```
+
+And that will:
+
+* Explicitly create a `typer.Typer` app.
+    * The previous `typer.run` actually creates one implicitly for you.
+* Add two subcommands with `@app.command()`.
+* Execute the `app()` itself, as if it was a function (instead of `typer.run`).
+
+### Run the upgraded example
+
+<div class="termy">
+
+```console
+// Check the --help
+$ python main.py --help
+
+Usage: main.py [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --install-completion  Install completion for the current shell.
+  --show-completion     Show completion for the current shell, to copy it or customize the installation.
+  --help                Show this message and exit.
+
+Commands:
+  goodbye
+  hello
+
+// You have 2 subcommands (the 2 functions): goodbye and hello
+
+// Now get the --help for hello
+
+$ python main.py hello --help
+
+Usage: main.py hello [OPTIONS] NAME
+
+Options:
+  --help  Show this message and exit.
+
+// And now get the --help for goodbye
+
+$ python main.py goodbye --help
+
+Usage: main.py goodbye [OPTIONS] NAME
+
+Options:
+  --formal / --no-formal
+  --help                  Show this message and exit.
+
+// Automatic --formal and --no-formal for the bool option 🎉
+
+// And if you use it with the hello command
+
+$ python main.py hello Camila
+
+Hello Camila
+
+// And with the goodbye command
+
+$ python main.py goodbye Camila
+
+Bye Camila!
+
+// And with --formal
+
+$ python main.py goodbye --formal Camila
+
+Goodbye Ms. Camila. Have a good day.
+```
+
+</div>
+
+### Recap
+
+In summary, you declare **once** the types of parameters (*arguments* and *options*) as function parameters.
+
+You do that with standard modern Python types.
+
+You don't have to learn a new syntax, the methods or classes of a specific library, etc.
+
+Just standard **Python 3.6+**.
+
+For example, for an `int`:
+
+```Python
+total: int
+```
+
+or for a `bool` flag:
+
+```Python
+force: bool
+```
+
+And similarly for **files**, **paths**, **enums** (choices), etc. And there are tools to create **groups of subcommands**, add metadata, extra **validation**, etc.
+
+**You get**: great editor support, including **completion** and **type checks** everywhere.
+
+**Your users get**: automatic **`--help`**, (optional) **autocompletion** in their terminal (Bash, Zsh, Fish, PowerShell).
+
+For a more complete example including more features, see the <a href="https://typer.tiangolo.com/tutorial/">Tutorial - User Guide</a>.
+
+## Optional Dependencies
+
+Typer uses <a href="https://click.palletsprojects.com/" class="external-link" target="_blank">Click</a> internally. That's the only dependency.
+
+But you can also install extras:
+
+* <a href="https://pypi.org/project/colorama/" class="external-link" target="_blank"><code>colorama</code></a>: and Click will automatically use it to make sure your terminal's colors always work correctly, even in Windows.
+    * Then you can use any tool you want to output your terminal's colors in all the systems, including the integrated `typer.style()` and `typer.secho()` (provided by Click).
+    * Or any other tool, e.g. <a href="https://pypi.org/project/wasabi/" class="external-link" target="_blank"><code>wasabi</code></a>, <a href="https://github.com/erikrose/blessings" class="external-link" target="_blank"><code>blessings</code></a>.
+* <a href="https://github.com/click-contrib/click-completion" class="external-link" target="_blank"><code>click-completion</code></a>: and Typer will automatically configure it to provide completion for all the shells, including installation commands.
+
+You can install `typer` with `colorama` and `click-completion` with `pip install typer[all]`.
+
+## Other tools and plug-ins
+
+Click has many plug-ins available that you can use. And there are many tools that help with command line applications that you can use as well, even if they are not related to Typer or Click.
+
+For example:
+
+* <a href="https://github.com/click-contrib/click-spinner" class="external-link" target="_blank"><code>click-spinner</code></a>: to show the user that you are loading data. A Click plug-in.
+    * There are several other Click plug-ins at <a href="https://github.com/click-contrib" class="external-link" target="_blank">click-contrib</a> that you can explore.
+* <a href="https://pypi.org/project/tabulate/" class="external-link" target="_blank"><code>tabulate</code></a>: to automatically display tabular data nicely. Independent of Click or typer.
+* etc... you can re-use many of the great available tools for building CLIs.
+
+## License
+
+This project is licensed under the terms of the MIT license.
