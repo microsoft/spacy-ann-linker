@@ -792,7 +792,10 @@ it just like you would any normal spaCy model.</p>
 <span class="c1"># The NER component of the en_core_web_md model doesn&#39;t actually recognize the aliases as entities</span>
 <span class="c1"># so we&#39;ll add a spaCy EntityRuler component for now to extract them.</span>
 <span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">)</span>
-<span class="n">patterns</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span> <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">get_alias_strings</span><span class="p">()]</span>
+<span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span>
+    <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">get_alias_strings</span><span class="p">()</span>
+<span class="p">]</span>
 <span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
 <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">ruler</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">&quot;ann_linker&quot;</span><span class="p">)</span>
 
@@ -802,6 +805,8 @@ it just like you would any normal spaCy model.</p>
 
 <span class="c1"># Outputs:</span>
 <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;Machine learning&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
+<span class="c1">#</span>
+<span class="c1"># In our entities.jsonl file</span>
 <span class="c1"># a3 =&gt; Natural Language Processing</span>
 <span class="c1"># a1 =&gt; Machine learning</span>
 </pre></div>
