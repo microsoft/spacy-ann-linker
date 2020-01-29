@@ -330,33 +330,6 @@
     Usage
   </a>
   
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#recap" class="md-nav__link">
-    Recap
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-dependencies" class="md-nav__link">
-    Optional Dependencies
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#other-tools-and-plug-ins" class="md-nav__link">
-    Other tools and plug-ins
-  </a>
-  
 </li>
       
         <li class="md-nav__item">
@@ -554,33 +527,6 @@
         <li class="md-nav__item">
   <a href="#usage" class="md-nav__link">
     Usage
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#recap" class="md-nav__link">
-    Recap
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#optional-dependencies" class="md-nav__link">
-    Optional Dependencies
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#other-tools-and-plug-ins" class="md-nav__link">
-    Other tools and plug-ins
   </a>
   
 </li>
@@ -807,48 +753,65 @@ the <code>create_index</code> command will run a few steps and you should see an
 
 </div>
 
-<h3 id="recap">Recap<a class="headerlink" href="#recap" title="Permanent link">&para;</a></h3>
-<p>In summary, you declare <strong>once</strong> the types of parameters (<em>arguments</em> and <em>options</em>) as function parameters.</p>
-<p>You do that with standard modern Python types.</p>
-<p>You don't have to learn a new syntax, the methods or classes of a specific library, etc.</p>
-<p>Just standard <strong>Python 3.6+</strong>.</p>
-<p>For example, for an <code>int</code>:</p>
+<!-- 
+### Recap
+
+In summary, you declare **once** the types of parameters (*arguments* and *options*) as function parameters.
+
+You do that with standard modern Python types.
+
+You don't have to learn a new syntax, the methods or classes of a specific library, etc.
+
+Just standard **Python 3.6+**.
+
+For example, for an `int`:
+
+
 <div class="codehilite"><pre><span></span><span class="n">total</span><span class="p">:</span> <span class="nb">int</span>
 </pre></div>
 
 
-<p>or for a <code>bool</code> flag:</p>
+
+or for a `bool` flag:
+
+
 <div class="codehilite"><pre><span></span><span class="n">force</span><span class="p">:</span> <span class="nb">bool</span>
 </pre></div>
 
 
-<p>And similarly for <strong>files</strong>, <strong>paths</strong>, <strong>enums</strong> (choices), etc. And there are tools to create <strong>groups of subcommands</strong>, add metadata, extra <strong>validation</strong>, etc.</p>
-<p><strong>You get</strong>: great editor support, including <strong>completion</strong> and <strong>type checks</strong> everywhere.</p>
-<p><strong>Your users get</strong>: automatic <strong><code>--help</code></strong>, (optional) <strong>autocompletion</strong> in their terminal (Bash, Zsh, Fish, PowerShell).</p>
-<p>For a more complete example including more features, see the <a href="https://typer.tiangolo.com/tutorial/">Tutorial - User Guide</a>.</p>
-<h2 id="optional-dependencies">Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Permanent link">&para;</a></h2>
-<p>Typer uses <a href="https://click.palletsprojects.com/" class="external-link" target="_blank">Click</a> internally. That's the only dependency.</p>
-<p>But you can also install extras:</p>
-<ul>
-<li><a href="https://pypi.org/project/colorama/" class="external-link" target="_blank"><code>colorama</code></a>: and Click will automatically use it to make sure your terminal's colors always work correctly, even in Windows.<ul>
-<li>Then you can use any tool you want to output your terminal's colors in all the systems, including the integrated <code>typer.style()</code> and <code>typer.secho()</code> (provided by Click).</li>
-<li>Or any other tool, e.g. <a href="https://pypi.org/project/wasabi/" class="external-link" target="_blank"><code>wasabi</code></a>, <a href="https://github.com/erikrose/blessings" class="external-link" target="_blank"><code>blessings</code></a>.</li>
-</ul>
-</li>
-<li><a href="https://github.com/click-contrib/click-completion" class="external-link" target="_blank"><code>click-completion</code></a>: and Typer will automatically configure it to provide completion for all the shells, including installation commands.</li>
-</ul>
-<p>You can install <code>typer</code> with <code>colorama</code> and <code>click-completion</code> with <code>pip install typer[all]</code>.</p>
-<h2 id="other-tools-and-plug-ins">Other tools and plug-ins<a class="headerlink" href="#other-tools-and-plug-ins" title="Permanent link">&para;</a></h2>
-<p>Click has many plug-ins available that you can use. And there are many tools that help with command line applications that you can use as well, even if they are not related to Typer or Click.</p>
-<p>For example:</p>
-<ul>
-<li><a href="https://github.com/click-contrib/click-spinner" class="external-link" target="_blank"><code>click-spinner</code></a>: to show the user that you are loading data. A Click plug-in.<ul>
-<li>There are several other Click plug-ins at <a href="https://github.com/click-contrib" class="external-link" target="_blank">click-contrib</a> that you can explore.</li>
-</ul>
-</li>
-<li><a href="https://pypi.org/project/tabulate/" class="external-link" target="_blank"><code>tabulate</code></a>: to automatically display tabular data nicely. Independent of Click or typer.</li>
-<li>etc... you can re-use many of the great available tools for building CLIs.</li>
-</ul>
+
+And similarly for **files**, **paths**, **enums** (choices), etc. And there are tools to create **groups of subcommands**, add metadata, extra **validation**, etc.
+
+**You get**: great editor support, including **completion** and **type checks** everywhere.
+
+**Your users get**: automatic **`--help`**, (optional) **autocompletion** in their terminal (Bash, Zsh, Fish, PowerShell).
+
+For a more complete example including more features, see the <a href="https://typer.tiangolo.com/tutorial/">Tutorial - User Guide</a>.
+
+## Optional Dependencies
+
+Typer uses <a href="https://click.palletsprojects.com/" class="external-link" target="_blank">Click</a> internally. That's the only dependency.
+
+But you can also install extras:
+
+* <a href="https://pypi.org/project/colorama/" class="external-link" target="_blank"><code>colorama</code></a>: and Click will automatically use it to make sure your terminal's colors always work correctly, even in Windows.
+    * Then you can use any tool you want to output your terminal's colors in all the systems, including the integrated `typer.style()` and `typer.secho()` (provided by Click).
+    * Or any other tool, e.g. <a href="https://pypi.org/project/wasabi/" class="external-link" target="_blank"><code>wasabi</code></a>, <a href="https://github.com/erikrose/blessings" class="external-link" target="_blank"><code>blessings</code></a>.
+* <a href="https://github.com/click-contrib/click-completion" class="external-link" target="_blank"><code>click-completion</code></a>: and Typer will automatically configure it to provide completion for all the shells, including installation commands.
+
+You can install `typer` with `colorama` and `click-completion` with `pip install typer[all]`.
+
+## Other tools and plug-ins
+
+Click has many plug-ins available that you can use. And there are many tools that help with command line applications that you can use as well, even if they are not related to Typer or Click.
+
+For example:
+
+* <a href="https://github.com/click-contrib/click-spinner" class="external-link" target="_blank"><code>click-spinner</code></a>: to show the user that you are loading data. A Click plug-in.
+    * There are several other Click plug-ins at <a href="https://github.com/click-contrib" class="external-link" target="_blank">click-contrib</a> that you can explore.
+* <a href="https://pypi.org/project/tabulate/" class="external-link" target="_blank"><code>tabulate</code></a>: to automatically display tabular data nicely. Independent of Click or typer.
+* etc... you can re-use many of the great available tools for building CLIs. -->
+
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>This project is licensed under the terms of the MIT license.</p>
                 
