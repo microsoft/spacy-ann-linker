@@ -120,11 +120,5 @@ def create_index(model: str,
         nlp.to_disk(output_dir)
         nlp_loaded = nlp.from_disk(output_dir)
 
-
-def _print_kb(kb):
-    print(kb.get_size_entities(), "kb entities")
-    print(kb.get_size_aliases(), "kb aliases")
-
-
 if __name__ == "__main__":
     typer.run(create_index)

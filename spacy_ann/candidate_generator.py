@@ -144,6 +144,7 @@ class CandidateGenerator:
         extended_distances = np.empty((len(empty_vectors_boolean_flags),), dtype=object)
 
         if vectors.shape[0] - empty_vectors_count == 0:
+            print("First", extended_neighbors, extended_distances)
             return extended_neighbors, extended_distances
 
         # remove empty vectors before calling `ann_index.knnQueryBatch`
@@ -165,11 +166,13 @@ class CandidateGenerator:
         extended_neighbors[empty_vectors_boolean_flags] = np.array(neighbors)[:-1]
         extended_distances[empty_vectors_boolean_flags] = np.array(distances)[:-1]
 
+        print("Second", extended_neighbors, extended_distances)
+
         return extended_neighbors, extended_distances
     
     def __call__(
         self, mention_texts: List[str], k: int
-    ) -> List[List[AliasCandidate]]:
+    ) -> List[List[Candidate]]:
         if not self.initialized:
             raise Exception(
                 "Not initialized. Run create_tfidf_ann_index or load a pretrained ann_index using from_disk"
@@ -192,14 +195,16 @@ class CandidateGenerator:
         if self.verbose:
             print(f"Finding neighbors took {total_time} seconds")
 
-        short_alias_strings = set([a for a in self.kb.get_alias_strings() if len(a) < 3])
+        short_alias_strings = set([a for a in self.kb.get_alias_strings() if len(a) < 4])
 
         batch_candidates = []
         for mention, neighbors, distances in zip(
             mention_texts, batch_neighbors, batch_distances
         ):
+            print("mention", "neighbors", "distances")
+            print(mention, neighbors, distances)
             if mention in short_alias_strings:
-                batch_candidates.append(self.kb.get_candidates(mention))
+                batch_candidates.append([AliasCandidate(mention, 1.0)])
                 continue
             if neighbors is None:
                 neighbors = []
@@ -209,6 +214,7 @@ class CandidateGenerator:
             alias_candidates = []
             for neighbor_index, distance in zip(neighbors, distances):
                 alias = self.aliases[neighbor_index]
+                print("ALIAS:", alias, distance)
                 similarity = 1.0 - distance
                 if similarity > self.threshold:
                     alias_candidates.append(AliasCandidate(alias, similarity))

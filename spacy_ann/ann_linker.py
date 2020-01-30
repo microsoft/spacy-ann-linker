@@ -4,12 +4,13 @@
 from collections import defaultdict
 import os
 import json
+from typing import List
 import numpy as np
 import spacy
 from spacy.errors import Errors
 from spacy.compat import basestring_
 from spacy.language import component
-from spacy.kb import KnowledgeBase
+from spacy.kb import Candidate, KnowledgeBase
 from spacy.tokens import Doc, Span
 from spacy import util
 import srsly
@@ -22,7 +23,7 @@ from spacy_ann.candidate_generator import CandidateGenerator
     requires=["doc.ents", "doc.sents", "token.ent_iob", "token.ent_type"],
     assigns=["span._.kb_alias"],
 )
-class ApproxNearestNeighborsLinker(object):
+class ApproxNearestNeighborsLinker:
     """The ApproxNearestNeighborsLinker adds Entity Linking capabilities
     to map NER mentions to KnowledgeBase Aliases
     """
@@ -39,8 +40,14 @@ class ApproxNearestNeighborsLinker(object):
         self.kb = None
         self.cg = None
         self.k = cfg.get("k_neighbors", 5)
+        self.disambiguate = cfg.get("disambiguate", True)
+    
+    @property
+    def aliases(self) -> List[str]:
+        """Return List of aliases in KB"""
+        return self.kb.get_alias_strings()
 
-    def __call__(self, doc: Doc):
+    def __call__(self, doc: Doc) -> Doc:
         """Resolve the ent_id_ attribute of an ent span to the skills data store."""
         self.require_kb()
         self.require_cg()
@@ -48,9 +55,34 @@ class ApproxNearestNeighborsLinker(object):
         mentions = doc.ents
         mention_strings = [x.text for x in mentions]
         batch_candidates = self.cg(mention_strings, self.k)
+        
+        for ent, alias_candidates in zip(doc.ents, batch_candidates):
+            if len(alias_candidates) == 0:
+                continue
+            else:
+                if self.disambiguate:
+                    print(alias_candidates)
 
-        for ent, candidates in zip(doc.ents, batch_candidates):
-            ent._.kb_alias = batch_candidates[0]
+                    kb_candidates = []
+                    for alias_cand in alias_candidates:
+                        kb_candidates += self.kb.get_candidates(alias_cand.alias)
+
+                    # create candidate matrix
+                    entity_encodings = np.asarray([c.entity_vector for c in kb_candidates])
+                    candidate_norm = np.linalg.norm(entity_encodings, axis=1)
+
+
+                    sims = np.dot(entity_encodings, doc.vector.T) / (
+                        candidate_norm * doc.vector_norm
+                    )
+
+                    # TODO: Add thresholding here
+                    likely = kb_candidates[np.argmax(sims)]
+                    for t in ent:
+                        t.ent_kb_id = likely.entity
+                else:
+                    # Set aliases for a later pipeline component
+                    ent._.kb_alias = alias_candidates[0]
 
         return doc
 
