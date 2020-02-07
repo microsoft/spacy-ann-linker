@@ -369,90 +369,6 @@
 
 
   <li class="md-nav__item">
-    <a href="features/" title="Features" class="md-nav__link">
-      Features
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item md-nav__item--nested">
-    
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-3" type="checkbox" id="nav-3">
-    
-    <label class="md-nav__link" for="nav-3">
-      Tutorial - User Guide
-    </label>
-    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
-      <label class="md-nav__title" for="nav-3">
-        Tutorial - User Guide
-      </label>
-      <ul class="md-nav__list" data-md-scrollfix>
-        
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="tutorial/" title="Tutorial - User Guide - Intro" class="md-nav__link">
-      Tutorial - User Guide - Intro
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="tutorial/first-steps/" title="First Steps" class="md-nav__link">
-      First Steps
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="tutorial/printing/" title="CLI" class="md-nav__link">
-      CLI
-    </a>
-  </li>
-
-        
-      </ul>
-    </nav>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
-    <a href="alternatives/" title="Alternatives, Inspiration and Comparisons" class="md-nav__link">
-      Alternatives, Inspiration and Comparisons
-    </a>
-  </li>
-
-    
-      
-      
-      
-
-
-  <li class="md-nav__item">
     <a href="contributing/" title="Development - Contributing" class="md-nav__link">
       Development - Contributing
     </a>
@@ -784,6 +700,7 @@ the <code>create_index</code> command will run a few steps and you should see an
 it just like you would any normal spaCy model.</p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
 <span class="kn">from</span> <span class="nn">spacy.tokens</span> <span class="kn">import</span> <span class="n">Span</span>
+<span class="kn">from</span> <span class="nn">spacy_ann</span> <span class="kn">import</span> <span class="n">ApproxNearestNeighborsLinker</span>
 
 <span class="c1"># Load the spaCy model from the output_dir you used</span>
 <span class="c1"># from the create_index command</span>
@@ -796,12 +713,12 @@ it just like you would any normal spaCy model.</p>
 <span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">)</span>
 <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
     <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span>
-    <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">get_alias_strings</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">get_alias_strings</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;machine learnin&#39;</span><span class="p">,</span> <span class="s1">&#39;machine learn&#39;</span><span class="p">]</span>
 <span class="p">]</span>
 <span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
 <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">ruler</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">&quot;ann_linker&quot;</span><span class="p">)</span>
 
-<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of Machine learning.&quot;</span><span class="p">)</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of Machine learn.&quot;</span><span class="p">)</span>
 
 <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
 
@@ -897,13 +814,13 @@ For example:
       <nav class="md-footer-nav__inner md-grid">
         
         
-          <a href="features/" title="Features" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="contributing/" title="Development - Contributing" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Features
+                Development - Contributing
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
@@ -931,14 +848,6 @@ For example:
       <a href="https://github.com/microsoft/spacy-ann-linker" class="md-footer-social__link fa fa-github"></a>
     
       <a href="https://twitter.com/kabir_khan14" class="md-footer-social__link fa fa-twitter"></a>
-    
-      <a href="https://www.linkedin.com/in/tiangolo" class="md-footer-social__link fa fa-linkedin"></a>
-    
-      <a href="https://dev.to/tiangolo" class="md-footer-social__link fa fa-rss"></a>
-    
-      <a href="https://medium.com/@tiangolo" class="md-footer-social__link fa fa-medium"></a>
-    
-      <a href="https://tiangolo.com" class="md-footer-social__link fa fa-globe"></a>
     
   </div>
 
