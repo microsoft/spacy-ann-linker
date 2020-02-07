@@ -1,4 +1,4 @@
-# spacy-ann-linker
+spacy-ann-linker
 fastapi
 uvicorn
 python-dotenv
