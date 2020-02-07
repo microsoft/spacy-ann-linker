@@ -4,3 +4,14 @@
 {"alias": "NLP", "entities": ["a3", "a4"], "probabilities": [0.5, 0.5]}
 {"alias": "Natural language processing", "entities": ["a3"], "probabilities": [1.0]}
 {"alias": "Neuro-linguistic programming", "entities": ["a4"], "probabilities": [1.0]}
+{"alias": "Operating system", "entities": ["a5"], "probabilities": [1.0]}
+{"alias": "OS", "entities": ["a5"], "probabilities": [1.0]}
+{"alias": "Statistics", "entities": ["a6"], "probabilities": [1.0]}
+{"alias": "Audience segmentation", "entities": ["a7"], "probabilities": [1.0]}
+{"alias": "Decision analysis", "entities": ["a8"], "probabilities": [1.0]}
+{"alias": "Computer science", "entities": ["a9"], "probabilities": [1.0]}
+{"alias": "Photochemistry", "entities": ["a10"], "probabilities": [1.0]}
+{"alias": "Mineralogy", "entities": ["a11"], "probabilities": [1.0]}
+{"alias": "Stereochemistry", "entities": ["a12"], "probabilities": [1.0]}
+{"alias": "Environmental chemistry", "entities": ["a13"], "probabilities": [1.0]}
+{"alias": "Agronomy", "entities": ["a14"], "probabilities": [1.0]}

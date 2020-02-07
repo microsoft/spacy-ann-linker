@@ -27,7 +27,7 @@ from spacy_ann.models import AliasCandidate
 
 class CandidateGenerator:
     def __init__(
-        self, nlp, kb, ef_search=200, k_neighbors=5, knn_similarity_threshold=0.90, verbose=False
+        self, nlp, kb, ef_search=200, k_neighbors=5, knn_similarity_threshold=0.65, verbose=False
     ):
         self.nlp = nlp
         self.kb = kb
@@ -144,7 +144,6 @@ class CandidateGenerator:
         extended_distances = np.empty((len(empty_vectors_boolean_flags),), dtype=object)
 
         if vectors.shape[0] - empty_vectors_count == 0:
-            print("First", extended_neighbors, extended_distances)
             return extended_neighbors, extended_distances
 
         # remove empty vectors before calling `ann_index.knnQueryBatch`
@@ -165,8 +164,6 @@ class CandidateGenerator:
         # interleave `neighbors` and Nones in `extended_neighbors`
         extended_neighbors[empty_vectors_boolean_flags] = np.array(neighbors)[:-1]
         extended_distances[empty_vectors_boolean_flags] = np.array(distances)[:-1]
-
-        print("Second", extended_neighbors, extended_distances)
 
         return extended_neighbors, extended_distances
     
@@ -201,8 +198,6 @@ class CandidateGenerator:
         for mention, neighbors, distances in zip(
             mention_texts, batch_neighbors, batch_distances
         ):
-            print("mention", "neighbors", "distances")
-            print(mention, neighbors, distances)
             if mention in short_alias_strings:
                 batch_candidates.append([AliasCandidate(mention, 1.0)])
                 continue
@@ -214,7 +209,6 @@ class CandidateGenerator:
             alias_candidates = []
             for neighbor_index, distance in zip(neighbors, distances):
                 alias = self.aliases[neighbor_index]
-                print("ALIAS:", alias, distance)
                 similarity = 1.0 - distance
                 if similarity > self.threshold:
                     alias_candidates.append(AliasCandidate(alias, similarity))
@@ -252,7 +246,6 @@ class CandidateGenerator:
         # `ann_index.knnQueryBatch` crashes if one of the vectors is all zeros.
         # `nmslib_knn_with_zero_vectors` is a wrapper around `ann_index.knnQueryBatch` that addresses this issue.
         batch_neighbors, batch_distances = self.nmslib_knn_with_zero_vectors(tfidfs, k)
-        # print(len(mention_texts), len(batch_neighbors), len(batch_distances))
         end_time = timer()
         total_time = end_time - start_time
         if self.verbose:
