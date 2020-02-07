@@ -57,6 +57,7 @@ stages:
     - script: |
         pip install flit
         flit install --deps=develop --symlink
+        spacy download en_core_web_md
       displayName: 'Install dependencies'
 
     - script: |

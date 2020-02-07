@@ -2,7 +2,6 @@ from pathlib import Path
 import os
 import subprocess
 
-import en_core_web_md
 import pytest
 import spacy
 from spacy_ann import ApproxNearestNeighborsLinker
@@ -10,7 +9,7 @@ from spacy_ann import ApproxNearestNeighborsLinker
 
 @pytest.fixture()
 def nlp():
-    return en_core_web_md.load()
+    return spacy.load('en_core_web_md')
 
 
 @pytest.fixture()
