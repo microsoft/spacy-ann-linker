@@ -41,6 +41,9 @@ class ApproxNearestNeighborsLinker:
         self.cg = None
         self.k = cfg.get("k_neighbors", 5)
         self.disambiguate = cfg.get("disambiguate", True)
+
+        # TODO: use the built in spaCy EntityLinker
+        # self.entity_linker = nlp.create_pipe("entity_linker")
     
     @property
     def aliases(self) -> List[str]:
@@ -61,8 +64,6 @@ class ApproxNearestNeighborsLinker:
                 continue
             else:
                 if self.disambiguate:
-                    print(alias_candidates)
-
                     kb_candidates = []
                     for alias_cand in alias_candidates:
                         kb_candidates += self.kb.get_candidates(alias_cand.alias)
@@ -85,6 +86,40 @@ class ApproxNearestNeighborsLinker:
                     ent._.kb_alias = alias_candidates[0]
 
         return doc
+    
+    # def predict(self, context: str, mentions: List[str]):
+    #     doc = self.nlp.make_doc(context)
+    #     batch_candidates = self.cg(mentions, self.k)
+
+    #     res = 
+
+    #     for mention, alias_candidates in zip(mentions, batch_candidates):
+    #         if len(alias_candidates) == 0:
+    #             continue
+    #         else:
+    #             if self.disambiguate:
+    #                 kb_candidates = []
+    #                 for alias_cand in alias_candidates:
+    #                     kb_candidates += self.kb.get_candidates(alias_cand.alias)
+
+    #                 # create candidate matrix
+    #                 entity_encodings = np.asarray([c.entity_vector for c in kb_candidates])
+    #                 candidate_norm = np.linalg.norm(entity_encodings, axis=1)
+
+
+    #                 sims = np.dot(entity_encodings, doc.vector.T) / (
+    #                     candidate_norm * doc.vector_norm
+    #                 )
+
+    #                 # TODO: Add thresholding here
+    #                 likely = kb_candidates[np.argmax(sims)]
+    #                 for t in ent:
+    #                     t.ent_kb_id = likely.entity
+    #             else:
+    #                 # Set aliases for a later pipeline component
+    #                 ent._.kb_alias = alias_candidates[0]
+
+
 
     def set_kb(self, kb: KnowledgeBase):
         self.kb = kb

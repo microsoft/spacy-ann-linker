@@ -5,19 +5,15 @@ from collections import defaultdict
 import os
 
 from dotenv import load_dotenv, find_dotenv
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import RedirectResponse
 import spacy
+from spacy.tokens import Span
+from spacy_ann import ApproxNearestNeighborsLinker
 import uvicorn
 
-from app.models import (
-    ENT_PROP_MAP,
-    RecordsRequest,
-    RecordsResponse,
-    RecordsEntitiesByTypeResponse,
-)
-from app.spacy_extractor import SpacyExtractor
+from models import LinkingRequest, LinkingResponse, LinkingRecord
 
 
 load_dotenv(find_dotenv())
@@ -34,59 +30,56 @@ app = FastAPI(
     openapi_prefix=prefix,
 )
 
-nlp = spacy.load("en_core_web_sm")
-extractor = SpacyExtractor(nlp)
+nlp = spacy.load("../tutorial/models/ann_linker")
+
+example_request = {
+    "documents": [
+        {
+            "spans": [
+                {
+                    "text": "NLP",
+                    "start": 0,
+                    "end": 3,
+                    "label": "SKILL"
+                },
+                {
+                    "text": "researched",
+                    "start": 16,
+                    "end": 26,
+                    "label": "SKILL"
+                },
+                {
+                    "text": "Machine learning",
+                    "start": 37,
+                    "end": 53,
+                    "label": "SKILL"
+                }
+            ],
+            "context": "NLP is a highly researched subset of Machine learning."
+        }
+    ]
+}
+
 
 @app.get("/", include_in_schema=False)
 def docs_redirect():
     return RedirectResponse(f"{prefix}/docs")
 
 
-@app.post("/entities", response_model=RecordsResponse, tags=["NER"])
-async def extract_entities(body: RecordsRequest):
-    """Extract Named Entities from a batch of Records."""
+@app.post("/link", response_model=LinkingResponse)
+async def link(body: LinkingRequest = Body(..., example=example_request)):
+    """Link batch of Spans to their canonical KnowledgeBase Id."""
 
-    res = []
-    documents = []
+    res = LinkingResponse(documents=[])
+    for doc in body.documents:
+        spacy_doc = nlp.make_doc(doc.context)
+        spans = [spacy_doc.char_span(s.start, s.end, label=s.label) for s in doc.spans]
+        spacy_doc.ents = [s for s in spans if s]
+        spacy_doc = nlp.get_pipe('ann_linker')(spacy_doc)
 
-    for val in body.values:
-        documents.append({"id": val.recordId, "text": val.data.text})
+        for i, ent in enumerate(spacy_doc.ents):
+            doc.spans[i].id = ent.kb_id_
 
-    entities_res = extractor.extract_entities(documents)
-    print(entities_res)
-
-    res = [
-        {"recordId": er["id"], "data": {"entities": er["entities"]}}
-        for er in entities_res
-    ]
-
-    return {"values": res}
-
-
-@app.post(
-    "/entities_by_type", response_model=RecordsEntitiesByTypeResponse, tags=["NER"]
-)
-async def extract_entities_by_type(body: RecordsRequest):
-    """Extract Named Entities from a batch of Records separated by entity label.
-        This route can be used directly as a Cognitive Skill in Azure Search
-        For Documentation on integration with Azure Search, see here:
-        https://docs.microsoft.com/en-us/azure/search/cognitive-search-custom-skill-interface"""
-
-    res = []
-    documents = []
-
-    for val in body.values:
-        documents.append({"id": val.recordId, "text": val.data.text})
-
-    entities_res = extractor.extract_entities(documents)
-    res = []
-
-    for er in entities_res:
-        groupby = defaultdict(list)
-        for ent in er["entities"]:
-            ent_prop = ENT_PROP_MAP[ent["label"]]
-            groupby[ent_prop].append(ent["name"])
-        record = {"recordId": er["id"], "data": groupby}
-        res.append(record)
-
-    return {"values": res}
+        res.documents.append(LinkingRecord(spans=doc.spans, context=doc.context))
+            
+    return res

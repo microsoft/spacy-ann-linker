@@ -15,3 +15,4 @@
 {"alias": "Stereochemistry", "entities": ["a12"], "probabilities": [1.0]}
 {"alias": "Environmental chemistry", "entities": ["a13"], "probabilities": [1.0]}
 {"alias": "Agronomy", "entities": ["a14"], "probabilities": [1.0]}
+{"alias": "Research", "entities": ["a15"], "probabilities": [1.0]}
