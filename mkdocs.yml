@@ -19,12 +19,6 @@ google_analytics:
 
 nav:
     - Introduction: 'index.md'
-    - Features: 'features.md'
-    - Tutorial - User Guide:
-        - Tutorial - User Guide - Intro: 'tutorial/index.md'
-        - First Steps: 'tutorial/first-steps.md'
-        - CLI: 'tutorial/printing.md'
-    - Alternatives, Inspiration and Comparisons: 'alternatives.md'
     - Development - Contributing: 'contributing.md'
     - Release Notes: release-notes.md
 
@@ -45,14 +39,6 @@ extra:
           link: 'https://github.com/microsoft/spacy-ann-linker'
         - type: 'twitter'
           link: 'https://twitter.com/kabir_khan14'
-        - type: 'linkedin'
-          link: 'https://www.linkedin.com/in/tiangolo'
-        - type: 'rss'
-          link: 'https://dev.to/tiangolo'
-        - type: 'medium'
-          link: 'https://medium.com/@tiangolo'
-        - type: 'globe'
-          link: 'https://tiangolo.com'
 
 extra_css:
     - 'css/termynal.css'
