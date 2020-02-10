@@ -100,8 +100,7 @@ class CandidateGenerator:
             the ANN index on.
         verbose (bool, optional): Set to True to get print updates while fitting the index. Defaults to False.
         
-        Returns:
-            CandidateGenerator: An initialized CandidateGenerator
+        RETURNS (CandidateGenerator): An initialized CandidateGenerator
         """        
         msg = Printer(no_print=verbose)
 
@@ -182,8 +181,7 @@ class CandidateGenerator:
         vectors (np.ndarray): Vectors used to query index for neighbors and distances
         k (int): k neighbors to consider
         
-        Returns:
-            Tuple[np.ndarray, np.ndarray]: Tuple of [neighbors, distances]
+        RETURNS (Tuple[np.ndarray, np.ndarray]): Tuple of [neighbors, distances]
         """                
 
         empty_vectors_boolean_flags = np.array(vectors.sum(axis=1) != 0).reshape(-1,)
@@ -220,7 +218,7 @@ class CandidateGenerator:
     def require_ann_index(self):
         """Raise an error if the ann_index is not initialized
         
-        Raises:
+        RAISES:
             ValueError: ann_index not initialized
         """        
         # 
@@ -232,8 +230,7 @@ class CandidateGenerator:
         
         mention_texts (List[str]): List of entity mentions to generate AliasCandidates for
         
-        Returns:
-            List[List[AliasCandidate]]: List of AliasCandidates for each mention
+        RETURNS (List[List[AliasCandidate]]): List of AliasCandidates for each mention
         """        
         self.require_ann_index()
 
@@ -279,8 +276,7 @@ class CandidateGenerator:
         
         path (Path): Directory to deserialize data from
         
-        Returns:
-            CandidateGenerator: Initialized Candidate Generator
+        RETURNS (CandidateGenerator): Initialized Candidate Generator
         """        
         aliases_path = f"{path}/aliases.json"
         short_aliases_path = f"{path}/short_aliases.json"
