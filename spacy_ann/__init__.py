@@ -7,12 +7,16 @@ __version__ = '0.0.3'
 
 from .ann_linker import ApproxNearestNeighborsLinker
 
-from spacy.kb import KnowledgeBase
-from spacy.tokens import Span
-from spacy.util import registry
+# TODO: Uncomment (and probably fix a bit) once this PR is merged upstream
+# https://github.com/explosion/spaCy/pull/4988 to enable kb registry with 
+# customizable `get_candidates` function
+# 
+# from spacy.kb import KnowledgeBase
+# from spacy.tokens import Span
+# from spacy.util import registry
 
 
-@registry.kb.register("get_candidates")
-def get_candidates(kb: KnowledgeBase, ent: Span):
-    alias = ent._.kb_alias if ent._.kb_alias else ent.text
-    return kb.get_candidates(alias)
+# @registry.kb.register("get_candidates")
+# def get_candidates(kb: KnowledgeBase, ent: Span):
+#     alias = ent._.kb_alias if ent._.kb_alias else ent.text
+#     return kb.get_candidates(alias)
