@@ -66,4 +66,4 @@ spacy_ann = "spacy_ann.cli:main"
 ann_linker = "spacy_ann.ann_linker:ApproxNearestNeighborsLinker"
 
 [tool.flit.entrypoints."spacy_kb"]
-ann_linker = "spacy_ann:get_candidates"
+get_candidates = "spacy_ann:get_candidates"
