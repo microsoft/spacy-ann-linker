@@ -1,0 +1,2 @@
+[spacy_factories]
+ann_linker = spacy_ann.ApproxNearestNeighborsLinker
