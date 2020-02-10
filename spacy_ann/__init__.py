@@ -3,6 +3,6 @@
 """spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking."""
 
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 from .ann_linker import ApproxNearestNeighborsLinker
