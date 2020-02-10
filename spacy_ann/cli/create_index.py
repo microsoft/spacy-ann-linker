@@ -107,7 +107,7 @@ def create_index(model: str,
 
         msg.good("Done adding entities and aliases to kb")
 
-    cg = CandidateGenerator.create_with_defaults(nlp, kb)
+    cg = CandidateGenerator().fit(kb.get_alias_strings(), verbose=True)
 
     ann_linker = nlp.create_pipe("ann_linker")
     ann_linker.set_kb(kb)

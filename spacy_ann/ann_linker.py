@@ -39,12 +39,8 @@ class ApproxNearestNeighborsLinker:
         self.nlp = nlp
         self.kb = None
         self.cg = None
-        self.k = cfg.get("k_neighbors", 5)
         self.disambiguate = cfg.get("disambiguate", True)
 
-        # TODO: use the built in spaCy EntityLinker
-        # self.entity_linker = nlp.create_pipe("entity_linker")
-    
     @property
     def aliases(self) -> List[str]:
         """Return List of aliases in KB"""
@@ -56,17 +52,15 @@ class ApproxNearestNeighborsLinker:
         self.require_cg()
 
         mentions = doc.ents
-        mention_strings = [x.text for x in mentions]
-        batch_candidates = self.cg(mention_strings, self.k)
+        mention_strings = [e.text for e in mentions]
+        batch_candidates = self.cg(mention_strings)
         
         for ent, alias_candidates in zip(doc.ents, batch_candidates):
             if len(alias_candidates) == 0:
                 continue
             else:
                 if self.disambiguate:
-                    kb_candidates = []
-                    for alias_cand in alias_candidates:
-                        kb_candidates += self.kb.get_candidates(alias_cand.alias)
+                    kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
 
                     # create candidate matrix
                     entity_encodings = np.asarray([c.entity_vector for c in kb_candidates])
@@ -105,19 +99,13 @@ class ApproxNearestNeighborsLinker:
 
     def from_disk(self, path, **kwargs):
         """Load data from disk"""
-
         path = util.ensure_path(path)
-        cfg = {}
-        deserializers = {
-            "cfg": lambda p: cfg.update(srsly.read_json(p)),
-        }
-        util.from_disk(path, deserializers, {})
 
         kb = KnowledgeBase(self.nlp.vocab, 300)
         kb.load_bulk(path / "kb")
         self.set_kb(kb)
 
-        cg = CandidateGenerator(self.nlp, kb).from_disk(path)
+        cg = CandidateGenerator().from_disk(path)
         self.set_cg(cg)
 
         return self
@@ -127,6 +115,5 @@ class ApproxNearestNeighborsLinker:
         path = util.ensure_path(path)
         if not path.exists():
             path.mkdir()
-        srsly.write_json(path / "cfg", {"k_neighbors": self.k})
         self.kb.dump(path / "kb")
         self.cg.to_disk(path)

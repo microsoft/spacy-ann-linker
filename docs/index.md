@@ -215,7 +215,6 @@ it just like you would any normal spaCy model.
 ```Python
 import spacy
 from spacy.tokens import Span
-from spacy_ann import ApproxNearestNeighborsLinker
 
 # Load the spaCy model from the output_dir you used
 # from the create_index command
@@ -228,12 +227,12 @@ nlp = spacy.load(model_dir)
 ruler = nlp.create_pipe('entity_ruler')
 patterns = [
     {"label": "SKILL", "pattern": alias}
-    for alias in nlp.get_pipe('ann_linker').kb.get_alias_strings() + ['machine learnin', 'machine learn']
+    for alias in nlp.get_pipe('ann_linker').kb.get_alias_strings() + ['machine learn']
 ]
 ruler.add_patterns(patterns)
 nlp.add_pipe(ruler, before="ann_linker")
 
-doc = nlp("NLP is a subset of Machine learn.")
+doc = nlp("NLP is a subset of machine learn.")
 
 print([(e.text, e.label_, e.kb_id_) for e in doc.ents])
 
