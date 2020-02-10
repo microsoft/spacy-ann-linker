@@ -43,9 +43,6 @@ stages:
         Python37Linux:
           imageName: 'ubuntu-16.04'
           python.version: '3.7'
-        Python38Linux:
-          imageName: 'ubuntu-16.04'
-          python.version: '3.8'
       maxParallel: 4
 
     steps:
