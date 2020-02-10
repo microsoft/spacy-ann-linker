@@ -26,17 +26,42 @@ from spacy_ann.models import AliasCandidate
 
 
 class CandidateGenerator:
+    """The CandidateGenerator encapsulates the logic to fit a list of 
+    string aliases into a searchable Approximate Nearest Neighbors index 
+    using the 3-Character-Gram TF-IDF representation of each alias. This 
+    index is useful for Entity Linking against a custom KnowledgeBase with a lower 
+    amount of total aliases than a typical wikidata/DBPedia like KnowledgeBase.
+
+    When you call an initialized CandidateGenerator with a batch of entity mentions,
+    it will return a list of `AliasCandidate` objects for each entity mention above a 
+    specified similarity threshold.
+    """
     def __init__(self,
-                #  kb: KnowledgeBase,
                  *,
                  k: int = 5,
                  similarity_threshold: float = 0.65,
                  m_parameter: int = 100,
                  ef_search: int = 200,
                  ef_construction: int = 2000,
-                 n_threads: int = 60
-                 ):
-        # self.kb = kb
+                 n_threads: int = 60):
+        """Initialize a CandidateGenerator
+        
+        k (int): Number of neighbors to query 
+            (default: {5})
+        similarity_threshold (float): Threshold of similarity with neighbors
+            (default: {0.65})
+        m_parameter (int): M parameter value for nmslib hnsw algorithm 
+            (default: {100})
+        ef_search (int): Set to the maximum recommended value. 
+            Improves recall at the expense of longer **inference** time
+            (default: {200})
+        ef_construction (int): Set to the maximum recommended value. 
+            Improves recall at the expense of longer **indexing** time
+            (default: {2000})
+        n_threads (int): Number of threads to use when creating the index. 
+            Change based on your machine. 
+            (default: {60})
+        """
         self.k = k
         self.similarity_threshold = similarity_threshold
         self.m_parameter = m_parameter
@@ -52,18 +77,32 @@ class CandidateGenerator:
                     ann_index: FloatIndex,
                     vectorizer: TfidfVectorizer,
                     alias_tfidfs: scipy.sparse.csr_matrix):
+        """Used in `fit` and `from_disk` to initialize the CandidateGenerator with computed
+        # TF-IDF Vectorizer and ANN Index
+        
+        aliases (List[str]): Aliases with vectors contained in the ANN Index
+        short_aliases (Set[str]): Aliases too short for a TF-IDF representation
+        ann_index (FloatIndex): Computed ANN Index of TF-IDF representations for aliases
+        vectorizer (TfidfVectorizer): TF-IDF Vectorizer to get vector representation of aliases
+        alias_tfidfs (scipy.sparse.csr_matrix): Computed TF-IDF Sparse Vectors for aliases
+        """
         self.aliases = aliases
         self.short_aliases = short_aliases
         self.ann_index = ann_index
         self.vectorizer = vectorizer
         self.alias_tfidfs = alias_tfidfs
 
-    def fit(self, kb_aliases, verbose=False):
-        """
-        Build tfidf vectorizer and ann index.
+    def fit(self, kb_aliases: List[str], verbose: bool = False):
+        """Build tfidf vectorizer and ann index.
         Warning: Running this function can take a lot of memory
-        Parameters
-        """
+        
+        kb_aliases (List[str]): Aliases in the KnoweledgeBase to fit 
+            the ANN index on.
+        verbose (bool, optional): Set to True to get print updates while fitting the index. Defaults to False.
+        
+        Returns:
+            CandidateGenerator: An initialized CandidateGenerator
+        """        
         msg = Printer(no_print=verbose)
 
         # kb_aliases = self.kb.get_alias_strings()
@@ -132,15 +171,21 @@ class CandidateGenerator:
     def _nmslib_knn_with_zero_vectors(
         self, vectors: np.ndarray, k: int
     ) -> Tuple[np.ndarray, np.ndarray]:
-        """
-        ann_index.knnQueryBatch crashes if any of the vectors is all zeros.
+        """ann_index.knnQueryBatch crashes if any of the vectors is all zeros.
         This function is a wrapper around `ann_index.knnQueryBatch` that solves this problem. It works as follows:
         - remove empty vectors from `vectors`.
         - call `ann_index.knnQueryBatch` with the non-empty vectors only. This returns `neighbors`,
         a list of list of neighbors. `len(neighbors)` equals the length of the non-empty vectors.
         - extend the list `neighbors` with `None`s in place of empty vectors.
         - return the extended list of neighbors and distances.
-        """
+        
+        vectors (np.ndarray): Vectors used to query index for neighbors and distances
+        k (int): k neighbors to consider
+        
+        Returns:
+            Tuple[np.ndarray, np.ndarray]: Tuple of [neighbors, distances]
+        """                
+
         empty_vectors_boolean_flags = np.array(vectors.sum(axis=1) != 0).reshape(-1,)
         empty_vectors_count = vectors.shape[0] - sum(empty_vectors_boolean_flags)
 
@@ -173,11 +218,23 @@ class CandidateGenerator:
         return extended_neighbors, extended_distances
     
     def require_ann_index(self):
-        # Raise an error if the ann_index is not initialized
+        """Raise an error if the ann_index is not initialized
+        
+        Raises:
+            ValueError: ann_index not initialized
+        """        
+        # 
         if getattr(self, "ann_index", None) in (None, True, False):
             raise ValueError(f"ann_index not initialized. Have you run `cg.train` yet?")
 
     def __call__(self, mention_texts: List[str]) -> List[List[AliasCandidate]]:
+        """Generate AliasCandidates for each mention in a batch of entity mentions.
+        
+        mention_texts (List[str]): List of entity mentions to generate AliasCandidates for
+        
+        Returns:
+            List[List[AliasCandidate]]: List of AliasCandidates for each mention
+        """        
         self.require_ann_index()
 
         # tfidf vectorizer crashes on an empty array, so we return early here
@@ -217,9 +274,14 @@ class CandidateGenerator:
 
         return batch_candidates
 
-    def from_disk(self, path, **kwargs):
-        """Load data from disk"""
-
+    def from_disk(self, path: Path, **kwargs):
+        """Deserialize CandidateGenerator data from disk
+        
+        path (Path): Directory to deserialize data from
+        
+        Returns:
+            CandidateGenerator: Initialized Candidate Generator
+        """        
         aliases_path = f"{path}/aliases.json"
         short_aliases_path = f"{path}/short_aliases.json"
         ann_index_path = f"{path}/ann_index.bin"
@@ -253,8 +315,11 @@ class CandidateGenerator:
 
         return self
 
-    def to_disk(self, path, **kwargs):
-        """Save data to disk"""
+    def to_disk(self, path: Path, **kwargs):
+        """Serialize CandidateGenerator to disk
+        
+        path (Path): Directory to serialize to
+        """
         cfg = {
             "k": self.k,
             "similarity_threshold": self.similarity_threshold,

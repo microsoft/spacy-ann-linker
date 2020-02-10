@@ -4,7 +4,8 @@
 from collections import defaultdict
 import os
 import json
-from typing import List
+from pathlib import Path
+from typing import List, Tuple
 import numpy as np
 import spacy
 from spacy.errors import Errors
@@ -25,15 +26,26 @@ from spacy_ann.candidate_generator import CandidateGenerator
 )
 class ApproxNearestNeighborsLinker:
     """The ApproxNearestNeighborsLinker adds Entity Linking capabilities
-    to map NER mentions to KnowledgeBase Aliases
-    """
+    to map NER mentions to KnowledgeBase Aliases or directly to KnowledgeBase Ids
+    """    
 
     @classmethod
     def from_nlp(cls, nlp, **cfg):
+        """Used in spacy.language.Language when constructing this pipeline.
+        Tells spaCy that this pipe requires the nlp object
+        
+        nlp (Language): spaCy Language object
+        
+        Returns:
+            ApproxNearestNeighborsLinker: Initialized ApproxNearestNeighborsLinker component
+        """        
         return cls(nlp, **cfg)
 
     def __init__(self, nlp, **cfg):
-        """Initialize the ApproxNearestNeighborsLinker."""
+        """Initialize the ApproxNearestNeighborsLinker
+        
+        nlp (Language): spaCy Language object
+        """        
         Span.set_extension("kb_alias", default="", force=True)
 
         self.nlp = nlp
@@ -43,11 +55,22 @@ class ApproxNearestNeighborsLinker:
 
     @property
     def aliases(self) -> List[str]:
-        """Return List of aliases in KB"""
+        """Get all aliases
+        
+        RETURNS (List[str]): List of aliases
+        """        
         return self.kb.get_alias_strings()
 
     def __call__(self, doc: Doc) -> Doc:
-        """Resolve the ent_id_ attribute of an ent span to the skills data store."""
+        """Annotate spaCy doc.ents with candidate info.
+        If disambiguate is True, use entity vectors and doc context
+        to pick the most likely Candidate
+        
+        doc (Doc): spaCy Doc
+        
+        RETURNS (Doc): spaCy Doc with updated annotations
+        """           
+
         self.require_kb()
         self.require_cg()
 
@@ -81,23 +104,44 @@ class ApproxNearestNeighborsLinker:
         return doc
 
     def set_kb(self, kb: KnowledgeBase):
+        """Set the KnowledgeBase
+        
+        kb (KnowledgeBase): spaCy KnowledgeBase
+        """        
         self.kb = kb
 
     def set_cg(self, cg: CandidateGenerator):
+        """Set the CandidateGenerator
+        
+        cg (CandidateGenerator): Initialized CandidateGenerator 
+        """
         self.cg = cg
 
     def require_kb(self):
-        # Raise an error if the knowledge base is not initialized.
+        """Raise an error if the kb is not set.
+        
+        RAISES:
+            ValueError: kb required
+        """
         if getattr(self, "kb", None) in (None, True, False):
-            raise ValueError(f"Knowledge Base Required for {self.name}")
+            raise ValueError(f"KnowledgeBase `kb` required for {self.name}")
 
     def require_cg(self):
-        # Raise an error if the knowledge base is not initialized.
+        """Raise an error if the cg is not set.
+        
+        RAISES:
+            ValueError: cg required
+        """
         if getattr(self, "cg", None) in (None, True, False):
-            raise ValueError(f"Candidate Generator Required for {self.name}")
+            raise ValueError(f"CandidateGenerator `cg` required for {self.name}")
 
-    def from_disk(self, path, **kwargs):
-        """Load data from disk"""
+    def from_disk(self, path: Path, **kwargs):
+        """Deserialize saved ApproxNearestNeighborsLinker from disk.
+        
+        path (Path): directory to deserialize from
+        
+        RETURNS (ApproxNearestNeighborsLinker): Initialized ApproxNearestNeighborsLinker
+        """        
         path = util.ensure_path(path)
 
         kb = KnowledgeBase(self.nlp.vocab, 300)
@@ -109,8 +153,12 @@ class ApproxNearestNeighborsLinker:
 
         return self
 
-    def to_disk(self, path, exclude=tuple(), **kwargs):
-        """Save data to disk"""
+    def to_disk(self, path: Path, exclude: Tuple = tuple(), **kwargs):
+        """Serialize ApproxNearestNeighborsLinker to disk.
+        
+        path (Path): directory to serialize to
+        exclude (Tuple, optional): config to exclude. Defaults to tuple().
+        """        
         path = util.ensure_path(path)
         if not path.exists():
             path.mkdir()

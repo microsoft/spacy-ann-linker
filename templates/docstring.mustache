@@ -1,0 +1,28 @@
+{{! Google Docstring Template }}
+{{summaryPlaceholder}}
+
+{{extendedSummaryPlaceholder}}
+
+{{#parametersExist}}
+{{#args}}
+{{var}} ({{typePlaceholder}}): {{descriptionPlaceholder}}
+{{/args}}
+{{#kwargs}}
+{{var}} ({{typePlaceholder}}, optional): {{descriptionPlaceholder}}. Defaults to {{&default}}.
+{{/kwargs}}
+{{/parametersExist}}
+
+{{#exceptionsExist}}
+RAISES:
+{{#exceptions}}
+    {{type}}: {{descriptionPlaceholder}}
+{{/exceptions}}
+{{/exceptionsExist}}
+
+{{#returnsExist}}
+RETURNS {{#returns}}({{typePlaceholder}}): {{descriptionPlaceholder}}{{/returns}}
+{{/returnsExist}}
+
+{{#yieldsExist}}
+YIELDS {{#yields}}({{typePlaceholder}}): {{descriptionPlaceholder}}{{/yields}}
+{{/yieldsExist}}
