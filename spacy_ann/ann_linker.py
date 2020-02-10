@@ -66,7 +66,6 @@ class ApproxNearestNeighborsLinker:
                     entity_encodings = np.asarray([c.entity_vector for c in kb_candidates])
                     candidate_norm = np.linalg.norm(entity_encodings, axis=1)
 
-
                     sims = np.dot(entity_encodings, doc.vector.T) / (
                         candidate_norm * doc.vector_norm
                     )

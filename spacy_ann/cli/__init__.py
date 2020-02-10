@@ -5,7 +5,7 @@ def main():
     import typer
     import sys
     from wasabi import msg
-    from spacy_ann.cli import create_index
+    from spacy_ann.cli.create_index import create_index
 
     commands = {
         "create_index": create_index,
