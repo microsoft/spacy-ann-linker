@@ -37,8 +37,7 @@ Python 3.6+
 spaCy ANN Linker is convenient wrapper built on a few comprehensive, high-performing packages.
 
 * <a href="https://spacy.io" class="external-link" target="_blank">spaCy</a>
-* <a href="https://github.com/nmslib/nmslib" class="external-link" target="_blank">nmslib (ANN Index)</a>.
-* <a href="https://github.com/nmslib/nmslib" class="external-link" target="_blank">nmslib (ANN Index)</a>.
+* <a href="https://github.com/nmslib/nmslib" class="external-link" target="_blank">nmslib (ANN Index)</a>
 * <a href="https://scikit-learn.org/stable/" class="external-link" target="_blank">scikit-learn (TF-IDF)</a>.
 * <a href="https://fastapi.tiangolo.com" class="external-link" target="_blank">FastAPI (Web Service)</a>.
 

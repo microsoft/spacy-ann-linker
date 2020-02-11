@@ -19,6 +19,7 @@ google_analytics:
 
 nav:
     - Introduction: 'index.md'
+    - Web Service: 'webservice.md'
     - Development - Contributing: 'contributing.md'
     - Release Notes: release-notes.md
 
