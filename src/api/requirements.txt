@@ -1,0 +1,4 @@
+spacy-ann-linker
+fastapi
+uvicorn
+python-dotenv

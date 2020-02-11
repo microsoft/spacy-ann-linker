@@ -1,0 +1,27 @@
+{
+    "documents": [
+        {
+            "spans": [
+                {
+                    "text": "NLP",
+                    "start": 0,
+                    "end": 3,
+                    "label": "SKILL"
+                },
+                {
+                    "text": "researched",
+                    "start": 16,
+                    "end": 26,
+                    "label": "SKILL"
+                },
+                {
+                    "text": "Machine learning",
+                    "start": 37,
+                    "end": 53,
+                    "label": "SKILL"
+                }
+            ],
+            "context": "NLP is a highly researched subset of Machine learning."
+        }
+    ]
+}
