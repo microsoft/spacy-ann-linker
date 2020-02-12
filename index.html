@@ -35,7 +35,7 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="img/favicon.png">
+      <link rel="shortcut icon" href="img/favicon.ico">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
     
     
@@ -73,38 +73,13 @@
     
     
       
-        
-<script>
-  window.ga = window.ga || function() {
-    (ga.q = ga.q || []).push(arguments)
-  }
-  ga.l = +new Date
-  /* Setup integration and send page view */
-  ga("create", "UA-155009830-1", "auto")
-  ga("set", "anonymizeIp", true)
-  ga("send", "pageview")
-  /* Register handler to log search on blur */
-  document.addEventListener("DOMContentLoaded", () => {
-    if (document.forms.search) {
-      var query = document.forms.search.query
-      query.addEventListener("blur", function() {
-        if (this.value) {
-          var path = document.location.pathname;
-          ga("send", "pageview", path + "?q=" + this.value)
-        }
-      })
-    }
-  })
-</script>
-<script async src="https://www.google-analytics.com/analytics.js"></script>
-      
     
     
   </head>
   
     
     
-    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="orange">
+    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="white">
   
     <svg class="md-svg">
       <defs>
@@ -186,7 +161,7 @@
 
   
 
-<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/microsoft/spacy-ann-linker/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -233,7 +208,7 @@
 
   
 
-<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/microsoft/spacy-ann-linker/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -326,22 +301,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
+  <a href="#follow-the-tutorial" class="md-nav__link">
+    Follow the Tutorial
   </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#using-the-saved-model" class="md-nav__link">
-    Using the saved model
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -368,10 +330,58 @@
       
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Tutorial
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Tutorial
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="webservice/" title="Web Service" class="md-nav__link">
-      Web Service
+    <a href="tutorial/create_index/" title="Create an Index" class="md-nav__link">
+      Create an Index
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="tutorial/local_entity_linking/" title="Local Entity Linking" class="md-nav__link">
+      Local Entity Linking
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="tutorial/remote_entity_linking/" title="Remote Entity Linking" class="md-nav__link">
+      Remote Entity Linking
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
@@ -466,22 +476,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#usage" class="md-nav__link">
-    Usage
+  <a href="#follow-the-tutorial" class="md-nav__link">
+    Follow the Tutorial
   </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#using-the-saved-model" class="md-nav__link">
-    Using the saved model
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -507,6 +504,8 @@
           <div class="md-content">
             <article class="md-content__inner md-typeset">
               
+                
+                  <a href="https://github.com/microsoft/spacy-ann-linker/docs/index.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                   <h1>Introduction</h1>
@@ -624,182 +623,8 @@ so download a model bigger than <code>en_core_web_sm</code></p>
 
 </div>
 
-<h2 id="usage">Usage<a class="headerlink" href="#usage" title="Permanent link">&para;</a></h2>
-<p>Once you have your data, and a spaCy model with vectors, compute the nearest neighbors index for your Aliases.</p>
-<p>Run the <code>create_index</code> help command to understand the required arguments.</p>
-<div class="termy">
-
-<div class="codehilite"><pre><span></span><span class="gp">$</span> spacy_ann create_index --help 
-<span class="go">spacy_ann create_index --help</span>
-<span class="go">Usage: spacy_ann create_index [OPTIONS] MODEL KB_DIR OUTPUT_DIR</span>
-
-<span class="go">  Create an ApproxNearestNeighborsLinker based on the Character N-Gram TF-</span>
-<span class="go">  IDF vectors for aliases in a KnowledgeBase</span>
-
-<span class="go">  model (str): spaCy language model directory or name to load kb_dir (Path):</span>
-<span class="go">  path to the directory with kb entities.jsonl and aliases.jsonl files</span>
-<span class="go">  output_dir (Path): path to output_dir for spaCy model with ann_linker pipe</span>
-
-<span class="go">  kb File Formats</span>
-
-<span class="go">  e.g. entities.jsonl</span>
-
-<span class="go">  {&quot;id&quot;: &quot;a1&quot;, &quot;description&quot;: &quot;Machine learning (ML) is the scientific study</span>
-<span class="go">  of algorithms and statistical models...&quot;} {&quot;id&quot;: &quot;a2&quot;, &quot;description&quot;: &quot;ML</span>
-<span class="go">  (&quot;Meta Language&quot;) is a general-purpose functional programming language. It</span>
-<span class="go">  has roots in Lisp, and has been characterized as &quot;Lisp with types&quot;.&quot;}</span>
-
-<span class="go">  e.g. aliases.jsonl {&quot;alias&quot;: &quot;ML&quot;, &quot;entities&quot;: [&quot;a1&quot;, &quot;a2&quot;],</span>
-<span class="go">  &quot;probabilities&quot;: [0.5, 0.5]}</span>
-
-<span class="go">Options:</span>
-<span class="go">  --new-model-name TEXT</span>
-<span class="go">  --cg-threshold FLOAT</span>
-<span class="go">  --n-iter INTEGER</span>
-<span class="go">  --verbose / --no-verbose</span>
-<span class="go">  --install-completion      Install completion for the current shell.</span>
-<span class="go">  --show-completion         Show completion for the current shell, to copy it</span>
-<span class="go">                            or customize the installation.</span>
-<span class="go">  --help                    Show this message and exit.</span>
-</pre></div>
-
-
-
-</div>
-
-<p>Now provide the required arguments. I'm using the example data but at this step use your own.
-the <code>create_index</code> command will run a few steps and you should see an output like the one below.</p>
-<div class="termy">
-
-<div class="codehilite"><pre><span></span><span class="go">spacy_ann create_index en_core_web_md examples/tutorial/data examples/tutorial/models</span>
-
-<span class="go">// The create_index command runs a few steps</span>
-
-<span class="go">// Load the model passed as the first positional argument (en_core_web_md)</span>
-<span class="go">===================== Load Model ======================</span>
-<span class="go">⠹ Loading model en_core_web_md✔ Done.</span>
-<span class="go">ℹ 0 entities without a description</span>
-
-<span class="go">// Train an EntityEncoder on the descriptions of each Entity</span>
-<span class="go">================= Train EntityEncoder =================</span>
-<span class="go">⠸ Starting training EntityEncoder✔ Done Training</span>
-
-<span class="go">// Apply the EntityEncoder to get the final vectors for each entity</span>
-<span class="go">================= Apply EntityEncoder =================</span>
-<span class="go">⠙ Applying EntityEncoder to descriptions✔ Finished, embeddings created</span>
-<span class="go">✔ Done adding entities and aliases to kb</span>
-
-<span class="go">// Create Nearest Neighbors index from the Aliases in kb_dir/aliases.jsonl</span>
-<span class="go">================== Create ANN Index ===================</span>
-<span class="go">Fitting tfidf vectorizer on 6 aliases</span>
-<span class="go">Fitting and saving vectorizer took 0.012949 seconds</span>
-<span class="go">Finding empty (all zeros) tfidf vectors</span>
-<span class="go">Deleting 2/6 aliases because their tfidf is empty</span>
-<span class="go">Fitting ann index on 4 aliases</span>
-
-<span class="go">0%   10   20   30   40   50   60   70   80   90   100%</span>
-<span class="go">|----|----|----|----|----|----|----|----|----|----|</span>
-<span class="go">***************************************************</span>
-<span class="go">Fitting ann index took 0.030826 seconds</span>
-</pre></div>
-
-
-</div>
-
-<h3 id="using-the-saved-model">Using the saved model<a class="headerlink" href="#using-the-saved-model" title="Permanent link">&para;</a></h3>
-<p>Now that you have a trained spaCy ANN Linker component you can load the saved model from <code>output_dir</code> and run
-it just like you would any normal spaCy model.</p>
-<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
-<span class="kn">from</span> <span class="nn">spacy.tokens</span> <span class="kn">import</span> <span class="n">Span</span>
-
-<span class="c1"># Load the spaCy model from the output_dir you used</span>
-<span class="c1"># from the create_index command</span>
-<span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;examples/tutorial/models/ann_linker&quot;</span>
-<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_dir</span><span class="p">)</span>
-
-<span class="c1"># The NER component of the en_core_web_md model doesn&#39;t actually</span>
-<span class="c1"># recognize the aliases as entities so we&#39;ll add a </span>
-<span class="c1"># spaCy EntityRuler component for now to extract them.</span>
-<span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">)</span>
-<span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span>
-    <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">get_alias_strings</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;machine learn&#39;</span><span class="p">]</span>
-<span class="p">]</span>
-<span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
-<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">ruler</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">&quot;ann_linker&quot;</span><span class="p">)</span>
-
-<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of machine learn.&quot;</span><span class="p">)</span>
-
-<span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
-
-<span class="c1"># Outputs:</span>
-<span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;Machine learning&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
-<span class="c1">#</span>
-<span class="c1"># In our entities.jsonl file</span>
-<span class="c1"># a3 =&gt; Natural Language Processing</span>
-<span class="c1"># a1 =&gt; Machine learning</span>
-</pre></div>
-
-
-<!-- 
-### Recap
-
-In summary, you declare **once** the types of parameters (*arguments* and *options*) as function parameters.
-
-You do that with standard modern Python types.
-
-You don't have to learn a new syntax, the methods or classes of a specific library, etc.
-
-Just standard **Python 3.6+**.
-
-For example, for an `int`:
-
-
-<div class="codehilite"><pre><span></span><span class="n">total</span><span class="p">:</span> <span class="nb">int</span>
-</pre></div>
-
-
-
-or for a `bool` flag:
-
-
-<div class="codehilite"><pre><span></span><span class="n">force</span><span class="p">:</span> <span class="nb">bool</span>
-</pre></div>
-
-
-
-And similarly for **files**, **paths**, **enums** (choices), etc. And there are tools to create **groups of subcommands**, add metadata, extra **validation**, etc.
-
-**You get**: great editor support, including **completion** and **type checks** everywhere.
-
-**Your users get**: automatic **`--help`**, (optional) **autocompletion** in their terminal (Bash, Zsh, Fish, PowerShell).
-
-For a more complete example including more features, see the <a href="https://typer.tiangolo.com/tutorial/">Tutorial - User Guide</a>.
-
-## Optional Dependencies
-
-Typer uses <a href="https://click.palletsprojects.com/" class="external-link" target="_blank">Click</a> internally. That's the only dependency.
-
-But you can also install extras:
-
-* <a href="https://pypi.org/project/colorama/" class="external-link" target="_blank"><code>colorama</code></a>: and Click will automatically use it to make sure your terminal's colors always work correctly, even in Windows.
-    * Then you can use any tool you want to output your terminal's colors in all the systems, including the integrated `typer.style()` and `typer.secho()` (provided by Click).
-    * Or any other tool, e.g. <a href="https://pypi.org/project/wasabi/" class="external-link" target="_blank"><code>wasabi</code></a>, <a href="https://github.com/erikrose/blessings" class="external-link" target="_blank"><code>blessings</code></a>.
-* <a href="https://github.com/click-contrib/click-completion" class="external-link" target="_blank"><code>click-completion</code></a>: and Typer will automatically configure it to provide completion for all the shells, including installation commands.
-
-You can install `typer` with `colorama` and `click-completion` with `pip install typer[all]`.
-
-## Other tools and plug-ins
-
-Click has many plug-ins available that you can use. And there are many tools that help with command line applications that you can use as well, even if they are not related to Typer or Click.
-
-For example:
-
-* <a href="https://github.com/click-contrib/click-spinner" class="external-link" target="_blank"><code>click-spinner</code></a>: to show the user that you are loading data. A Click plug-in.
-    * There are several other Click plug-ins at <a href="https://github.com/click-contrib" class="external-link" target="_blank">click-contrib</a> that you can explore.
-* <a href="https://pypi.org/project/tabulate/" class="external-link" target="_blank"><code>tabulate</code></a>: to automatically display tabular data nicely. Independent of Click or typer.
-* etc... you can re-use many of the great available tools for building CLIs. -->
-
+<h2 id="follow-the-tutorial">Follow the Tutorial<a class="headerlink" href="#follow-the-tutorial" title="Permanent link">&para;</a></h2>
+<p>Once you have the Data and spaCy prerequisites completed follow along with the <a href="tutorial/create_index/">Tutorial</a> to for a step-by-step guide for using the <code>spacy_ann</code> package.</p>
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>This project is licensed under the terms of the MIT license.</p>
                 
@@ -824,13 +649,13 @@ For example:
       <nav class="md-footer-nav__inner md-grid">
         
         
-          <a href="webservice/" title="Web Service" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="tutorial/create_index/" title="Create an Index" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Web Service
+                Create an Index
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">

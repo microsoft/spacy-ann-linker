@@ -13,7 +13,7 @@
         <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
       
       
-        <link rel="canonical" href="https://microsoft.github.com/spacy-ann-linker/webservice/">
+        <link rel="canonical" href="https://microsoft.github.com/spacy-ann-linker/tutorial/remote_entity_linking/">
       
       
       
@@ -35,18 +35,18 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="../img/favicon.ico">
+      <link rel="shortcut icon" href="../../img/favicon.ico">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
     
     
       
-        <title>Tutorial - Remote Entity Linking - spaCy ANN Linker</title>
+        <title>Remote Entity Linking - spaCy ANN Linker</title>
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/application.1b62728e.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/application.1b62728e.css">
       
-        <link rel="stylesheet" href="../assets/stylesheets/application-palette.a8b3c06d.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/application-palette.a8b3c06d.css">
       
       
         
@@ -55,7 +55,7 @@
       
     
     
-      <script src="../assets/javascripts/modernizr.268332fc.js"></script>
+      <script src="../../assets/javascripts/modernizr.268332fc.js"></script>
     
     
       
@@ -64,12 +64,12 @@
         <style>body,input{font-family:"Roboto","Helvetica Neue",Helvetica,Arial,sans-serif}code,kbd,pre{font-family:"Roboto Mono","Courier New",Courier,monospace}</style>
       
     
-    <link rel="stylesheet" href="../assets/fonts/material-icons.css">
+    <link rel="stylesheet" href="../../assets/fonts/material-icons.css">
     
     
-      <link rel="stylesheet" href="../css/termynal.css">
+      <link rel="stylesheet" href="../../css/termynal.css">
     
-      <link rel="stylesheet" href="../css/custom.css">
+      <link rel="stylesheet" href="../../css/custom.css">
     
     
       
@@ -104,7 +104,7 @@
       <div class="md-flex__cell md-flex__cell--shrink">
         <a href="https://microsoft.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-header-nav__button md-logo">
           
-            <img src="../img/icon-white.svg" width="24" height="24">
+            <img src="../../img/icon-white.svg" width="24" height="24">
           
         </a>
       </div>
@@ -119,7 +119,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Tutorial - Remote Entity Linking
+                Remote Entity Linking
               
             </span>
           
@@ -196,7 +196,7 @@
   <label class="md-nav__title md-nav__title--site" for="__drawer">
     <a href="https://microsoft.github.com/spacy-ann-linker" title="spaCy ANN Linker" class="md-nav__button md-logo">
       
-        <img src="../img/icon-white.svg" width="48" height="48">
+        <img src="../../img/icon-white.svg" width="48" height="48">
       
     </a>
     spaCy ANN Linker
@@ -230,7 +230,7 @@
 
 
   <li class="md-nav__item">
-    <a href=".." title="Introduction" class="md-nav__link">
+    <a href="../.." title="Introduction" class="md-nav__link">
       Introduction
     </a>
   </li>
@@ -240,10 +240,12 @@
       
       
 
+  
 
-  <li class="md-nav__item md-nav__item--nested">
+
+  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
     
     <label class="md-nav__link" for="nav-2">
       Tutorial
@@ -261,7 +263,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../tutorial/create_index/" title="Create an Index" class="md-nav__link">
+    <a href="../create_index/" title="Create an Index" class="md-nav__link">
       Create an Index
     </a>
   </li>
@@ -273,7 +275,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../tutorial/local_entity_linking/" title="Local Entity Linking" class="md-nav__link">
+    <a href="../local_entity_linking/" title="Local Entity Linking" class="md-nav__link">
       Local Entity Linking
     </a>
   </li>
@@ -283,11 +285,145 @@
           
           
 
+  
 
-  <li class="md-nav__item">
-    <a href="../tutorial/remote_entity_linking/" title="Remote Entity Linking" class="md-nav__link">
+
+  <li class="md-nav__item md-nav__item--active">
+    
+    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+    
+      
+    
+    
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Remote Entity Linking
+      </label>
+    
+    <a href="./" title="Remote Entity Linking" class="md-nav__link md-nav__link--active">
       Remote Entity Linking
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#introduction" class="md-nav__link">
+    Introduction
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#load-the-model" class="md-nav__link">
+    Load the model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#define-the-batch-linking-route" class="md-nav__link">
+    Define the batch linking route
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#models" class="md-nav__link">
+    Models
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#example-request" class="md-nav__link">
+    Example Request
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#build-and-run" class="md-nav__link">
+    Build and Run
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-install-requirements" class="md-nav__link">
+    1. Install Requirements
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-start-the-web-service" class="md-nav__link">
+    2. Start the Web Service
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#call-the-web-service" class="md-nav__link">
+    Call the Web Service
+  </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#load-extraction-model" class="md-nav__link">
+    Load Extraction Model
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-remote_ann_linker-pipe" class="md-nav__link">
+    Create a remote_ann_linker pipe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-the-pipeline" class="md-nav__link">
+    Run the pipeline
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#conclusion" class="md-nav__link">
+    Conclusion
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
+    
   </li>
 
         
@@ -302,7 +438,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../contributing/" title="Development - Contributing" class="md-nav__link">
+    <a href="../../contributing/" title="Development - Contributing" class="md-nav__link">
       Development - Contributing
     </a>
   </li>
@@ -314,7 +450,7 @@
 
 
   <li class="md-nav__item">
-    <a href="../release-notes/" title="Release Notes" class="md-nav__link">
+    <a href="../../release-notes/" title="Release Notes" class="md-nav__link">
       Release Notes
     </a>
   </li>
@@ -355,8 +491,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#define-a-route-batch-linking" class="md-nav__link">
-    Define a route batch linking
+  <a href="#define-the-batch-linking-route" class="md-nav__link">
+    Define the batch linking route
   </a>
   
 </li>
@@ -391,8 +527,8 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#2-start-the-web-service-using-uvicorn" class="md-nav__link">
-    2. Start the Web Service using uvicorn
+  <a href="#2-start-the-web-service" class="md-nav__link">
+    2. Start the Web Service
   </a>
   
 </li>
@@ -403,9 +539,36 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#coming-soon" class="md-nav__link">
-    Coming Soon:
+  <a href="#call-the-web-service" class="md-nav__link">
+    Call the Web Service
   </a>
+  
+    <nav class="md-nav">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#load-extraction-model" class="md-nav__link">
+    Load Extraction Model
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#create-a-remote_ann_linker-pipe" class="md-nav__link">
+    Create a remote_ann_linker pipe
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#run-the-pipeline" class="md-nav__link">
+    Run the pipeline
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -432,7 +595,7 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/microsoft/spacy-ann-linker/docs/webservice.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/microsoft/spacy-ann-linker/docs/tutorial/remote_entity_linking.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <h1 id="tutorial-remote-entity-linking">Tutorial - Remote Entity Linking<a class="headerlink" href="#tutorial-remote-entity-linking" title="Permanent link">&para;</a></h1>
@@ -442,7 +605,7 @@
 <blockquote>
 <p>If you're unfamiliar with FastAPI, you can read more about it here: https://fastapi.tiangolo.com/</p>
 <p>The full code for this tutorial is in <a href="https://github.com/microsoft/spacy-ann-linker/tree/master/examples/api">examples/api</a></p>
-<p>This tutorial assumes you've already run the <code>create_index</code> command and have a saved model. If you haven't already done that, follow the steps in the <a href="..">Introduction</a></p>
+<p>This tutorial assumes you've already run the <code>create_index</code> command and have a saved model. If you haven't already done that, follow the steps in the <a href="./index.md">Introduction</a></p>
 </blockquote>
 <p>The actual webservice service implementation is quite short thanks to FastAPI taking away a lot of the normal boilerplate.</p>
 <h2 id="load-the-model">Load the model<a class="headerlink" href="#load-the-model" title="Permanent link">&para;</a></h2>
@@ -511,7 +674,7 @@
 </pre></div>
 
 
-<h2 id="define-a-route-batch-linking">Define a route batch linking<a class="headerlink" href="#define-a-route-batch-linking" title="Permanent link">&para;</a></h2>
+<h2 id="define-the-batch-linking-route">Define the batch linking route<a class="headerlink" href="#define-the-batch-linking-route" title="Permanent link">&para;</a></h2>
 <p>Once we have our basic API configured and our model loaded, we need a route where we can query the index. Let's add the <code>/link</code> route.</p>
 <div class="codehilite"><pre><span></span><span class="c1"># Copyright (c) Microsoft Corporation. All rights reserved.</span>
 <span class="c1"># Licensed under the MIT License.</span>
@@ -721,7 +884,7 @@
 
 </div>
 
-<h3 id="2-start-the-web-service-using-uvicorn">2. Start the Web Service using uvicorn<a class="headerlink" href="#2-start-the-web-service-using-uvicorn" title="Permanent link">&para;</a></h3>
+<h3 id="2-start-the-web-service">2. Start the Web Service<a class="headerlink" href="#2-start-the-web-service" title="Permanent link">&para;</a></h3>
 <div class="termy">
 
 <div class="codehilite"><pre><span></span><span class="gp">$</span> uvicorn app:app --port <span class="m">8080</span>
@@ -736,7 +899,7 @@
 </div>
 
 <p>If you open your browser to http://localhost:8080 now you'll be automatically redirected to the <code>/docs</code> route and greeted with the Open API UI for the Web Service</p>
-<p><img alt="Open API UI" src="../img/webservice-openapi.png" /></p>
+<p><img alt="Open API UI" src="img/webservice-openapi.png" /></p>
 <p>Now if you click on the green highlighted link route, click the button that says "Try it out" and hit Execute, you'll be making a request with the <code>example_request.json</code> data and should get a JSON reponse back that looks like:</p>
 <div class="codehilite"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;documents&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -771,12 +934,94 @@
 </pre></div>
 
 
-<blockquote>
-<h2 id="coming-soon">Coming Soon:<a class="headerlink" href="#coming-soon" title="Permanent link">&para;</a></h2>
-<p>RemoteAnnLinker component for calling this API from inside a spaCy pipeline component</p>
-</blockquote>
+<h2 id="call-the-web-service">Call the Web Service<a class="headerlink" href="#call-the-web-service" title="Permanent link">&para;</a></h2>
+<p>Now that we have an understanding of the remote web service, we need an easy way to call this service from a normal spaCy pipeline. The <code>RemoteAnnLinker</code> component handles this interaction.</p>
+<h3 id="load-extraction-model">Load Extraction Model<a class="headerlink" href="#load-extraction-model" title="Permanent link">&para;</a></h3>
+<p>First, load a model capable of extracting the Entities in your KnowledgeBase. This could be a trained NER model or a rule based extraction or a combination of both. For simplicity we'll use the spaCy <code>EntityRuler</code> component and just add a few terms to it that are close to those in our KnowledgeBase.</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="hll">    <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">blank</span><span class="p">(</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">aliases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;machine learning&#39;</span><span class="p">,</span> <span class="s1">&#39;ML&#39;</span><span class="p">,</span> <span class="s1">&#39;NLP&#39;</span><span class="p">,</span> <span class="s1">&#39;researched&#39;</span><span class="p">]</span>
+</span><span class="hll">    <span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;overwrite_ents&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+</span><span class="hll">    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span> <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">]</span>
+</span><span class="hll">    <span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+</span>
+    <span class="n">remote_ann_linker</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;remote_ann_linker&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;base_url&#39;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:8080/link&quot;</span>
+    <span class="p">})</span>
+    <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">remote_ann_linker</span><span class="p">)</span>
+
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a highly researched area of machine learning&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
+
+    <span class="c1"># Outputs:</span>
+    <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;Machine learning&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
+    <span class="c1">#</span>
+    <span class="c1"># In our entities.jsonl file</span>
+    <span class="c1"># a3 =&gt; Natural Language Processing</span>
+    <span class="c1"># a1 =&gt; Machine learnin</span>
+</pre></div>
+
+
+<h3 id="create-a-remote_ann_linker-pipe">Create a <code>remote_ann_linker</code> pipe<a class="headerlink" href="#create-a-remote_ann_linker-pipe" title="Permanent link">&para;</a></h3>
+<p>Now create a <code>remote_ann_linker</code> pipe using <code>nlp.create_pipe</code> and set the <code>base_url</code> config value to the batch linking url of your web service. If you're still running the service locally from the last step this should be <code>http://localhost:8080/link</code></p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">blank</span><span class="p">(</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+    <span class="n">aliases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;machine learning&#39;</span><span class="p">,</span> <span class="s1">&#39;ML&#39;</span><span class="p">,</span> <span class="s1">&#39;NLP&#39;</span><span class="p">,</span> <span class="s1">&#39;researched&#39;</span><span class="p">]</span>
+    <span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;overwrite_ents&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span> <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">]</span>
+    <span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+
+<span class="hll">    <span class="n">remote_ann_linker</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;remote_ann_linker&#39;</span><span class="p">,</span> <span class="p">{</span>
+</span><span class="hll">        <span class="s1">&#39;base_url&#39;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:8080/link&quot;</span>
+</span><span class="hll">    <span class="p">})</span>
+</span><span class="hll">    <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">remote_ann_linker</span><span class="p">)</span>
+</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a highly researched area of machine learning&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
+
+    <span class="c1"># Outputs:</span>
+    <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;Machine learning&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
+    <span class="c1">#</span>
+    <span class="c1"># In our entities.jsonl file</span>
+    <span class="c1"># a3 =&gt; Natural Language Processing</span>
+    <span class="c1"># a1 =&gt; Machine learnin</span>
+</pre></div>
+
+
+<h3 id="run-the-pipeline">Run the pipeline<a class="headerlink" href="#run-the-pipeline" title="Permanent link">&para;</a></h3>
+<p>Now you can call the pipeline the exact same way as you did in when using the local <code>ann_linker</code> component and you should get the exact same results.</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">blank</span><span class="p">(</span><span class="s2">&quot;en&quot;</span><span class="p">)</span>
+    <span class="n">aliases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;machine learning&#39;</span><span class="p">,</span> <span class="s1">&#39;ML&#39;</span><span class="p">,</span> <span class="s1">&#39;NLP&#39;</span><span class="p">,</span> <span class="s1">&#39;researched&#39;</span><span class="p">]</span>
+    <span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;overwrite_ents&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">})</span>
+    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span> <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">aliases</span><span class="p">]</span>
+    <span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+
+    <span class="n">remote_ann_linker</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;remote_ann_linker&#39;</span><span class="p">,</span> <span class="p">{</span>
+        <span class="s1">&#39;base_url&#39;</span><span class="p">:</span> <span class="s2">&quot;http://localhost:8080/link&quot;</span>
+    <span class="p">})</span>
+    <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">remote_ann_linker</span><span class="p">)</span>
+
+<span class="hll">    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a highly researched area of machine learning&quot;</span><span class="p">)</span>
+</span><span class="hll">    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
+</span>
+    <span class="c1"># Outputs:</span>
+    <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;Machine learning&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
+    <span class="c1">#</span>
+    <span class="c1"># In our entities.jsonl file</span>
+    <span class="c1"># a3 =&gt; Natural Language Processing</span>
+    <span class="c1"># a1 =&gt; Machine learnin</span>
+</pre></div>
+
+
 <h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
-<p>This Web Service is quite simple for the tutorial. It skips over things like a health check url, Docker/Kubernetes based deployment, etc. It's merely meant as a quick guide to illustrate the problem this package was originally designed to solve. </p>
+<p>This Web Service is quite simple for the tutorial. It skips over things like a health check url, Docker/Kubernetes based deployment, etc. It's merely meant as a quick guide to illustrate the problem this package was originally designed to solve.</p>
                 
                   
                 
@@ -795,6 +1040,41 @@
         
 <footer class="md-footer">
   
+    <div class="md-footer-nav">
+      <nav class="md-footer-nav__inner md-grid">
+        
+          <a href="../local_entity_linking/" title="Local Entity Linking" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
+            </div>
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Previous
+                </span>
+                Local Entity Linking
+              </span>
+            </div>
+          </a>
+        
+        
+          <a href="../../contributing/" title="Development - Contributing" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
+              <span class="md-flex__ellipsis">
+                <span class="md-footer-nav__direction">
+                  Next
+                </span>
+                Development - Contributing
+              </span>
+            </div>
+            <div class="md-flex__cell md-flex__cell--shrink">
+              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
+            </div>
+          </a>
+        
+      </nav>
+    </div>
+  
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
       <div class="md-footer-copyright">
@@ -807,7 +1087,7 @@
       </div>
       
   <div class="md-footer-social">
-    <link rel="stylesheet" href="../assets/fonts/font-awesome.css">
+    <link rel="stylesheet" href="../../assets/fonts/font-awesome.css">
     
       <a href="https://github.com/microsoft/spacy-ann-linker" class="md-footer-social__link fa fa-github"></a>
     
@@ -821,13 +1101,13 @@
       
     </div>
     
-      <script src="../assets/javascripts/application.808e90bb.js"></script>
+      <script src="../../assets/javascripts/application.808e90bb.js"></script>
       
-      <script>app.initialize({version:"1.0.4",url:{base:".."}})</script>
+      <script>app.initialize({version:"1.0.4",url:{base:"../.."}})</script>
       
-        <script src="../js/termynal.js"></script>
+        <script src="../../js/termynal.js"></script>
       
-        <script src="../js/custom.js"></script>
+        <script src="../../js/custom.js"></script>
       
     
   </body>

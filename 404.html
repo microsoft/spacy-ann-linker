@@ -33,7 +33,7 @@
       
         <meta name="lang:search.tokenizer" content="[\s\-]+">
       
-      <link rel="shortcut icon" href="/spacy-ann-linker/img/favicon.png">
+      <link rel="shortcut icon" href="/spacy-ann-linker/img/favicon.ico">
       <meta name="generator" content="mkdocs-1.0.4, mkdocs-material-4.6.0">
     
     
@@ -71,38 +71,13 @@
     
     
       
-        
-<script>
-  window.ga = window.ga || function() {
-    (ga.q = ga.q || []).push(arguments)
-  }
-  ga.l = +new Date
-  /* Setup integration and send page view */
-  ga("create", "UA-155009830-1", "auto")
-  ga("set", "anonymizeIp", true)
-  ga("send", "pageview")
-  /* Register handler to log search on blur */
-  document.addEventListener("DOMContentLoaded", () => {
-    if (document.forms.search) {
-      var query = document.forms.search.query
-      query.addEventListener("blur", function() {
-        if (this.value) {
-          var path = document.location.pathname;
-          ga("send", "pageview", path + "?q=" + this.value)
-        }
-      })
-    }
-  })
-</script>
-<script async src="https://www.google-analytics.com/analytics.js"></script>
-      
     
     
   </head>
   
     
     
-    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="orange">
+    <body dir="ltr" data-md-color-primary="blue" data-md-color-accent="white">
   
     <svg class="md-svg">
       <defs>
@@ -180,7 +155,7 @@
 
   
 
-<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/microsoft/spacy-ann-linker/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -227,7 +202,7 @@
 
   
 
-<a href="https://github.com/microsoft/spacy-ann-linker" title="Go to repository" class="md-source" data-md-source="github">
+<a href="https://github.com/microsoft/spacy-ann-linker/" title="Go to repository" class="md-source" data-md-source="github">
   
     <div class="md-source__icon">
       <svg viewBox="0 0 24 24" width="24" height="24">
@@ -260,10 +235,58 @@
       
 
 
+  <li class="md-nav__item md-nav__item--nested">
+    
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
+    
+    <label class="md-nav__link" for="nav-2">
+      Tutorial
+    </label>
+    <nav class="md-nav" data-md-component="collapsible" data-md-level="1">
+      <label class="md-nav__title" for="nav-2">
+        Tutorial
+      </label>
+      <ul class="md-nav__list" data-md-scrollfix>
+        
+        
+          
+          
+          
+
+
   <li class="md-nav__item">
-    <a href="/spacy-ann-linker/webservice/" title="Web Service" class="md-nav__link">
-      Web Service
+    <a href="/spacy-ann-linker/tutorial/create_index/" title="Create an Index" class="md-nav__link">
+      Create an Index
     </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="/spacy-ann-linker/tutorial/local_entity_linking/" title="Local Entity Linking" class="md-nav__link">
+      Local Entity Linking
+    </a>
+  </li>
+
+        
+          
+          
+          
+
+
+  <li class="md-nav__item">
+    <a href="/spacy-ann-linker/tutorial/remote_entity_linking/" title="Remote Entity Linking" class="md-nav__link">
+      Remote Entity Linking
+    </a>
+  </li>
+
+        
+      </ul>
+    </nav>
   </li>
 
     
