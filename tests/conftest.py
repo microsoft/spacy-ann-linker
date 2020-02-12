@@ -4,7 +4,7 @@ import subprocess
 
 import pytest
 import spacy
-from spacy_ann import ApproxNearestNeighborsLinker
+from spacy_ann import AnnLinker
 
 
 @pytest.fixture()

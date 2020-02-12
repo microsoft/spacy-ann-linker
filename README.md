@@ -133,7 +133,7 @@ $ spacy_ann create_index --help
 spacy_ann create_index --help
 Usage: spacy_ann create_index [OPTIONS] MODEL KB_DIR OUTPUT_DIR
 
-  Create an ApproxNearestNeighborsLinker based on the Character N-Gram TF-
+  Create an AnnLinker based on the Character N-Gram TF-
   IDF vectors for aliases in a KnowledgeBase
 
   model (str): spaCy language model directory or name to load kb_dir (Path):

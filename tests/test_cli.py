@@ -2,7 +2,7 @@ from pathlib import Path
 import os
 import subprocess
 import spacy
-from spacy_ann import ApproxNearestNeighborsLinker
+from spacy_ann import AnnLinker
 
 
 def test_create_index():

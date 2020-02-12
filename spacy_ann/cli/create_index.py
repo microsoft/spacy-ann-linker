@@ -13,7 +13,7 @@ import typer
 from wasabi import Printer
 from bin.wiki_entity_linking.train_descriptions import EntityEncoder
 
-from spacy_ann import ApproxNearestNeighborsLinker
+from spacy_ann import AnnLinker
 from spacy_ann.candidate_generator import CandidateGenerator
 
 INPUT_DIM = 300  # dimension of pretrained input vectors
@@ -28,7 +28,7 @@ def create_index(model: str,
                  n_iter: int = 5,
                  verbose: bool = True):
 
-    """Create an ApproxNearestNeighborsLinker based on the Character N-Gram
+    """Create an AnnLinker based on the Character N-Gram
     TF-IDF vectors for aliases in a KnowledgeBase
 
     model (str): spaCy language model directory or name to load

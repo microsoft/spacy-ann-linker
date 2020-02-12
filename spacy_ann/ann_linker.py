@@ -24,10 +24,10 @@ from spacy_ann.candidate_generator import CandidateGenerator
     requires=["doc.ents", "doc.sents", "token.ent_iob", "token.ent_type"],
     assigns=["span._.kb_alias"],
 )
-class ApproxNearestNeighborsLinker:
-    """The ApproxNearestNeighborsLinker adds Entity Linking capabilities
+class AnnLinker:
+    """The AnnLinker adds Entity Linking capabilities
     to map NER mentions to KnowledgeBase Aliases or directly to KnowledgeBase Ids
-    """    
+    """
 
     @classmethod
     def from_nlp(cls, nlp, **cfg):
@@ -36,13 +36,12 @@ class ApproxNearestNeighborsLinker:
         
         nlp (Language): spaCy Language object
         
-        Returns:
-            ApproxNearestNeighborsLinker: Initialized ApproxNearestNeighborsLinker component
+        RETURNS (AnnLinker): Initialized AnnLinker.
         """        
         return cls(nlp, **cfg)
 
     def __init__(self, nlp, **cfg):
-        """Initialize the ApproxNearestNeighborsLinker
+        """Initialize the AnnLinker
         
         nlp (Language): spaCy Language object
         """        
@@ -136,11 +135,11 @@ class ApproxNearestNeighborsLinker:
             raise ValueError(f"CandidateGenerator `cg` required for {self.name}")
 
     def from_disk(self, path: Path, **kwargs):
-        """Deserialize saved ApproxNearestNeighborsLinker from disk.
+        """Deserialize saved AnnLinker from disk.
         
         path (Path): directory to deserialize from
         
-        RETURNS (ApproxNearestNeighborsLinker): Initialized ApproxNearestNeighborsLinker
+        RETURNS (AnnLinker): Initialized AnnLinker
         """        
         path = util.ensure_path(path)
 
@@ -154,7 +153,7 @@ class ApproxNearestNeighborsLinker:
         return self
 
     def to_disk(self, path: Path, exclude: Tuple = tuple(), **kwargs):
-        """Serialize ApproxNearestNeighborsLinker to disk.
+        """Serialize AnnLinker to disk.
         
         path (Path): directory to serialize to
         exclude (Tuple, optional): config to exclude. Defaults to tuple().

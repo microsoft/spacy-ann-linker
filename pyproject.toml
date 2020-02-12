@@ -63,7 +63,8 @@ doc = [
 spacy_ann = "spacy_ann.cli:main"
 
 [tool.flit.entrypoints."spacy_factories"]
-ann_linker = "spacy_ann.ann_linker:ApproxNearestNeighborsLinker"
+ann_linker = "spacy_ann.ann_linker:AnnLinker"
+remote_ann_linker = "spacy_ann.remote_ann_linker:RemoteAnnLinker"
 
 [tool.flit.entrypoints."spacy_kb"]
 get_candidates = "spacy_ann:get_candidates"

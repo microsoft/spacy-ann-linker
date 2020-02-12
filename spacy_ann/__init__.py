@@ -5,7 +5,8 @@
 
 __version__ = '0.0.6'
 
-from .ann_linker import ApproxNearestNeighborsLinker
+from .ann_linker import AnnLinker
+from .remote_ann_linker import RemoteAnnLinker
 
 # TODO: Uncomment (and probably fix a bit) once this PR is merged upstream
 # https://github.com/explosion/spaCy/pull/4988 to enable kb registry with 

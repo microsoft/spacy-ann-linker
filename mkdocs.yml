@@ -6,20 +6,21 @@ theme:
     name: 'material'
     palette:
         primary: 'blue'
-        accent: 'orange'
+        accent: 'white'
     logo: 'img/icon-white.svg'
-    favicon: 'img/favicon.png'
+    favicon: 'img/favicon.ico'
 
 repo_name: microsoft/spacy-ann-linker
 repo_url: https://github.com/microsoft/spacy-ann-linker
-edit_uri: ''
-google_analytics:
-    - 'UA-155009830-1'
-    - 'auto'
+edit_uri: 'https://github.com/microsoft/spacy-ann-linker/docs'
 
 nav:
     - Introduction: 'index.md'
-    - Web Service: 'webservice.md'
+    - Tutorial:
+        - Create an Index: 'tutorial/create_index.md'
+        - Local Entity Linking: 'tutorial/local_entity_linking.md'
+        - Remote Entity Linking: 'tutorial/remote_entity_linking.md'
+
     - Development - Contributing: 'contributing.md'
     - Release Notes: release-notes.md
 
