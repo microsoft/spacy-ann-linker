@@ -11,7 +11,7 @@ This tutorial walks through creating the ANN Index for all the Aliases in a Know
 > The full code for this tutorial is in [examples/api](https://github.com/microsoft/spacy-ann-linker/tree/master/examples/api)
 
 
-> This tutorial assumes you've already run the `create_index` command and have a saved model. If you haven't already done that, follow the steps in the [Introduction](./index.md)
+> This tutorial assumes you've already run the `create_index` command and have a saved model. If you haven't already done that, follow the steps in the [Introduction](../index.md)
 
 
 The actual webservice service implementation is quite short thanks to FastAPI taking away a lot of the normal boilerplate.
@@ -120,7 +120,7 @@ Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)
 
 If you open your browser to http://localhost:8080 now you'll be automatically redirected to the `/docs` route and greeted with the Open API UI for the Web Service
 
-![Open API UI](img/webservice-openapi.png)
+![Open API UI](../img/webservice-openapi.png)
 
 Now if you click on the green highlighted link route, click the button that says "Try it out" and hit Execute, you'll be making a request with the `example_request.json` data and should get a JSON reponse back that looks like:
 
