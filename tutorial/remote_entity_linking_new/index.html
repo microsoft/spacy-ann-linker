@@ -13,7 +13,7 @@
         <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
       
       
-        <link rel="canonical" href="https://microsoft.github.com/spacy-ann-linker/tutorial/remote_entity_linking/">
+        <link rel="canonical" href="https://microsoft.github.com/spacy-ann-linker/tutorial/remote_entity_linking_new/">
       
       
       
@@ -40,7 +40,7 @@
     
     
       
-        <title>Remote Entity Linking - spaCy ANN Linker</title>
+        <title>Remote Entity Linking (New) - spaCy ANN Linker</title>
       
     
     
@@ -119,7 +119,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Remote Entity Linking
+                Remote Entity Linking (New)
               
             </span>
           
@@ -285,6 +285,18 @@
           
           
 
+
+  <li class="md-nav__item">
+    <a href="../remote_entity_linking/" title="Remote Entity Linking" class="md-nav__link">
+      Remote Entity Linking
+    </a>
+  </li>
+
+        
+          
+          
+          
+
   
 
 
@@ -296,11 +308,11 @@
     
     
       <label class="md-nav__link md-nav__link--active" for="__toc">
-        Remote Entity Linking
+        Remote Entity Linking (New)
       </label>
     
-    <a href="./" title="Remote Entity Linking" class="md-nav__link md-nav__link--active">
-      Remote Entity Linking
+    <a href="./" title="Remote Entity Linking (New)" class="md-nav__link md-nav__link--active">
+      Remote Entity Linking (New)
     </a>
     
       
@@ -321,22 +333,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#load-the-model" class="md-nav__link">
-    Load the model
+  <a href="#prerequisite-install-api-requirements" class="md-nav__link">
+    Prerequisite - Install [api] requirements
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#define-the-batch-linking-route" class="md-nav__link">
-    Define the batch linking route
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#models" class="md-nav__link">
-    Models
+  <a href="#serve-a-model-remotely" class="md-nav__link">
+    Serve a model remotely
   </a>
   
 </li>
@@ -345,33 +350,6 @@
   <a href="#example-request" class="md-nav__link">
     Example Request
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#build-and-run" class="md-nav__link">
-    Build and Run
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-install-requirements" class="md-nav__link">
-    1. Install Requirements
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-start-the-web-service" class="md-nav__link">
-    2. Start the Web Service
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -424,18 +402,6 @@
   
 </nav>
     
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../remote_entity_linking_new/" title="Remote Entity Linking (New)" class="md-nav__link">
-      Remote Entity Linking (New)
-    </a>
   </li>
 
         
@@ -496,22 +462,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#load-the-model" class="md-nav__link">
-    Load the model
+  <a href="#prerequisite-install-api-requirements" class="md-nav__link">
+    Prerequisite - Install [api] requirements
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#define-the-batch-linking-route" class="md-nav__link">
-    Define the batch linking route
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#models" class="md-nav__link">
-    Models
+  <a href="#serve-a-model-remotely" class="md-nav__link">
+    Serve a model remotely
   </a>
   
 </li>
@@ -520,33 +479,6 @@
   <a href="#example-request" class="md-nav__link">
     Example Request
   </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#build-and-run" class="md-nav__link">
-    Build and Run
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-install-requirements" class="md-nav__link">
-    1. Install Requirements
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-start-the-web-service" class="md-nav__link">
-    2. Start the Web Service
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -607,183 +539,52 @@
             <article class="md-content__inner md-typeset">
               
                 
-                  <a href="https://github.com/microsoft/spacy-ann-linker/docs/tutorial/remote_entity_linking.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
+                  <a href="https://github.com/microsoft/spacy-ann-linker/docs/tutorial/remote_entity_linking_new.md" title="Edit this page" class="md-icon md-content__icon">&#xE3C9;</a>
                 
                 
                 <h1 id="tutorial-remote-entity-linking">Tutorial - Remote Entity Linking<a class="headerlink" href="#tutorial-remote-entity-linking" title="Permanent link">&para;</a></h1>
 <h2 id="introduction">Introduction<a class="headerlink" href="#introduction" title="Permanent link">&para;</a></h2>
 <p>The original reason for developing this package at Microsoft is we need a way to Link Entities to a KnowledgeBase without having that KnowledgeBase in memory. </p>
-<p>This tutorial walks through creating the ANN Index for all the Aliases in a KnowledgeBase remotely and exposing the index through a Web Service using FastAPI.</p>
+<p>This tutorial walks through creating the ANN Index for all the Aliases in a KnowledgeBase remotely and exposing the index through a Web Service using the <code>spacy_ann serve</code> command</p>
 <blockquote>
-<p>If you're unfamiliar with FastAPI, you can read more about it here: https://fastapi.tiangolo.com/</p>
-<p>The full code for this tutorial is in <a href="https://github.com/microsoft/spacy-ann-linker/tree/master/examples/api">examples/api</a></p>
+<p>Internally, the API is built using FastAPI. If you're unfamiliar with FastAPI, you can read more about it here: https://fastapi.tiangolo.com/</p>
 <p>This tutorial assumes you've already run the <code>create_index</code> command and have a saved model. If you haven't already done that, follow the steps in the <a href="../..">Introduction</a></p>
 </blockquote>
-<p>The actual webservice service implementation is quite short thanks to FastAPI taking away a lot of the normal boilerplate.</p>
-<h2 id="load-the-model">Load the model<a class="headerlink" href="#load-the-model" title="Permanent link">&para;</a></h2>
-<p>First we need to load our spaCy model from the <code>create_index</code> command.</p>
-<div class="codehilite"><pre><span></span><span class="c1"># Copyright (c) Microsoft Corporation. All rights reserved.</span>
-<span class="c1"># Licensed under the MIT License.</span>
+<h2 id="prerequisite-install-api-requirements">Prerequisite - Install [api] requirements<a class="headerlink" href="#prerequisite-install-api-requirements" title="Permanent link">&para;</a></h2>
+<p><code>spacy-ann-linker</code> provides an installation extension for using the <code>serve</code> CLI command called <code>[api]</code>
+To install the api extension run:</p>
+<div class="termy">
 
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span><span class="p">,</span> <span class="n">find_dotenv</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Body</span>
-<span class="kn">from</span> <span class="nn">starlette.middleware.cors</span> <span class="kn">import</span> <span class="n">CORSMiddleware</span>
-<span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">RedirectResponse</span>
-<span class="kn">import</span> <span class="nn">spacy</span>
-<span class="kn">import</span> <span class="nn">uvicorn</span>
-
-<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">LinkingRequest</span><span class="p">,</span> <span class="n">LinkingResponse</span><span class="p">,</span> <span class="n">LinkingRecord</span>
-
-
-<span class="n">load_dotenv</span><span class="p">(</span><span class="n">find_dotenv</span><span class="p">())</span>
-<span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CLUSTER_ROUTE_PREFIX&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
-    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;spacy-ann-linker&quot;</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Entity Linking with Approximate Nearest Neighbors index lookup for Aliases&quot;</span><span class="p">,</span>
-    <span class="n">openapi_prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">example_request</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">srsly</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./example_request.json&#39;</span><span class="p">))</span>
-
-<span class="hll"><span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../tutorial/models/ann_linker&quot;</span><span class="p">)</span>
-</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">include_in_schema</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">docs_redirect</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">RedirectResponse</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{prefix}</span><span class="s2">/docs&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/link&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">LinkingResponse</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">LinkingRequest</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">example</span><span class="o">=</span><span class="n">example_request</span><span class="p">)):</span>
-    <span class="sd">&quot;&quot;&quot;Link batch of Spans to their canonical KnowledgeBase Id.&quot;&quot;&quot;</span>
-
-    <span class="n">res</span> <span class="o">=</span> <span class="n">LinkingResponse</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="p">[])</span>
-    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">body</span><span class="o">.</span><span class="n">documents</span><span class="p">:</span>
-        <span class="n">spacy_doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">make_doc</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-        <span class="n">spans</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">spacy_doc</span><span class="o">.</span><span class="n">char_span</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">spans</span>
-        <span class="p">]</span>
-        <span class="n">spacy_doc</span><span class="o">.</span><span class="n">ents</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spans</span> <span class="k">if</span> <span class="n">s</span><span class="p">]</span>
-        <span class="n">spacy_doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)(</span><span class="n">spacy_doc</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spacy_doc</span><span class="o">.</span><span class="n">ents</span><span class="p">):</span>
-            <span class="n">doc</span><span class="o">.</span><span class="n">spans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">ent</span><span class="o">.</span><span class="n">kb_id_</span>
-
-        <span class="n">res</span><span class="o">.</span><span class="n">documents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">LinkingRecord</span><span class="p">(</span><span class="n">spans</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">spans</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-        <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">res</span>
+<div class="codehilite"><pre><span></span><span class="gp">$</span> pip install spacy-ann-linker<span class="o">[</span>api<span class="o">]</span>
+<span class="go">---&gt; 100%</span>
+<span class="go">Successfully installed spacy-ann-linker[api]</span>
 </pre></div>
 
 
-<h2 id="define-the-batch-linking-route">Define the batch linking route<a class="headerlink" href="#define-the-batch-linking-route" title="Permanent link">&para;</a></h2>
-<p>Once we have our basic API configured and our model loaded, we need a route where we can query the index. Let's add the <code>/link</code> route.</p>
-<div class="codehilite"><pre><span></span><span class="c1"># Copyright (c) Microsoft Corporation. All rights reserved.</span>
-<span class="c1"># Licensed under the MIT License.</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
+</div>
 
-<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span><span class="p">,</span> <span class="n">find_dotenv</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Body</span>
-<span class="kn">from</span> <span class="nn">starlette.middleware.cors</span> <span class="kn">import</span> <span class="n">CORSMiddleware</span>
-<span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">RedirectResponse</span>
-<span class="kn">import</span> <span class="nn">spacy</span>
-<span class="kn">import</span> <span class="nn">uvicorn</span>
+<p>Now you can run the <code>spacy_ann serve</code> command</p>
+<h2 id="serve-a-model-remotely">Serve a model remotely<a class="headerlink" href="#serve-a-model-remotely" title="Permanent link">&para;</a></h2>
+<p>In order to serve a model, you need to have already run the <code>create_index</code> command and have
+as saved spaCy model with an <code>ann_linker</code> pipeline component.</p>
+<p>If you have this already, you can serve that model using the <code>serve</code> command provided in the CLI.</p>
+<p>For the example below I'm going to use the example ann_linker model we used in the tutorial.</p>
+<div class="termy">
 
-<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">LinkingRequest</span><span class="p">,</span> <span class="n">LinkingResponse</span><span class="p">,</span> <span class="n">LinkingRecord</span>
-
-
-<span class="n">load_dotenv</span><span class="p">(</span><span class="n">find_dotenv</span><span class="p">())</span>
-<span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CLUSTER_ROUTE_PREFIX&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
-    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;spacy-ann-linker&quot;</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Entity Linking with Approximate Nearest Neighbors index lookup for Aliases&quot;</span><span class="p">,</span>
-    <span class="n">openapi_prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">example_request</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">srsly</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./example_request.json&#39;</span><span class="p">))</span>
-
-<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../tutorial/models/ann_linker&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">include_in_schema</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">docs_redirect</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">RedirectResponse</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{prefix}</span><span class="s2">/docs&quot;</span><span class="p">)</span>
-
-
-<span class="hll"><span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/link&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">LinkingResponse</span><span class="p">)</span>
-</span><span class="hll"><span class="k">async</span> <span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">LinkingRequest</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">example</span><span class="o">=</span><span class="n">example_request</span><span class="p">)):</span>
-</span>    <span class="sd">&quot;&quot;&quot;Link batch of Spans to their canonical KnowledgeBase Id.&quot;&quot;&quot;</span>
-
-    <span class="n">res</span> <span class="o">=</span> <span class="n">LinkingResponse</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="p">[])</span>
-    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">body</span><span class="o">.</span><span class="n">documents</span><span class="p">:</span>
-        <span class="n">spacy_doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">make_doc</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-        <span class="n">spans</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">spacy_doc</span><span class="o">.</span><span class="n">char_span</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">spans</span>
-        <span class="p">]</span>
-        <span class="n">spacy_doc</span><span class="o">.</span><span class="n">ents</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spans</span> <span class="k">if</span> <span class="n">s</span><span class="p">]</span>
-        <span class="n">spacy_doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)(</span><span class="n">spacy_doc</span><span class="p">)</span>
-
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spacy_doc</span><span class="o">.</span><span class="n">ents</span><span class="p">):</span>
-            <span class="n">doc</span><span class="o">.</span><span class="n">spans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">ent</span><span class="o">.</span><span class="n">kb_id_</span>
-
-        <span class="n">res</span><span class="o">.</span><span class="n">documents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">LinkingRecord</span><span class="p">(</span><span class="n">spans</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">spans</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-        <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">res</span>
+<div class="codehilite"><pre><span></span><span class="gp">$</span> spacy_ann serve examples/tutorial/models/ann_linker
+<span class="go">Started server process [21052]</span>
+<span class="go">Waiting for application startup.</span>
+<span class="go">Application startup complete.</span>
+<span class="go">Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)</span>
 </pre></div>
 
 
-<p>Now this might seem a bit complicated if you haven't used FastAPI before. However, it's quite simple once you delve into the models. FastAPI leverages Pydantic for serializing and deserializing JSON requests. So at the route level, you pass a response_model and a definition of what the Post Body should look like based on Pydantic models. </p>
-<h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h2>
-<p>Let's hop over to our models.py file to get a look at the models our route expects.</p>
-<div class="codehilite"><pre><span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span>
 
+</div>
 
-<span class="k">class</span> <span class="nc">LinkingSpan</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">text</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">start</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">end</span><span class="p">:</span> <span class="nb">int</span>
-    <span class="n">label</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span>
-
-
-<span class="k">class</span> <span class="nc">LinkingRecord</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-    <span class="n">spans</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LinkingSpan</span><span class="p">]</span>
-    <span class="n">context</span><span class="p">:</span> <span class="nb">str</span>
-
-
-<span class="hll"><span class="k">class</span> <span class="nc">LinkingRequest</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-</span><span class="hll">    <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LinkingRecord</span><span class="p">]</span>
-</span>
-
-<span class="hll"><span class="k">class</span> <span class="nc">LinkingResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-</span><span class="hll">    <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LinkingRecord</span><span class="p">]</span>
-</span></pre></div>
-
-
-<p>If you follow the nested structure of these models you can construct the JSON tree request structure that the API expects as well as the definiton of what it will return.</p>
-<p>But we've also included an example_request.json file for a real world example.</p>
 <h2 id="example-request">Example Request<a class="headerlink" href="#example-request" title="Permanent link">&para;</a></h2>
+<p><code>spacy-ann-linker</code> provides an example JSON input request based on the model created with the example tutorial data. This is the request format that the default server accepts.</p>
 <div class="codehilite"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;documents&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
@@ -815,101 +616,6 @@
 
 
 <p>From this request, you can see that we're passing the Entity Spans extracted by an NER model along with the context in which they were extracted. This is all the input data we need for the <code>ann_linker</code> component to be able to identify candidate aliases and disambiguate and alias to a cononical entity id.</p>
-<p>Let's hop back over to our main <code>app.py</code> and review our <code>/link</code> route again.</p>
-<p>The logic here is we loop through each document in the request body, make the text into a spaCy Doc object, set the <code>doc.ents</code> based on the provided spans and then run the ann_linker pipe on the doc. We then write to the id attribute of each <code>LinkingSpan</code> object the value of the <code>ent.kb_id_</code> set by the <code>ann_linker</code> pipeline component.</p>
-<div class="codehilite"><pre><span></span><span class="c1"># Copyright (c) Microsoft Corporation. All rights reserved.</span>
-<span class="c1"># Licensed under the MIT License.</span>
-
-<span class="kn">import</span> <span class="nn">os</span>
-
-<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span><span class="p">,</span> <span class="n">find_dotenv</span>
-<span class="kn">from</span> <span class="nn">fastapi</span> <span class="kn">import</span> <span class="n">FastAPI</span><span class="p">,</span> <span class="n">Body</span>
-<span class="kn">from</span> <span class="nn">starlette.middleware.cors</span> <span class="kn">import</span> <span class="n">CORSMiddleware</span>
-<span class="kn">from</span> <span class="nn">starlette.responses</span> <span class="kn">import</span> <span class="n">RedirectResponse</span>
-<span class="kn">import</span> <span class="nn">spacy</span>
-<span class="kn">import</span> <span class="nn">uvicorn</span>
-
-<span class="kn">from</span> <span class="nn">models</span> <span class="kn">import</span> <span class="n">LinkingRequest</span><span class="p">,</span> <span class="n">LinkingResponse</span><span class="p">,</span> <span class="n">LinkingRecord</span>
-
-
-<span class="n">load_dotenv</span><span class="p">(</span><span class="n">find_dotenv</span><span class="p">())</span>
-<span class="n">prefix</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CLUSTER_ROUTE_PREFIX&quot;</span><span class="p">)</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">prefix</span><span class="p">:</span>
-    <span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="n">prefix</span> <span class="o">=</span> <span class="n">prefix</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
-
-
-<span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;spacy-ann-linker&quot;</span><span class="p">,</span>
-    <span class="n">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="p">,</span>
-    <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Entity Linking with Approximate Nearest Neighbors index lookup for Aliases&quot;</span><span class="p">,</span>
-    <span class="n">openapi_prefix</span><span class="o">=</span><span class="n">prefix</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">example_request</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">srsly</span><span class="o">.</span><span class="n">read_json</span><span class="p">(</span><span class="s1">&#39;./example_request.json&#39;</span><span class="p">))</span>
-
-<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s2">&quot;../tutorial/models/ann_linker&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">include_in_schema</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">docs_redirect</span><span class="p">():</span>
-    <span class="k">return</span> <span class="n">RedirectResponse</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{prefix}</span><span class="s2">/docs&quot;</span><span class="p">)</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/link&quot;</span><span class="p">,</span> <span class="n">response_model</span><span class="o">=</span><span class="n">LinkingResponse</span><span class="p">)</span>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">link</span><span class="p">(</span><span class="n">body</span><span class="p">:</span> <span class="n">LinkingRequest</span> <span class="o">=</span> <span class="n">Body</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">example</span><span class="o">=</span><span class="n">example_request</span><span class="p">)):</span>
-    <span class="sd">&quot;&quot;&quot;Link batch of Spans to their canonical KnowledgeBase Id.&quot;&quot;&quot;</span>
-
-    <span class="n">res</span> <span class="o">=</span> <span class="n">LinkingResponse</span><span class="p">(</span><span class="n">documents</span><span class="o">=</span><span class="p">[])</span>
-    <span class="k">for</span> <span class="n">doc</span> <span class="ow">in</span> <span class="n">body</span><span class="o">.</span><span class="n">documents</span><span class="p">:</span>
-        <span class="n">spacy_doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">make_doc</span><span class="p">(</span><span class="n">doc</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-        <span class="n">spans</span> <span class="o">=</span> <span class="p">[</span>
-            <span class="n">spacy_doc</span><span class="o">.</span><span class="n">char_span</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">s</span><span class="o">.</span><span class="n">end</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">s</span><span class="o">.</span><span class="n">label</span><span class="p">)</span>
-            <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">spans</span>
-        <span class="p">]</span>
-<span class="hll">        <span class="n">spacy_doc</span><span class="o">.</span><span class="n">ents</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">spans</span> <span class="k">if</span> <span class="n">s</span><span class="p">]</span>
-</span><span class="hll">        <span class="n">spacy_doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)(</span><span class="n">spacy_doc</span><span class="p">)</span>
-</span>
-<span class="hll">        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ent</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">spacy_doc</span><span class="o">.</span><span class="n">ents</span><span class="p">):</span>
-</span><span class="hll">            <span class="n">doc</span><span class="o">.</span><span class="n">spans</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">ent</span><span class="o">.</span><span class="n">kb_id_</span>
-</span>
-        <span class="n">res</span><span class="o">.</span><span class="n">documents</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-            <span class="n">LinkingRecord</span><span class="p">(</span><span class="n">spans</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">spans</span><span class="p">,</span> <span class="n">context</span><span class="o">=</span><span class="n">doc</span><span class="o">.</span><span class="n">context</span><span class="p">)</span>
-        <span class="p">)</span>
-
-    <span class="k">return</span> <span class="n">res</span>
-</pre></div>
-
-
-<h2 id="build-and-run">Build and Run<a class="headerlink" href="#build-and-run" title="Permanent link">&para;</a></h2>
-<p>Now that we have an understanding of the code for the Web Service, let's run it using uvicorn.</p>
-<h3 id="1-install-requirements">1. Install Requirements<a class="headerlink" href="#1-install-requirements" title="Permanent link">&para;</a></h3>
-<div class="termy">
-
-<div class="codehilite"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> examples/api
-<span class="gp">$</span> pip install -r requirements.txt
-<span class="go">---&gt; 100%</span>
-<span class="go">Successfully installed requirements</span>
-</pre></div>
-
-
-
-</div>
-
-<h3 id="2-start-the-web-service">2. Start the Web Service<a class="headerlink" href="#2-start-the-web-service" title="Permanent link">&para;</a></h3>
-<div class="termy">
-
-<div class="codehilite"><pre><span></span><span class="gp">$</span> uvicorn app:app --port <span class="m">8080</span>
-<span class="go">Started server process [21052]</span>
-<span class="go">Waiting for application startup.</span>
-<span class="go">Application startup complete.</span>
-<span class="go">Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)</span>
-</pre></div>
-
-
-
-</div>
-
 <p>If you open your browser to http://localhost:8080 now you'll be automatically redirected to the <code>/docs</code> route and greeted with the Open API UI for the Web Service</p>
 <p><img alt="Open API UI" src="../../img/webservice-openapi.png" /></p>
 <p>Now if you click on the green highlighted link route, click the button that says "Try it out" and hit Execute, you'll be making a request with the <code>example_request.json</code> data and should get a JSON reponse back that looks like:</p>
@@ -947,7 +653,8 @@
 
 
 <h2 id="call-the-web-service">Call the Web Service<a class="headerlink" href="#call-the-web-service" title="Permanent link">&para;</a></h2>
-<p>Now that we have an understanding of the remote web service, we need an easy way to call this service from a normal spaCy pipeline. The <code>RemoteAnnLinker</code> component handles this interaction.</p>
+<p>Now that we have an understanding of the remote web service, we need an easy way to call this service from a normal spaCy pipeline. The <code>spacy_ann.remote_ann_linker.RemoteAnnLinker</code> component handles this interaction.</p>
+<p>The following example code demonstrates the usage of the <code>RemoteAnnLinker</code>.</p>
 <h3 id="load-extraction-model">Load Extraction Model<a class="headerlink" href="#load-extraction-model" title="Permanent link">&para;</a></h3>
 <p>First, load a model capable of extracting the Entities in your KnowledgeBase. This could be a trained NER model or a rule based extraction or a combination of both. For simplicity we'll use the spaCy <code>EntityRuler</code> component and just add a few terms to it that are close to those in our KnowledgeBase.</p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
@@ -977,7 +684,7 @@
 
 
 <h3 id="create-a-remote_ann_linker-pipe">Create a <code>remote_ann_linker</code> pipe<a class="headerlink" href="#create-a-remote_ann_linker-pipe" title="Permanent link">&para;</a></h3>
-<p>Now create a <code>remote_ann_linker</code> pipe using <code>nlp.create_pipe</code> and set the <code>base_url</code> config value to the batch linking url of your web service. If you're still running the service locally from the last step this should be <code>http://localhost:8080/link</code></p>
+<p>Now create a <code>remote_ann_linker</code> pipe using <code>nlp.create_pipe</code> and set the <code>base_url</code> config value to the batch linking url of your web service. If you're testing the service locally from the last step this should be <code>http://localhost:8080/link</code></p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
@@ -1055,7 +762,7 @@
     <div class="md-footer-nav">
       <nav class="md-footer-nav__inner md-grid">
         
-          <a href="../local_entity_linking/" title="Local Entity Linking" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
+          <a href="../remote_entity_linking/" title="Remote Entity Linking" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
             <div class="md-flex__cell md-flex__cell--shrink">
               <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
             </div>
@@ -1064,19 +771,19 @@
                 <span class="md-footer-nav__direction">
                   Previous
                 </span>
-                Local Entity Linking
+                Remote Entity Linking
               </span>
             </div>
           </a>
         
         
-          <a href="../remote_entity_linking_new/" title="Remote Entity Linking (New)" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../../contributing/" title="Development - Contributing" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
                   Next
                 </span>
-                Remote Entity Linking (New)
+                Development - Contributing
               </span>
             </div>
             <div class="md-flex__cell md-flex__cell--shrink">
