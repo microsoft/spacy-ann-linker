@@ -67,7 +67,7 @@ class RemoteAnnLinker:
         
         ents (List[Span]): List of spaCy ents from `doc.ents`
         
-        RETURNS ([type]): 
+        RETURNS (List[Dict[str, Any]]): JSON spans
         """        
         return [{
             "text": ent.text,
@@ -126,17 +126,17 @@ class RemoteAnnLinker:
 
             yield from docs
     
-    def _make_request(self, documents: List[Any]) -> List[Any]:
+    def _make_request(self, documents: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """Make request to remote Web Service with batch
         of Documents
         
-        documents (List[Any]): Batch of documents to link
+        documents (Dict[str, Any]): Batch of documents to link
             entity spans
         
         RAISES:
             ValueError: If there is a server error, raise and exit
         
-        RETURNS (List[Any]): List of Documents with id prop set on each span
+        RETURNS (Dict[str, Any]): List of Documents with id prop set on each span
         """        
          
         res = requests.post(

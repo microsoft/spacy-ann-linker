@@ -1,8 +1,7 @@
 [run]
 
 source =
-    typer
-    tests
+    spacy_ann
     docs/src
 
 parallel = True
