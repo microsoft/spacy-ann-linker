@@ -1,4 +1,4 @@
-# Tutorial: Create an ANN Index
+# Tutorial - Create an ANN Index
 
 Once you have your data in the supported format, and a spaCy model with vectors you can use the `spacy_ann` CLI to compute the nearest neighbors index for your Aliases and tran an Encoder for disambiguating entity spans to their canonical Id
 

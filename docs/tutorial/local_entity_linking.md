@@ -1,4 +1,4 @@
-# Local Entity Linking
+# Tutorial - Local Entity Linking
 
 In the previous step, you ran the `spacy_ann create_index` CLI command. The output of this
 command is a loadable spaCy model with an `ann_linker` capable of Entity Linking against your KnowledgeBase data.
