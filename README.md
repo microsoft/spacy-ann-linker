@@ -11,6 +11,9 @@
 <a href="https://pypi.org/project/spacy-ann-linker" target="_blank">
     <img src="https://badge.fury.io/py/spacy-ann-linker.svg" alt="Package version">
 </a>
+<a href="https://codecov.io/gh/microsoft/spacy-ann-linker" target="_blank">
+  <img src="https://codecov.io/gh/microsoft/spacy-ann-linker/branch/master/graph/badge.svg" alt="Code Coverage"/>
+</a>
 </p>
 
 ---
