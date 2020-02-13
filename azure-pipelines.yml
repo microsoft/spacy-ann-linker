@@ -60,6 +60,11 @@ stages:
     - script: |
         bash scripts/test.sh
       displayName: Test
+    - script: |
+        bash <(curl -s https://codecov.io/bash)
+      displayName: codecov.io
+      env:
+        CODECOV_TOKEN: $(CODECOV_TOKEN)
 
 - stage: Publish
   displayName: 'Publish to PyPI'
