@@ -125,7 +125,7 @@ Successfully installed en_core_web_md
 
 ## Follow the Tutorial
 
-Once you have the Data and spaCy prerequisites completed follow along with the [Tutorial](tutorial/create_index.md) to for a step-by-step guide for using the `spacy_ann` package.
+Once you have the Data and spaCy prerequisites completed follow along with the [Tutorial](https://microsoft.github.io/spacy-ann-linker/tutorial/create_index/) to for a step-by-step guide for using the `spacy_ann` package.
 
 ## License
 
