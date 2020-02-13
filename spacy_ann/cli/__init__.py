@@ -6,9 +6,11 @@ def main():
     import sys
     from wasabi import msg
     from spacy_ann.cli.create_index import create_index
+    from spacy_ann.cli.serve import serve
 
     commands = {
         "create_index": create_index,
+        "serve": serve
     }
     if len(sys.argv) == 1:
         msg.info("Available commands", ", ".join(commands), exits=1)

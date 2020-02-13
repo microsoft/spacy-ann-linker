@@ -42,6 +42,11 @@ requires-python = ">=3.6"
 Documentation = "https://microsoft.github.com/spacy-ann-linker"
 
 [tool.flit.metadata.requires-extra]
+api = [
+    "fastapi",
+    "uvicorn",
+    "python-dotenv"
+]
 test = [
     "click-completion",
     "pytest >=4.4.0",
