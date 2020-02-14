@@ -77,20 +77,20 @@ def create_index(model: str,
 
     msg.info(f"{n_no_desc} entities without a description")
 
-    msg.divider("Train EntityEncoder")
+    # msg.divider("Train EntityEncoder")
 
-    with msg.loading("Starting training EntityEncoder"):
-        # training entity description encodings
-        # this part can easily be replaced with a custom entity encoder
-        encoder = EntityEncoder(nlp=nlp, input_dim=INPUT_DIM, desc_width=DESC_WIDTH, epochs=n_iter)
-        encoder.train(description_list=descriptions, to_print=True)
-        msg.good("Done Training")
+    # with msg.loading("Starting training EntityEncoder"):
+    #     # training entity description encodings
+    #     # this part can easily be replaced with a custom entity encoder
+    #     encoder = EntityEncoder(nlp=nlp, input_dim=INPUT_DIM, desc_width=DESC_WIDTH, epochs=n_iter)
+    #     encoder.train(description_list=descriptions, to_print=True)
+    #     msg.good("Done Training")
 
     msg.divider("Apply EntityEncoder")
 
     with msg.loading("Applying EntityEncoder to descriptions"):
         # get the pretrained entity vectors
-        embeddings = encoder.apply_encoder(descriptions)
+        embeddings = [nlp.make_doc(desc).vector for desc in descriptions]
         msg.good("Finished, embeddings created")
 
     with msg.loading("Setting kb entities and aliases"):
@@ -106,6 +106,8 @@ def create_index(model: str,
                 kb.add_alias(alias=a["alias"], entities=a["entities"], probabilities=prior_prob)
 
         msg.good("Done adding entities and aliases to kb")
+    
+    msg.divider("Create ANN Index")
 
     cg = CandidateGenerator().fit(kb.get_alias_strings(), verbose=True)
 

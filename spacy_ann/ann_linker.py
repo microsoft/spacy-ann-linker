@@ -96,6 +96,7 @@ class AnnLinker:
                     likely = kb_candidates[np.argmax(sims)]
                     for t in ent:
                         t.ent_kb_id = likely.entity
+
                 else:
                     # Set aliases for a later pipeline component
                     ent._.kb_alias = alias_candidates[0]
