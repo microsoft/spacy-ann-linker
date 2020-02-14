@@ -56,10 +56,9 @@ def serve(model: str,
         options = {
             'bind': f"{host}:{port}",
             'workers': n_workers,
-            'worker-class': UvicornWorker
+            'worker_class': 'uvicorn.workers.UvicornWorker'
         }
-        # FastAPIApplication(app, options).run()
-        raise NotImplementedError("Gunicorn support is not yet implemented. The above code doesn't work.")
+        FastAPIApplication(app, options).run()
     else:
         uvicorn.run(app, host=host, port=port)
 

@@ -15,7 +15,7 @@ def main():
     if len(sys.argv) == 1:
         msg.info("Available commands", ", ".join(commands), exits=1)
     command = sys.argv.pop(1)
-    sys.argv[0] = "spacy_ann %s" % command
+    sys.argv[0] = f"spacy_ann {command}"
     if command in commands:
         typer.run(commands[command])
     else:

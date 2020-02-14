@@ -162,6 +162,9 @@ class RemoteAnnLinker:
         cfg = {}
         deserializers = {"cfg": lambda p: cfg.update(srsly.read_json(p))}
         from_disk(path, deserializers, {})
+        self.cfg.update(cfg)
+        self.base_url = cfg.get('base_url')
+        self.headers = cfg.get('headers', {})
 
         return self
 

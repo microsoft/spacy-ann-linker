@@ -1,9 +1,20 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
 from pathlib import Path
 import os
 import subprocess
 import spacy
-from spacy_ann import AnnLinker
 
+
+def test_main():
+    process = subprocess.Popen([
+        "spacy_ann"
+    ], stdout=subprocess.PIPE)
+
+    process.wait(timeout=10)
+    
+    assert "Available commands" in str(process.stdout.read())
 
 def test_create_index():
     model_path = Path("examples/tutorial/models/ann_linker")

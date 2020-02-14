@@ -1,3 +1,6 @@
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
+
 from pathlib import Path
 import os
 import subprocess
@@ -9,7 +12,7 @@ from spacy_ann import AnnLinker
 
 @pytest.fixture()
 def nlp():
-    return spacy.load('en_core_web_md')
+    return spacy.blank('en')
 
 
 @pytest.fixture()
@@ -19,6 +22,6 @@ def trained_linker():
         subprocess.run([
             "spacy_ann", "create_index", "en_core_web_md", "examples/tutorial/data", "examples/tutorial/models"
         ])
-
-    nlp = spacy.load("examples/tutorial/models/ann_linker")
-    return nlp
+    # if not TRAINED_LINKER:
+    TRAINED_LINKER = spacy.load("examples/tutorial/models/ann_linker")
+    return TRAINED_LINKER

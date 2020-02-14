@@ -46,21 +46,15 @@ class CandidateGenerator:
                  n_threads: int = 60):
         """Initialize a CandidateGenerator
         
-        k (int): Number of neighbors to query 
-            (default: {5})
+        k (int): Number of neighbors to query
         similarity_threshold (float): Threshold of similarity with neighbors
-            (default: {0.65})
-        m_parameter (int): M parameter value for nmslib hnsw algorithm 
-            (default: {100})
+        m_parameter (int): M parameter value for nmslib hnsw algorithm
         ef_search (int): Set to the maximum recommended value. 
             Improves recall at the expense of longer **inference** time
-            (default: {200})
         ef_construction (int): Set to the maximum recommended value. 
             Improves recall at the expense of longer **indexing** time
-            (default: {2000})
         n_threads (int): Number of threads to use when creating the index. 
-            Change based on your machine. 
-            (default: {60})
+            Change based on your machine.
         """
         self.k = k
         self.similarity_threshold = similarity_threshold

@@ -1,2 +1,2 @@
-def test_add():
-    assert 2 + 2 == 4
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# Licensed under the MIT License.
