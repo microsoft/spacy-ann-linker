@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
-        <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
+        <meta name="description" content="spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking based on an Approximate Nearest Neighbors (ANN) index computed on the Character N-Gram TF-IDF representation of all aliases in your KnowledgeBase.">
       
       
         <link rel="canonical" href="https://microsoft.github.com/spacy-ann-linker/tutorial/remote_entity_linking/">
@@ -40,7 +40,7 @@
     
     
       
-        <title>Remote Entity Linking - spaCy ANN Linker</title>
+        <title>Tutorial - Remote Entity Linking - spaCy ANN Linker</title>
       
     
     
@@ -119,7 +119,7 @@
             </span>
             <span class="md-header-nav__topic">
               
-                Remote Entity Linking
+                Tutorial - Remote Entity Linking
               
             </span>
           
@@ -240,12 +240,10 @@
       
       
 
-  
 
-
-  <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+  <li class="md-nav__item md-nav__item--nested">
     
-      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2" checked>
+      <input class="md-toggle md-nav__toggle" data-md-toggle="nav-2" type="checkbox" id="nav-2">
     
     <label class="md-nav__link" for="nav-2">
       Tutorial
@@ -285,156 +283,10 @@
           
           
 
-  
-
-
-  <li class="md-nav__item md-nav__item--active">
-    
-    <input class="md-toggle md-nav__toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-    
-      
-    
-    
-      <label class="md-nav__link md-nav__link--active" for="__toc">
-        Remote Entity Linking
-      </label>
-    
-    <a href="./" title="Remote Entity Linking" class="md-nav__link md-nav__link--active">
-      Remote Entity Linking
-    </a>
-    
-      
-<nav class="md-nav md-nav--secondary">
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">Table of contents</label>
-    <ul class="md-nav__list" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#introduction" class="md-nav__link">
-    Introduction
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#load-the-model" class="md-nav__link">
-    Load the model
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#define-the-batch-linking-route" class="md-nav__link">
-    Define the batch linking route
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#models" class="md-nav__link">
-    Models
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#example-request" class="md-nav__link">
-    Example Request
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#build-and-run" class="md-nav__link">
-    Build and Run
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-install-requirements" class="md-nav__link">
-    1. Install Requirements
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-start-the-web-service" class="md-nav__link">
-    2. Start the Web Service
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#call-the-web-service" class="md-nav__link">
-    Call the Web Service
-  </a>
-  
-    <nav class="md-nav">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#load-extraction-model" class="md-nav__link">
-    Load Extraction Model
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#create-a-remote_ann_linker-pipe" class="md-nav__link">
-    Create a remote_ann_linker pipe
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#run-the-pipeline" class="md-nav__link">
-    Run the pipeline
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#conclusion" class="md-nav__link">
-    Conclusion
-  </a>
-  
-</li>
-      
-      
-      
-      
-      
-    </ul>
-  
-</nav>
-    
-  </li>
-
-        
-          
-          
-          
-
 
   <li class="md-nav__item">
-    <a href="../remote_entity_linking_new/" title="Remote Entity Linking (New)" class="md-nav__link">
-      Remote Entity Linking (New)
+    <a href="../remote_entity_linking_new/" title="Remote Entity Linking" class="md-nav__link">
+      Remote Entity Linking
     </a>
   </li>
 
@@ -685,7 +537,6 @@
     <span class="k">return</span> <span class="n">res</span>
 </pre></div>
 
-
 <h2 id="define-the-batch-linking-route">Define the batch linking route<a class="headerlink" href="#define-the-batch-linking-route" title="Permanent link">&para;</a></h2>
 <p>Once we have our basic API configured and our model loaded, we need a route where we can query the index. Let's add the <code>/link</code> route.</p>
 <div class="codehilite"><pre><span></span><span class="c1"># Copyright (c) Microsoft Corporation. All rights reserved.</span>
@@ -751,7 +602,6 @@
     <span class="k">return</span> <span class="n">res</span>
 </pre></div>
 
-
 <p>Now this might seem a bit complicated if you haven't used FastAPI before. However, it's quite simple once you delve into the models. FastAPI leverages Pydantic for serializing and deserializing JSON requests. So at the route level, you pass a response_model and a definition of what the Post Body should look like based on Pydantic models. </p>
 <h2 id="models">Models<a class="headerlink" href="#models" title="Permanent link">&para;</a></h2>
 <p>Let's hop over to our models.py file to get a look at the models our route expects.</p>
@@ -780,11 +630,10 @@
 </span><span class="hll">    <span class="n">documents</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">LinkingRecord</span><span class="p">]</span>
 </span></pre></div>
 
-
 <p>If you follow the nested structure of these models you can construct the JSON tree request structure that the API expects as well as the definiton of what it will return.</p>
 <p>But we've also included an example_request.json file for a real world example.</p>
 <h2 id="example-request">Example Request<a class="headerlink" href="#example-request" title="Permanent link">&para;</a></h2>
-<div class="codehilite"><pre><span></span><span class="p">{</span>
+<p><div class="codehilite"><pre><span></span><span class="p">{</span>
     <span class="nt">&quot;documents&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
             <span class="nt">&quot;spans&quot;</span><span class="p">:</span> <span class="p">[</span>
@@ -812,9 +661,7 @@
     <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
-
-
-<p>From this request, you can see that we're passing the Entity Spans extracted by an NER model along with the context in which they were extracted. This is all the input data we need for the <code>ann_linker</code> component to be able to identify candidate aliases and disambiguate and alias to a cononical entity id.</p>
+From this request, you can see that we're passing the Entity Spans extracted by an NER model along with the context in which they were extracted. This is all the input data we need for the <code>ann_linker</code> component to be able to identify candidate aliases and disambiguate and alias to a cononical entity id.</p>
 <p>Let's hop back over to our main <code>app.py</code> and review our <code>/link</code> route again.</p>
 <p>The logic here is we loop through each document in the request body, make the text into a spaCy Doc object, set the <code>doc.ents</code> based on the provided spans and then run the ann_linker pipe on the doc. We then write to the id attribute of each <code>LinkingSpan</code> object the value of the <code>ent.kb_id_</code> set by the <code>ann_linker</code> pipeline component.</p>
 <div class="codehilite"><pre><span></span><span class="c1"># Copyright (c) Microsoft Corporation. All rights reserved.</span>
@@ -880,7 +727,6 @@
     <span class="k">return</span> <span class="n">res</span>
 </pre></div>
 
-
 <h2 id="build-and-run">Build and Run<a class="headerlink" href="#build-and-run" title="Permanent link">&para;</a></h2>
 <p>Now that we have an understanding of the code for the Web Service, let's run it using uvicorn.</p>
 <h3 id="1-install-requirements">1. Install Requirements<a class="headerlink" href="#1-install-requirements" title="Permanent link">&para;</a></h3>
@@ -891,8 +737,6 @@
 <span class="go">---&gt; 100%</span>
 <span class="go">Successfully installed requirements</span>
 </pre></div>
-
-
 
 </div>
 
@@ -905,8 +749,6 @@
 <span class="go">Application startup complete.</span>
 <span class="go">Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)</span>
 </pre></div>
-
-
 
 </div>
 
@@ -945,7 +787,6 @@
 <span class="p">}</span>
 </pre></div>
 
-
 <h2 id="call-the-web-service">Call the Web Service<a class="headerlink" href="#call-the-web-service" title="Permanent link">&para;</a></h2>
 <p>Now that we have an understanding of the remote web service, we need an easy way to call this service from a normal spaCy pipeline. The <code>RemoteAnnLinker</code> component handles this interaction.</p>
 <h3 id="load-extraction-model">Load Extraction Model<a class="headerlink" href="#load-extraction-model" title="Permanent link">&para;</a></h3>
@@ -975,7 +816,6 @@
     <span class="c1"># a1 =&gt; Machine learnin</span>
 </pre></div>
 
-
 <h3 id="create-a-remote_ann_linker-pipe">Create a <code>remote_ann_linker</code> pipe<a class="headerlink" href="#create-a-remote_ann_linker-pipe" title="Permanent link">&para;</a></h3>
 <p>Now create a <code>remote_ann_linker</code> pipe using <code>nlp.create_pipe</code> and set the <code>base_url</code> config value to the batch linking url of your web service. If you're still running the service locally from the last step this should be <code>http://localhost:8080/link</code></p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
@@ -1002,7 +842,6 @@
     <span class="c1"># a3 =&gt; Natural Language Processing</span>
     <span class="c1"># a1 =&gt; Machine learnin</span>
 </pre></div>
-
 
 <h3 id="run-the-pipeline">Run the pipeline<a class="headerlink" href="#run-the-pipeline" title="Permanent link">&para;</a></h3>
 <p>Now you can call the pipeline the exact same way as you did in when using the local <code>ann_linker</code> component and you should get the exact same results.</p>
@@ -1031,7 +870,6 @@
     <span class="c1"># a1 =&gt; Machine learnin</span>
 </pre></div>
 
-
 <h2 id="conclusion">Conclusion<a class="headerlink" href="#conclusion" title="Permanent link">&para;</a></h2>
 <p>This Web Service is quite simple for the tutorial. It skips over things like a health check url, Docker/Kubernetes based deployment, etc. It's merely meant as a quick guide to illustrate the problem this package was originally designed to solve.</p>
                 
@@ -1051,41 +889,6 @@
       
         
 <footer class="md-footer">
-  
-    <div class="md-footer-nav">
-      <nav class="md-footer-nav__inner md-grid">
-        
-          <a href="../local_entity_linking/" title="Local Entity Linking" class="md-flex md-footer-nav__link md-footer-nav__link--prev" rel="prev">
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-back md-footer-nav__button"></i>
-            </div>
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
-                <span class="md-footer-nav__direction">
-                  Previous
-                </span>
-                Local Entity Linking
-              </span>
-            </div>
-          </a>
-        
-        
-          <a href="../remote_entity_linking_new/" title="Remote Entity Linking (New)" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
-            <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
-              <span class="md-flex__ellipsis">
-                <span class="md-footer-nav__direction">
-                  Next
-                </span>
-                Remote Entity Linking (New)
-              </span>
-            </div>
-            <div class="md-flex__cell md-flex__cell--shrink">
-              <i class="md-icon md-icon--arrow-forward md-footer-nav__button"></i>
-            </div>
-          </a>
-        
-      </nav>
-    </div>
   
   <div class="md-footer-meta md-typeset">
     <div class="md-footer-meta__inner md-grid">
@@ -1120,6 +923,8 @@
         <script src="../../js/termynal.js"></script>
       
         <script src="../../js/custom.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js"></script>
       
     
   </body>

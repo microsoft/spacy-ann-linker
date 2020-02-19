@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
-        <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
+        <meta name="description" content="spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking based on an Approximate Nearest Neighbors (ANN) index computed on the Character N-Gram TF-IDF representation of all aliases in your KnowledgeBase.">
       
       
         <link rel="canonical" href="https://microsoft.github.com/spacy-ann-linker/tutorial/create_index/">
@@ -296,20 +296,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../remote_entity_linking/" title="Remote Entity Linking" class="md-nav__link">
+    <a href="../remote_entity_linking_new/" title="Remote Entity Linking" class="md-nav__link">
       Remote Entity Linking
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../remote_entity_linking_new/" title="Remote Entity Linking (New)" class="md-nav__link">
-      Remote Entity Linking (New)
     </a>
   </li>
 
@@ -412,8 +400,6 @@
 <span class="go">  --help                    Show this message and exit.</span>
 </pre></div>
 
-
-
 </div>
 
 <p>Now provide the required arguments. I'm using the example data but at this step use your own.
@@ -451,8 +437,6 @@ the <code>create_index</code> command will run a few steps and you should see an
 <span class="go">***************************************************</span>
 <span class="go">Fitting ann index took 0.030826 seconds</span>
 </pre></div>
-
-
 </div>
                 
                   
@@ -540,6 +524,8 @@ the <code>create_index</code> command will run a few steps and you should see an
         <script src="../../js/termynal.js"></script>
       
         <script src="../../js/custom.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js"></script>
       
     
   </body>

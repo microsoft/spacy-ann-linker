@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
-        <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
+        <meta name="description" content="spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking based on an Approximate Nearest Neighbors (ANN) index computed on the Character N-Gram TF-IDF representation of all aliases in your KnowledgeBase.">
       
       
         <link rel="canonical" href="https://microsoft.github.com/spacy-ann-linker/tutorial/local_entity_linking/">
@@ -283,9 +283,59 @@
       
     
     
+      <label class="md-nav__link md-nav__link--active" for="__toc">
+        Local Entity Linking
+      </label>
+    
     <a href="./" title="Local Entity Linking" class="md-nav__link md-nav__link--active">
       Local Entity Linking
     </a>
+    
+      
+<nav class="md-nav md-nav--secondary">
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#load-ann_linker-model" class="md-nav__link">
+    Load ann_linker model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#load-extraction-model" class="md-nav__link">
+    Load Extraction Model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-the-trained-ann_linker-component" class="md-nav__link">
+    Test the trained ann_linker component
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next Steps
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
+</nav>
     
   </li>
 
@@ -296,20 +346,8 @@
 
 
   <li class="md-nav__item">
-    <a href="../remote_entity_linking/" title="Remote Entity Linking" class="md-nav__link">
+    <a href="../remote_entity_linking_new/" title="Remote Entity Linking" class="md-nav__link">
       Remote Entity Linking
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="../remote_entity_linking_new/" title="Remote Entity Linking (New)" class="md-nav__link">
-      Remote Entity Linking (New)
     </a>
   </li>
 
@@ -360,6 +398,43 @@
     
   
   
+    <label class="md-nav__title" for="__toc">Table of contents</label>
+    <ul class="md-nav__list" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#load-ann_linker-model" class="md-nav__link">
+    Load ann_linker model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#load-extraction-model" class="md-nav__link">
+    Load Extraction Model
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#test-the-trained-ann_linker-component" class="md-nav__link">
+    Test the trained ann_linker component
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#next-steps" class="md-nav__link">
+    Next Steps
+  </a>
+  
+</li>
+      
+      
+      
+      
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -377,36 +452,114 @@
 <p>In the previous step, you ran the <code>spacy_ann create_index</code> CLI command. The output of this
 command is a loadable spaCy model with an <code>ann_linker</code> capable of Entity Linking against your KnowledgeBase data.
 You can load the saved model from <code>output_dir</code> in the previous step just like you would any normal spaCy model.</p>
+<h2 id="load-ann_linker-model">Load <code>ann_linker</code> model<a class="headerlink" href="#load-ann_linker-model" title="Permanent link">&para;</a></h2>
+<p>First load the model created by <code>spacy_ann create_index</code></p>
 <div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
 <span class="kn">from</span> <span class="nn">spacy.tokens</span> <span class="kn">import</span> <span class="n">Span</span>
 
-<span class="c1"># Load the spaCy model from the output_dir you used</span>
-<span class="c1"># from the create_index command</span>
-<span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;examples/tutorial/models/ann_linker&quot;</span>
-<span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_dir</span><span class="p">)</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
 
-<span class="c1"># The NER component of the en_core_web_md model doesn&#39;t actually</span>
-<span class="c1"># recognize the aliases as entities so we&#39;ll add a </span>
-<span class="c1"># spaCy EntityRuler component for now to extract them.</span>
-<span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">)</span>
-<span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span>
-    <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">get_alias_strings</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;machine learn&#39;</span><span class="p">]</span>
-<span class="p">]</span>
-<span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
-<span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">ruler</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">&quot;ann_linker&quot;</span><span class="p">)</span>
+    <span class="c1"># Load the spaCy model from the output_dir you used</span>
+    <span class="c1"># from the create_index command</span>
+<span class="hll">    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;examples/tutorial/models/ann_linker&quot;</span>
+</span><span class="hll">    <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_dir</span><span class="p">)</span>
+</span>
+    <span class="c1"># The NER component of the en_core_web_md model doesn&#39;t actually</span>
+    <span class="c1"># recognize the aliases as entities so we&#39;ll add a </span>
+    <span class="c1"># spaCy EntityRuler component for now to extract them.</span>
+    <span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">)</span>
+    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">get_alias_strings</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;machine learn&#39;</span><span class="p">]</span>
+    <span class="p">]</span>
+    <span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+    <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">ruler</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">&quot;ann_linker&quot;</span><span class="p">)</span>
 
-<span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of machine learn.&quot;</span><span class="p">)</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of machine learn.&quot;</span><span class="p">)</span>
 
-<span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
 
-<span class="c1"># Outputs:</span>
-<span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;Machine learning&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
-<span class="c1">#</span>
-<span class="c1"># In our entities.jsonl file</span>
-<span class="c1"># a3 =&gt; Natural Language Processing</span>
-<span class="c1"># a1 =&gt; Machine learning</span>
+    <span class="c1"># Outputs:</span>
+    <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;machine learn&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
+    <span class="c1">#</span>
+    <span class="c1"># In our entities.jsonl file</span>
+    <span class="c1"># a3 =&gt; Natural Language Processing</span>
+    <span class="c1"># a1 =&gt; Machine learning</span>
 </pre></div>
+
+<h2 id="load-extraction-model">Load Extraction Model<a class="headerlink" href="#load-extraction-model" title="Permanent link">&para;</a></h2>
+<p>This is a bit of misnomar for the provided example code.
+You likely want a trained NER model but the purpose of this example we'll just arbitrarily extract entities using the spaCy <code>EntityRuler</code> component by just add a few terms to it that are close to those in our KnowledgeBase.</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
+<span class="kn">from</span> <span class="nn">spacy.tokens</span> <span class="kn">import</span> <span class="n">Span</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="c1"># Load the spaCy model from the output_dir you used</span>
+    <span class="c1"># from the create_index command</span>
+    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;examples/tutorial/models/ann_linker&quot;</span>
+    <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_dir</span><span class="p">)</span>
+
+    <span class="c1"># The NER component of the en_core_web_md model doesn&#39;t actually</span>
+    <span class="c1"># recognize the aliases as entities so we&#39;ll add a </span>
+    <span class="c1"># spaCy EntityRuler component for now to extract them.</span>
+<span class="hll">    <span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class="hll">        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span>
+</span><span class="hll">        <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">get_alias_strings</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;machine learn&#39;</span><span class="p">]</span>
+</span><span class="hll">    <span class="p">]</span>
+</span><span class="hll">    <span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+</span><span class="hll">    <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">ruler</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">&quot;ann_linker&quot;</span><span class="p">)</span>
+</span>
+    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of machine learn.&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
+
+    <span class="c1"># Outputs:</span>
+    <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;machine learn&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
+    <span class="c1">#</span>
+    <span class="c1"># In our entities.jsonl file</span>
+    <span class="c1"># a3 =&gt; Natural Language Processing</span>
+    <span class="c1"># a1 =&gt; Machine learning</span>
+</pre></div>
+
+<h2 id="test-the-trained-ann_linker-component">Test the trained <code>ann_linker</code> component<a class="headerlink" href="#test-the-trained-ann_linker-component" title="Permanent link">&para;</a></h2>
+<p>Run the pipeline on some sample text and ensure that you have <code>e.kb_id_</code> set properly for each entity. You should get id <code>a3</code> for "NLP" and id <code>a1</code> for "machine learn</p>
+<div class="codehilite"><pre><span></span><span class="kn">import</span> <span class="nn">spacy</span>
+<span class="kn">from</span> <span class="nn">spacy.tokens</span> <span class="kn">import</span> <span class="n">Span</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="c1"># Load the spaCy model from the output_dir you used</span>
+    <span class="c1"># from the create_index command</span>
+    <span class="n">model_dir</span> <span class="o">=</span> <span class="s2">&quot;examples/tutorial/models/ann_linker&quot;</span>
+    <span class="n">nlp</span> <span class="o">=</span> <span class="n">spacy</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">model_dir</span><span class="p">)</span>
+
+    <span class="c1"># The NER component of the en_core_web_md model doesn&#39;t actually</span>
+    <span class="c1"># recognize the aliases as entities so we&#39;ll add a </span>
+    <span class="c1"># spaCy EntityRuler component for now to extract them.</span>
+    <span class="n">ruler</span> <span class="o">=</span> <span class="n">nlp</span><span class="o">.</span><span class="n">create_pipe</span><span class="p">(</span><span class="s1">&#39;entity_ruler&#39;</span><span class="p">)</span>
+    <span class="n">patterns</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span> <span class="s2">&quot;pattern&quot;</span><span class="p">:</span> <span class="n">alias</span><span class="p">}</span>
+        <span class="k">for</span> <span class="n">alias</span> <span class="ow">in</span> <span class="n">nlp</span><span class="o">.</span><span class="n">get_pipe</span><span class="p">(</span><span class="s1">&#39;ann_linker&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">kb</span><span class="o">.</span><span class="n">get_alias_strings</span><span class="p">()</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;machine learn&#39;</span><span class="p">]</span>
+    <span class="p">]</span>
+    <span class="n">ruler</span><span class="o">.</span><span class="n">add_patterns</span><span class="p">(</span><span class="n">patterns</span><span class="p">)</span>
+    <span class="n">nlp</span><span class="o">.</span><span class="n">add_pipe</span><span class="p">(</span><span class="n">ruler</span><span class="p">,</span> <span class="n">before</span><span class="o">=</span><span class="s2">&quot;ann_linker&quot;</span><span class="p">)</span>
+
+<span class="hll">    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of machine learn.&quot;</span><span class="p">)</span>
+</span><span class="hll">
+</span><span class="hll">    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
+</span>
+    <span class="c1"># Outputs:</span>
+    <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;machine learn&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
+    <span class="c1">#</span>
+    <span class="c1"># In our entities.jsonl file</span>
+    <span class="c1"># a3 =&gt; Natural Language Processing</span>
+    <span class="c1"># a1 =&gt; Machine learning</span>
+</pre></div>
+
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
+<p>This works great when you can afford to fit your KnowledgeBase in memory and have full access to your KnowledgeBase. In the next step of this tutorial, we'll talk about hosting the KnowledgeBase and ANN Index remotely and making batch calls to the endpoint so you can keep the KnowledgeBase and model code separate.</p>
                 
                   
                 
@@ -443,7 +596,7 @@ You can load the saved model from <code>output_dir</code> in the previous step j
           </a>
         
         
-          <a href="../remote_entity_linking/" title="Remote Entity Linking" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
+          <a href="../remote_entity_linking_new/" title="Remote Entity Linking" class="md-flex md-footer-nav__link md-footer-nav__link--next" rel="next">
             <div class="md-flex__cell md-flex__cell--stretch md-footer-nav__title">
               <span class="md-flex__ellipsis">
                 <span class="md-footer-nav__direction">
@@ -493,6 +646,8 @@ You can load the saved model from <code>output_dir</code> in the previous step j
         <script src="../../js/termynal.js"></script>
       
         <script src="../../js/custom.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js"></script>
       
     
   </body>

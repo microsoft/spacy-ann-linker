@@ -24,7 +24,7 @@ if __name__ == "__main__":
     print([(e.text, e.label_, e.kb_id_) for e in doc.ents])
 
     # Outputs:
-    # [('NLP', 'SKILL', 'a3'), ('Machine learning', 'SKILL', 'a1')]
+    # [('NLP', 'SKILL', 'a3'), ('machine learn', 'SKILL', 'a1')]
     #
     # In our entities.jsonl file
     # a3 => Natural Language Processing

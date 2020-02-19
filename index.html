@@ -10,7 +10,7 @@
       <meta name="viewport" content="width=device-width,initial-scale=1">
       <meta http-equiv="x-ua-compatible" content="ie=edge">
       
-        <meta name="description" content="spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.">
+        <meta name="description" content="spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking based on an Approximate Nearest Neighbors (ANN) index computed on the Character N-Gram TF-IDF representation of all aliases in your KnowledgeBase.">
       
       
         <link rel="canonical" href="https://microsoft.github.com/spacy-ann-linker/">
@@ -294,6 +294,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#example-data" class="md-nav__link">
+    Example Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#spacy-prerequisites" class="md-nav__link">
     spaCy prerequisites
   </a>
@@ -301,8 +308,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#follow-the-tutorial" class="md-nav__link">
-    Follow the Tutorial
+  <a href="#next-steps" class="md-nav__link">
+    Next Steps
   </a>
   
 </li>
@@ -374,20 +381,8 @@
 
 
   <li class="md-nav__item">
-    <a href="tutorial/remote_entity_linking/" title="Remote Entity Linking" class="md-nav__link">
+    <a href="tutorial/remote_entity_linking_new/" title="Remote Entity Linking" class="md-nav__link">
       Remote Entity Linking
-    </a>
-  </li>
-
-        
-          
-          
-          
-
-
-  <li class="md-nav__item">
-    <a href="tutorial/remote_entity_linking_new/" title="Remote Entity Linking (New)" class="md-nav__link">
-      Remote Entity Linking (New)
     </a>
   </li>
 
@@ -481,6 +476,13 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#example-data" class="md-nav__link">
+    Example Data
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#spacy-prerequisites" class="md-nav__link">
     spaCy prerequisites
   </a>
@@ -488,8 +490,8 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#follow-the-tutorial" class="md-nav__link">
-    Follow the Tutorial
+  <a href="#next-steps" class="md-nav__link">
+    Next Steps
   </a>
   
 </li>
@@ -527,7 +529,7 @@
 </p> -->
 
 <p>
-    <em>spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.</em>
+    <em>spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking based on an Approximate Nearest Neighbors (ANN) index computed on the Character N-Gram TF-IDF representation of all aliases in your KnowledgeBase.</em>
 </p>
 
 <p align="center">
@@ -574,8 +576,6 @@
 <span class="go">Successfully installed spacy-ann-linker</span>
 </pre></div>
 
-
-
 </div>
 
 <h2 id="data-prerequisites">Data Prerequisites<a class="headerlink" href="#data-prerequisites" title="Permanent link">&para;</a></h2>
@@ -586,34 +586,28 @@ spaCy ANN Linker expects data to exist in 2 JSONL files together in a directory<
 │   entities.jsonl
 </pre></div>
 
-
 <p>For testing the package, you can use the example data in <code>examples/tutorial/data</code></p>
 <div class="codehilite"><pre><span></span>examples/tutorial/data
 │   aliases.jsonl
 │   entities.jsonl
 </pre></div>
 
-
 <h3 id="entitiesjsonl-record-format"><strong>entities.jsonl Record Format</strong><a class="headerlink" href="#entitiesjsonl-record-format" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;Canonical Entity Id&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Entity Description used for Disambiguation&quot;</span><span class="p">}</span>
 </pre></div>
 
-
-<p><strong>Example data</strong></p>
+<p><strong>Example data</strong>
 <div class="codehilite"><pre><span></span><span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Machine learning (ML) is the scientific study of algorithms and statistical models...&quot;</span><span class="p">}</span>
 <span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a2&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;ML (\&quot;Meta Language\&quot;) is a general-purpose functional programming language. It has roots in Lisp, and has been characterized as \&quot;Lisp with types\&quot;.&quot;</span><span class="p">}</span>
 <span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a3&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Natural language processing (NLP) is a subfield of linguistics, computer science, information engineering, and artificial intelligence concerned with the interactions between computers and human (natural) languages, in particular how to program computers to process and analyze large amounts of natural language data.&quot;</span><span class="p">}</span>
 <span class="p">{</span><span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a4&quot;</span><span class="p">,</span> <span class="nt">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;Neuro-linguistic programming (NLP) is a pseudoscientific approach to communication, personal development, and psychotherapy created by Richard Bandler and John Grinder in California, United States in the 1970s.&quot;</span><span class="p">}</span>
 <span class="err">...</span>
-</pre></div>
-
-
+</pre></div></p>
 <h3 id="aliasesjsonl-record-format"><strong>aliases.jsonl Record Format</strong><a class="headerlink" href="#aliasesjsonl-record-format" title="Permanent link">&para;</a></h3>
 <div class="codehilite"><pre><span></span><span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;alias string&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;list&quot;</span><span class="p">,</span> <span class="s2">&quot;of&quot;</span><span class="p">,</span> <span class="s2">&quot;entity&quot;</span><span class="p">,</span> <span class="s2">&quot;ids&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]}</span>
 </pre></div>
 
-
-<p><strong>Example data</strong></p>
+<p><strong>Example data</strong>
 <div class="codehilite"><pre><span></span><span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;ML&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a1&quot;</span><span class="p">,</span> <span class="s2">&quot;a2&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]}</span>
 <span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Machine learning&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a1&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]}</span>
 <span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Meta Language&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a2&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]}</span>
@@ -621,8 +615,29 @@ spaCy ANN Linker expects data to exist in 2 JSONL files together in a directory<
 <span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Natural language processing&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a3&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]}</span>
 <span class="p">{</span><span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Neuro-linguistic programming&quot;</span><span class="p">,</span> <span class="nt">&quot;entities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;a4&quot;</span><span class="p">],</span> <span class="nt">&quot;probabilities&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">]}</span>
 <span class="err">...</span>
+</pre></div></p>
+<h2 id="example-data">Example Data<a class="headerlink" href="#example-data" title="Permanent link">&para;</a></h2>
+<p><code>spacy-ann-linker</code> comes with some example data to get you started.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>If this is your first time using <code>spacy-ann-linker</code> start out with the example data using the <code>spacy_ann example_data</code> command. Just pass an output_dir to write the example data to.</p>
+</div>
+<div class="termy">
+
+<div class="codehilite"><pre><span></span><span class="gp">$</span> spacy_ann example_data ./kb
+
+<span class="go">=============== Example Data ================</span>
+<span class="go">Writing Example data to test/kb</span>
+<span class="go">✔ Done.</span>
 </pre></div>
 
+</div>
+
+<p>This should leave you with a folder called ./kb_dir that has a structure like</p>
+<div class="codehilite"><pre><span></span>kb_dir
+│   aliases.jsonl
+│   entities.jsonl
+</pre></div>
 
 <h2 id="spacy-prerequisites">spaCy prerequisites<a class="headerlink" href="#spacy-prerequisites" title="Permanent link">&para;</a></h2>
 <p>If you don't have a pretrained spaCy model, download one now. The model needs to have vectors
@@ -634,12 +649,14 @@ so download a model bigger than <code>en_core_web_sm</code></p>
 <span class="go">Successfully installed en_core_web_md</span>
 </pre></div>
 
-
-
 </div>
 
-<h2 id="follow-the-tutorial">Follow the Tutorial<a class="headerlink" href="#follow-the-tutorial" title="Permanent link">&para;</a></h2>
+<h2 id="next-steps">Next Steps<a class="headerlink" href="#next-steps" title="Permanent link">&para;</a></h2>
 <p>Once you have the Data and spaCy prerequisites completed follow along with the <a href="https://microsoft.github.io/spacy-ann-linker/tutorial/create_index/">Tutorial</a> to for a step-by-step guide for using the <code>spacy_ann</code> package.</p>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>These are just the prerequisites. Follow the full tutorial linked above for a step-by-step guide to working with <code>spacy-ann-linker</code>.</p>
+</div>
 <h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
 <p>This project is licensed under the terms of the MIT license.</p>
                 
@@ -714,6 +731,8 @@ so download a model bigger than <code>en_core_web_sm</code></p>
         <script src="js/termynal.js"></script>
       
         <script src="js/custom.js"></script>
+      
+        <script src="https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js"></script>
       
     
   </body>
