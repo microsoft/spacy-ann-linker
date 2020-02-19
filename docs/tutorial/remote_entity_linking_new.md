@@ -7,10 +7,26 @@ The original reason for developing this package at Microsoft is we need a way to
 This tutorial walks through creating the ANN Index for all the Aliases in a KnowledgeBase remotely and exposing the index through a Web Service using the `spacy_ann serve` command
 
 
-> Internally, the API is built using FastAPI. If you're unfamiliar with FastAPI, you can read more about it here: https://fastapi.tiangolo.com/
+!!! tip 
+    Internally, the API is built using FastAPI. If you're unfamiliar with FastAPI, you can read more about it here: [FastAPI](https://fastapi.tiangolo.com/)
 
-> This tutorial assumes you've already run the `create_index` command and have a saved model. If you haven't already done that, follow the steps in the [Introduction](../index.md)
+!!! note
+    This tutorial assumes you've already run the `create_index` command and have a saved model. If you haven't already done that, follow the steps in the [Introduction](../index.md)
 
+```mermaid
+sequenceDiagram
+participant client as Client
+participant service as Remote Service
+    Note over client: Input Text: "NLP is a subset of Machine learning."
+    Note over service: `spacy_ann serve`
+
+    Note over client: Extract Entities
+    client ->> service: Start request
+
+    Note over service: Run ANN Linking
+    service -->> client: Send Entity Ids res
+    Note over client: Return Entity Ids
+```
 
 ## Prerequisite - Install [api] requirements
 

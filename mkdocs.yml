@@ -1,5 +1,5 @@
 site_name: spaCy ANN Linker
-site_description: spaCy pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.
+site_description: spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking based on an Approximate Nearest Neighbors (ANN) index computed on the Character N-Gram TF-IDF representation of all aliases in your KnowledgeBase.
 site_url: https://microsoft.github.com/spacy-ann-linker
 
 theme:
@@ -19,8 +19,7 @@ nav:
     - Tutorial:
         - Create an Index: 'tutorial/create_index.md'
         - Local Entity Linking: 'tutorial/local_entity_linking.md'
-        - Remote Entity Linking: 'tutorial/remote_entity_linking.md'
-        - Remote Entity Linking (New): 'tutorial/remote_entity_linking_new.md'
+        - Remote Entity Linking: 'tutorial/remote_entity_linking_new.md'
 
     - Development - Contributing: 'contributing.md'
     - Release Notes: release-notes.md
@@ -35,6 +34,11 @@ markdown_extensions:
     - admonition
     - codehilite
     - extra
+    - pymdownx.superfences:
+        custom_fences:
+            - name: mermaid
+              class: mermaid
+              format: !!python/name:pymdownx.superfences.fence_div_format
 
 extra:
     social:
@@ -50,3 +54,4 @@ extra_css:
 extra_javascript:
     - 'js/termynal.js'
     - 'js/custom.js'
+    - 'https://unpkg.com/mermaid@8.4.6/dist/mermaid.min.js'
