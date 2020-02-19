@@ -2,7 +2,7 @@
   <a href="https://microsoft.github.io/spacy-ann-linker"><img src="https://typer.tiangolo.com/img/logo-margin/logo-margin-vectoar.svg" alt="spaCy ANN Linker"></a>
 </p> -->
 <p>
-    <em>spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking.</em>
+    <em>spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking based on an Approximate Nearest Neighbors (ANN) index computed on the Character N-Gram TF-IDF representation of all aliases in your KnowledgeBase.</em>
 </p>
 <p align="center">
 <a href="https://dev.azure.com/kakh/spacy-ann-linker/_apis/build/status/microsoft.spacy-ann-linker?branchName=master" target="_blank">
@@ -106,6 +106,33 @@ examples/tutorial/data
 {"alias": "Neuro-linguistic programming", "entities": ["a4"], "probabilities": [1.0]}
 ...
 ```
+  
+## Example Data
+
+`spacy-ann-linker` comes with some example data to get you started.
+
+!!! important
+    If this is your first time using `spacy-ann-linker` start out with the example data using the `spacy_ann example_data` command. Just pass an output_dir to write the example data to.
+
+<div class="termy">
+
+```console
+$ spacy_ann example_data ./kb
+
+=============== Example Data ================
+Writing Example data to test/kb
+✔ Done.
+```
+
+</div>
+
+This should leave you with a folder called ./kb_dir that has a structure like
+
+```
+kb_dir
+│   aliases.jsonl
+│   entities.jsonl
+```
 
 ## spaCy prerequisites
 
@@ -123,9 +150,12 @@ Successfully installed en_core_web_md
 
 </div>
 
-## Follow the Tutorial
+## Next Steps
 
 Once you have the Data and spaCy prerequisites completed follow along with the [Tutorial](https://microsoft.github.io/spacy-ann-linker/tutorial/create_index/) to for a step-by-step guide for using the `spacy_ann` package.
+
+!!! important
+    These are just the prerequisites. Follow the full tutorial linked above for a step-by-step guide to working with `spacy-ann-linker`.
 
 ## License
 
