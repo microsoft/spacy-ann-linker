@@ -19,7 +19,7 @@ nav:
     - Tutorial:
         - Create an Index: 'tutorial/create_index.md'
         - Local Entity Linking: 'tutorial/local_entity_linking.md'
-        - Remote Entity Linking: 'tutorial/remote_entity_linking_new.md'
+        - Remote Entity Linking: 'tutorial/remote_entity_linking.md'
 
     - Development - Contributing: 'contributing.md'
     - Release Notes: release-notes.md

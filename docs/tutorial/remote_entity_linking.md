@@ -16,16 +16,19 @@ This tutorial walks through creating the ANN Index for all the Aliases in a Know
 ```mermaid
 sequenceDiagram
 participant client as Client
+participant net as Network Boundary
 participant service as Remote Service
-    Note over client: Input Text: "NLP is a subset of Machine learning."
-    Note over service: `spacy_ann serve`
+    Note over client,service: Input Text: "NLP is a subset of Machine learning."
+
+    Note over service: Serve ANN Linker
 
     Note over client: Extract Entities
-    client ->> service: Start request
+    opt Entity Linking
+        client ->> service: Send Extracted Entities from Client
+        Note over service: Run ANN Linking
+        service -->> client: Return Linked Entity Ids
+    end
 
-    Note over service: Run ANN Linking
-    service -->> client: Send Entity Ids res
-    Note over client: Return Entity Ids
 ```
 
 ## Prerequisite - Install [api] requirements
@@ -172,6 +175,37 @@ Now you can call the pipeline the exact same way as you did in when using the lo
 {!./src/remote_ann_linker.py!}
 ```
 
+## Serving in Production
+
+The default service run with `spacy_ann serve` uses [Uvicorn](https://www.uvicorn.org/). For production usage, it's recommended to use a process manager like [Gunicorn](https://gunicorn.org/) using the `uvicorn.workers.UvicornWorker`.
+
+This functionality is built into `spacy-ann-linker` directly. Just use the `--use-gunicorn` flag when running `spacy_ann serve` and add parameters for the number of workers and bind to the host 0.0.0.0 so the service can be reached on a remote server.
+
+<div class="termy">
+
+```console
+$ spacy_ann serve examples/tutorial/models/ann_linker --use-gunicorn --n-workers 2 --host 0.0.0.0
+[2020-02-20 11:03:45] [7064] Starting gunicorn 20.0.4
+[2020-02-20 11:03:45] [7064] Listening at: http://0.0.0.0:8080 (7064)
+[2020-02-20 11:03:45] [7064] Using worker: uvicorn.workers.UvicornWorker
+[2020-02-20 11:03:46] [7075] Booting worker with pid: 7075
+[2020-02-20 11:03:46] [7076] Booting worker with pid: 7076
+[2020-02-20 11:03:46] [7075] Started server process [7075]
+[2020-02-20 11:03:46] [7076] Started server process [7076]
+[2020-02-20 11:03:46] [7075] Waiting for application startup.
+[2020-02-20 11:03:46] [7076] Waiting for application startup.
+[2020-02-20 11:03:46] [7075] Application startup complete.
+[2020-02-20 11:03:46] [7076] Application startup complete.
+```
+
+</div>
+
+
+!!! note
+    If you don't provide the `--n-workers` argument, it will default to 2 workers per CPU core + 1.
+    This is generally the recommended approach from Gunicorn but may not work well for your use case. Play around with this number based on the hardware and usage patterns to get the optimal configuration.
+
+
 ## Conclusion
 
-This Web Service is quite simple for the tutorial. It skips over things like a health check url, Docker/Kubernetes based deployment, etc. It's merely meant as a quick guide to illustrate the problem this package was originally designed to solve.
+Now you can effectively serve an instance of a `spacy-ann-linker` model in production and have the ability to remotely call that service directly from the `remote_ann_linker` spaCy pipeline component.
