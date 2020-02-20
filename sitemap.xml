@@ -2,32 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
      <loc>https://microsoft.github.com/spacy-ann-linker/</loc>
-     <lastmod>2020-02-19</lastmod>
+     <lastmod>2020-02-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://microsoft.github.com/spacy-ann-linker/tutorial/create_index/</loc>
-     <lastmod>2020-02-19</lastmod>
+     <lastmod>2020-02-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://microsoft.github.com/spacy-ann-linker/tutorial/local_entity_linking/</loc>
-     <lastmod>2020-02-19</lastmod>
+     <lastmod>2020-02-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
-     <loc>https://microsoft.github.com/spacy-ann-linker/tutorial/remote_entity_linking_new/</loc>
-     <lastmod>2020-02-19</lastmod>
+     <loc>https://microsoft.github.com/spacy-ann-linker/tutorial/remote_entity_linking/</loc>
+     <lastmod>2020-02-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://microsoft.github.com/spacy-ann-linker/contributing/</loc>
-     <lastmod>2020-02-19</lastmod>
+     <lastmod>2020-02-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
     <url>
      <loc>https://microsoft.github.com/spacy-ann-linker/release-notes/</loc>
-     <lastmod>2020-02-19</lastmod>
+     <lastmod>2020-02-20</lastmod>
      <changefreq>daily</changefreq>
     </url>
 </urlset>
