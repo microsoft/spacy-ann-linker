@@ -21,7 +21,6 @@ def serve(model: str,
     from fastapi import FastAPI
     from starlette.requests import Request
     import uvicorn
-    from uvicorn.workers import UvicornWorker
     from spacy_ann.api.app import app
 
     nlp = spacy.load(model)
@@ -36,7 +35,7 @@ def serve(model: str,
     if use_gunicorn:
         import gunicorn
         from gunicorn.app.wsgiapp import WSGIApplication
-        import subprocess
+        from uvicorn.workers import UvicornWorker
 
         class FastAPIApplication(WSGIApplication):
 

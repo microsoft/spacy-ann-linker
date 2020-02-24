@@ -68,14 +68,9 @@ def create_index(model: str,
     freqs = []
     n_no_desc = 0
     for e in entities:
-        if "description" in e:
-            entity_ids.append(e["id"])
-            descriptions.append(e["description"])
-            freqs.append(100)
-        else:
-            n_no_desc += 1
-
-    msg.info(f"{n_no_desc} entities without a description")
+        entity_ids.append(e["id"])
+        descriptions.append(e.get("description", ""))
+        freqs.append(100)
 
     # msg.divider("Train EntityEncoder")
 
@@ -101,8 +96,9 @@ def create_index(model: str,
                 kb.add_entity(entity, freqs[i], embeddings[i])
 
         for a in aliases:
-            if len(a["entities"]) > 0:
-                prior_prob = [1.0 / len(a["entities"])] * len(a["entities"])
+            n_ents = len(a['entities'])
+            if n_ents > 0:
+                prior_prob = [1.0 / n_ents] * n_ents
                 kb.add_alias(alias=a["alias"], entities=a["entities"], probabilities=prior_prob)
 
         msg.good("Done adding entities and aliases to kb")

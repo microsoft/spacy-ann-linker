@@ -45,6 +45,7 @@ Documentation = "https://microsoft.github.com/spacy-ann-linker"
 api = [
     "fastapi",
     "uvicorn",
+    "gunicorn",
     "python-dotenv"
 ]
 test = [
