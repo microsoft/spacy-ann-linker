@@ -21,7 +21,7 @@ if __name__ == "__main__":
 
     doc = nlp("NLP is a subset of machine learn.")
 
-    print([(e.text, e.label_, e.kb_id_) for e in doc.ents])
+    print([(e.text, e.label_, e.kb_id_, e._.alias_candidates) for e in doc.ents])
 
     # Outputs:
     # [('NLP', 'SKILL', 'a3'), ('machine learn', 'SKILL', 'a1')]

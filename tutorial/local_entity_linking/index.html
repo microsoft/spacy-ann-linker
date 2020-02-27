@@ -477,7 +477,7 @@ You can load the saved model from <code>output_dir</code> in the previous step j
 
     <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of machine learn.&quot;</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">alias_candidates</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
 
     <span class="c1"># Outputs:</span>
     <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;machine learn&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
@@ -513,7 +513,7 @@ You likely want a trained NER model but the purpose of this example we'll just a
 </span>
     <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of machine learn.&quot;</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
+    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">alias_candidates</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
 
     <span class="c1"># Outputs:</span>
     <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;machine learn&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>
@@ -548,7 +548,7 @@ You likely want a trained NER model but the purpose of this example we'll just a
 
 <span class="hll">    <span class="n">doc</span> <span class="o">=</span> <span class="n">nlp</span><span class="p">(</span><span class="s2">&quot;NLP is a subset of machine learn.&quot;</span><span class="p">)</span>
 </span><span class="hll">
-</span><span class="hll">    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
+</span><span class="hll">    <span class="nb">print</span><span class="p">([(</span><span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">label_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">kb_id_</span><span class="p">,</span> <span class="n">e</span><span class="o">.</span><span class="n">_</span><span class="o">.</span><span class="n">alias_candidates</span><span class="p">)</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">ents</span><span class="p">])</span>
 </span>
     <span class="c1"># Outputs:</span>
     <span class="c1"># [(&#39;NLP&#39;, &#39;SKILL&#39;, &#39;a3&#39;), (&#39;machine learn&#39;, &#39;SKILL&#39;, &#39;a1&#39;)]</span>

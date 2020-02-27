@@ -636,34 +636,74 @@ From this request, you can see that we're passing the Entity Spans extracted by 
 <p><img alt="Open API UI" src="../../img/webservice-openapi.png" /></p>
 <p>Now if you click on the green highlighted link route, click the button that says "Try it out" and hit Execute, you'll be making a request with the <code>example_request.json</code> data and should get a JSON reponse back that looks like:</p>
 <div class="codehilite"><pre><span></span><span class="p">{</span>
-    <span class="nt">&quot;documents&quot;</span><span class="p">:</span> <span class="p">[</span>
+  <span class="nt">&quot;documents&quot;</span><span class="p">:</span> <span class="p">[</span>
+    <span class="p">{</span>
+      <span class="nt">&quot;spans&quot;</span><span class="p">:</span> <span class="p">[</span>
         <span class="p">{</span>
-            <span class="nt">&quot;spans&quot;</span><span class="p">:</span> <span class="p">[</span>
-                <span class="p">{</span>
-                    <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;NLP&quot;</span><span class="p">,</span>
-                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-                    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                    <span class="nt">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span>
-                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a3&quot;</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;researched&quot;</span><span class="p">,</span>
-                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
-                    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span>
-                    <span class="nt">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span>
-                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a15&quot;</span>
-                <span class="p">},</span>
-                <span class="p">{</span>
-                    <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;Machine learning&quot;</span><span class="p">,</span>
-                    <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">37</span><span class="p">,</span>
-                    <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">53</span><span class="p">,</span>
-                    <span class="nt">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span>
-                    <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a1&quot;</span>
-                <span class="p">}</span>
-            <span class="p">],</span>
-            <span class="nt">&quot;context&quot;</span><span class="p">:</span> <span class="s2">&quot;NLP is a highly researched subset of Machine learning.&quot;</span>
+          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;NLP&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+          <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+          <span class="nt">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a3&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;alias_candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;NLP&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mi">1</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="nt">&quot;kb_candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="nt">&quot;entity&quot;</span><span class="p">:</span> <span class="s2">&quot;a3&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;context_similarity&quot;</span><span class="p">:</span> <span class="mf">0.8408428185071984</span>
+            <span class="p">},</span>
+            <span class="p">{</span>
+              <span class="nt">&quot;entity&quot;</span><span class="p">:</span> <span class="s2">&quot;a4&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;context_similarity&quot;</span><span class="p">:</span> <span class="mf">0.8260134868278688</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;researched&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+          <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span>
+          <span class="nt">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a15&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;alias_candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Research&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mf">0.7436967492103577</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="nt">&quot;kb_candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="nt">&quot;entity&quot;</span><span class="p">:</span> <span class="s2">&quot;a15&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;context_similarity&quot;</span><span class="p">:</span> <span class="mf">0.8439850025368583</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
+        <span class="p">},</span>
+        <span class="p">{</span>
+          <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;machine learning&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;start&quot;</span><span class="p">:</span> <span class="mi">37</span><span class="p">,</span>
+          <span class="nt">&quot;end&quot;</span><span class="p">:</span> <span class="mi">53</span><span class="p">,</span>
+          <span class="nt">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;SKILL&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;id&quot;</span><span class="p">:</span> <span class="s2">&quot;a1&quot;</span><span class="p">,</span>
+          <span class="nt">&quot;alias_candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="nt">&quot;alias&quot;</span><span class="p">:</span> <span class="s2">&quot;Machine learning&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;similarity&quot;</span><span class="p">:</span> <span class="mi">1</span>
+            <span class="p">}</span>
+          <span class="p">],</span>
+          <span class="nt">&quot;kb_candidates&quot;</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+              <span class="nt">&quot;entity&quot;</span><span class="p">:</span> <span class="s2">&quot;a1&quot;</span><span class="p">,</span>
+              <span class="nt">&quot;context_similarity&quot;</span><span class="p">:</span> <span class="mf">0.8208977825866187</span>
+            <span class="p">}</span>
+          <span class="p">]</span>
         <span class="p">}</span>
-    <span class="p">]</span>
+      <span class="p">],</span>
+      <span class="nt">&quot;context&quot;</span><span class="p">:</span> <span class="s2">&quot;NLP is a highly researched subset of machine learning.&quot;</span>
+    <span class="p">}</span>
+  <span class="p">]</span>
 <span class="p">}</span>
 </pre></div>
 
