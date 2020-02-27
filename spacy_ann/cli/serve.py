@@ -14,7 +14,7 @@ from spacy_ann.api.constants import NO_API_KEY
 
 
 def serve(model: str,
-          api_key: str = typer.Option(NO_API_KEY, prompt=True, hide_input=True, show_default=True, confirmation_prompt=True),
+        #   api_key: str = typer.Option(NO_API_KEY, prompt=True, hide_input=True, show_default=True, confirmation_prompt=True),
           host: str = "127.0.0.1",
           port: int = 8080,
           use_gunicorn: bool = False,
@@ -35,7 +35,7 @@ def serve(model: str,
     @app.middleware("http")
     async def update_request_state(request: Request, call_next):
         request.state.nlp = nlp
-        request.state.api_key = api_key
+        # request.state.api_key = api_key
         response = await call_next(request)
         return response
     

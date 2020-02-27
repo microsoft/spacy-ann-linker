@@ -42,24 +42,24 @@ def docs_redirect():
 
 @app.post("/link", response_model=LinkingResponse)
 async def link(request: Request,
-               api_key = Depends(security),
+            #    api_key = Depends(security),
                similarity_threshold: float = 0.65,
                body: LinkingRequest = Body(..., example=example_request)):
     """Link batch of Spans to their canonical KnowledgeBase Id."""
 
     try:
         nlp = request.state.nlp
-        app_api_key = request.state.api_key
+        # app_api_key = request.state.api_key
     except AttributeError as e:
         error_msg = "`nlp` does not exist in the request state." \
         "nlp is set using middleware defined in the `spacy_ann serve` command." \
         "Are you running this app outside of the `spacy_ann serve` command?"
         raise HTTPException(status_code=501, detail=error_msg)
 
-    if app_api_key != NO_API_KEY and api_key != app_api_key:
-        raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED, detail="Unauthorized auth api-key passed in header"
-        )
+    # if app_api_key != NO_API_KEY and api_key != app_api_key:
+    #     raise HTTPException(
+    #         status_code=HTTP_401_UNAUTHORIZED, detail="Unauthorized auth api-key passed in header"
+    #     )
 
     res = LinkingResponse(documents=[])
     for doc in body.documents:
