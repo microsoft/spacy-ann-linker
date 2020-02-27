@@ -114,34 +114,74 @@ Now if you click on the green highlighted link route, click the button that says
 
 ```json
 {
-    "documents": [
+  "documents": [
+    {
+      "spans": [
         {
-            "spans": [
-                {
-                    "text": "NLP",
-                    "start": 0,
-                    "end": 3,
-                    "label": "SKILL",
-                    "id": "a3"
-                },
-                {
-                    "text": "researched",
-                    "start": 16,
-                    "end": 26,
-                    "label": "SKILL",
-                    "id": "a15"
-                },
-                {
-                    "text": "Machine learning",
-                    "start": 37,
-                    "end": 53,
-                    "label": "SKILL",
-                    "id": "a1"
-                }
-            ],
-            "context": "NLP is a highly researched subset of Machine learning."
+          "text": "NLP",
+          "start": 0,
+          "end": 3,
+          "label": "SKILL",
+          "id": "a3",
+          "alias_candidates": [
+            {
+              "alias": "NLP",
+              "similarity": 1
+            }
+          ],
+          "kb_candidates": [
+            {
+              "entity": "a3",
+              "context_similarity": 0.8408428185071984
+            },
+            {
+              "entity": "a4",
+              "context_similarity": 0.8260134868278688
+            }
+          ]
+        },
+        {
+          "text": "researched",
+          "start": 16,
+          "end": 26,
+          "label": "SKILL",
+          "id": "a15",
+          "alias_candidates": [
+            {
+              "alias": "Research",
+              "similarity": 0.7436967492103577
+            }
+          ],
+          "kb_candidates": [
+            {
+              "entity": "a15",
+              "context_similarity": 0.8439850025368583
+            }
+          ]
+        },
+        {
+          "text": "machine learning",
+          "start": 37,
+          "end": 53,
+          "label": "SKILL",
+          "id": "a1",
+          "alias_candidates": [
+            {
+              "alias": "Machine learning",
+              "similarity": 1
+            }
+          ],
+          "kb_candidates": [
+            {
+              "entity": "a1",
+              "context_similarity": 0.8208977825866187
+            }
+          ]
         }
-    ]
+      ],
+      "context": "NLP is a highly researched subset of machine learning."
+    }
+  ]
 }
 ```
 
