@@ -17,6 +17,7 @@ from spacy import util
 import srsly
 from bin.wiki_entity_linking.train_descriptions import EntityEncoder
 from spacy_ann.candidate_generator import CandidateGenerator
+from spacy_ann.types import KnowledgeBaseCandidate
 
 
 @component(
@@ -44,8 +45,9 @@ class AnnLinker:
         """Initialize the AnnLinker
         
         nlp (Language): spaCy Language object
-        """        
-        Span.set_extension("kb_alias", default="", force=True)
+        """
+        Span.set_extension("alias_candidates", default=[], force=True)
+        Span.set_extension("kb_candidates", default=[], force=True)
 
         self.nlp = nlp
         self.kb = None
@@ -83,6 +85,7 @@ class AnnLinker:
             else:
                 if self.disambiguate:
                     kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
+                    
 
                     # create candidate matrix
                     entity_encodings = np.asarray([c.entity_vector for c in kb_candidates])
@@ -91,15 +94,18 @@ class AnnLinker:
                     sims = np.dot(entity_encodings, doc.vector.T) / (
                         candidate_norm * doc.vector_norm
                     )
+                    ent._.kb_candidates = [
+                        KnowledgeBaseCandidate(entity=cand.entity_, context_similarity=sim)
+                        for cand, sim in zip(kb_candidates, sims)
+                    ]
 
                     # TODO: Add thresholding here
                     likely = kb_candidates[np.argmax(sims)]
                     for t in ent:
                         t.ent_kb_id = likely.entity
 
-                else:
-                    # Set aliases for a later pipeline component
-                    ent._.kb_alias = alias_candidates[0]
+                # Set aliases for a later pipeline component
+                ent._.alias_candidates = alias_candidates
 
         return doc
 

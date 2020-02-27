@@ -22,7 +22,7 @@ from spacy.util import ensure_path, to_disk, from_disk
 import srsly
 from timeit import default_timer as timer
 from wasabi import Printer
-from spacy_ann.models import AliasCandidate
+from spacy_ann.types import AliasCandidate
 
 
 class CandidateGenerator:
@@ -247,7 +247,7 @@ class CandidateGenerator:
             mention_texts, batch_neighbors, batch_distances
         ):
             if mention in self.short_aliases:
-                batch_candidates.append([AliasCandidate(mention, 1.0)])
+                batch_candidates.append([AliasCandidate(alias=mention, similarity=1.0)])
                 continue
             if neighbors is None:
                 neighbors = []
@@ -259,7 +259,7 @@ class CandidateGenerator:
                 alias = self.aliases[neighbor_index]
                 similarity = 1.0 - distance
                 if similarity > self.similarity_threshold:
-                    alias_candidates.append(AliasCandidate(alias, similarity))
+                    alias_candidates.append(AliasCandidate(alias=alias, similarity=similarity))
 
             batch_candidates.append(alias_candidates)
 
