@@ -3,7 +3,7 @@
 """spaCy ANN Linker, a pipeline component for generating spaCy KnowledgeBase Alias Candidates for Entity Linking."""
 
 
-__version__ = '0.1.4'
+__version__ = '0.1.5'
 
 from .ann_linker import AnnLinker
 from .remote_ann_linker import RemoteAnnLinker
@@ -19,5 +19,5 @@ from .remote_ann_linker import RemoteAnnLinker
 
 # @registry.kb.register("get_candidates")
 # def get_candidates(kb: KnowledgeBase, ent: Span):
-#     alias = ent._.kb_alias if ent._.kb_alias else ent.text
+#     alias = ent._.alias_candidates[0] if ent._.alias_candidates else ent.text
 #     return kb.get_candidates(alias)
