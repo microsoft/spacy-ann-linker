@@ -86,7 +86,7 @@ class AnnLinker:
                 continue
             else:
                 alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.threshold]
-                no_definition_alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.no_definition_threshold]
+                no_definition_alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.no_description_threshold]
                 if self.disambiguate:
                     kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
                     
