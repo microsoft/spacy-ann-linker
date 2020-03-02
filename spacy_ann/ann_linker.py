@@ -163,7 +163,7 @@ class AnnLinker:
         cfg = srsly.read_json(path / "cfg")
         
         self.threshold = cfg.get("threshold", 0.7)
-        self.no_definition_threshold = cfg.get("no_definition_threshold", 0.7)
+        self.no_description_threshold = cfg.get("no_description_threshold", 0.95)
         self.disambiguate = cfg.get("disambiguate", True)
 
         return self
@@ -180,7 +180,7 @@ class AnnLinker:
 
         cfg = {
             "threshold": self.threshold,
-            "no_definition_threshold": self.no_definition_threshold,
+            "no_description_threshold": self.no_description_threshold,
             "disambiguate": self.disambiguate
         }
         srsly.write_json(path / "cfg", cfg)
