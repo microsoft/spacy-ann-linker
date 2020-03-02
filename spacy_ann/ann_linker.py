@@ -82,11 +82,13 @@ class AnnLinker:
         batch_candidates = self.cg(mention_strings)
         
         for ent, alias_candidates in zip(doc.ents, batch_candidates):
+            alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.threshold]
+            no_definition_alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.no_description_threshold]
+            ent._.alias_candidates = alias_candidates
+            
             if len(alias_candidates) == 0:
                 continue
             else:
-                alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.threshold]
-                no_definition_alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.no_description_threshold]
                 if self.disambiguate:
                     kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
                     
@@ -106,9 +108,6 @@ class AnnLinker:
                     best_candidate = kb_candidates[np.argmax(sims)]
                     for t in ent:
                         t.ent_kb_id = best_candidate.entity
-
-                # Set aliases for a later pipeline component
-                ent._.alias_candidates = alias_candidates
 
         return doc
 
