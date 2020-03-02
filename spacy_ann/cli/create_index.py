@@ -96,10 +96,11 @@ def create_index(model: str,
                 kb.add_entity(entity, freqs[i], embeddings[i])
 
         for a in aliases:
-            n_ents = len(a['entities'])
+            ents = [e for e in a['entities'] if kb.contains_entity(e)]
+            n_ents = len(ents)
             if n_ents > 0:
                 prior_prob = [1.0 / n_ents] * n_ents
-                kb.add_alias(alias=a["alias"], entities=a["entities"], probabilities=prior_prob)
+                kb.add_alias(alias=a["alias"], entities=ents, probabilities=prior_prob)
 
         msg.good("Done adding entities and aliases to kb")
     

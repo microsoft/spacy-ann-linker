@@ -52,6 +52,8 @@ class AnnLinker:
         self.nlp = nlp
         self.kb = None
         self.cg = None
+        self.threshold = cfg.get("threshold", 0.7)
+        self.no_description_threshold = cfg.get("no_description_threshold", 0.95)
         self.disambiguate = cfg.get("disambiguate", True)
 
     @property
@@ -83,6 +85,8 @@ class AnnLinker:
             if len(alias_candidates) == 0:
                 continue
             else:
+                alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.threshold]
+                no_definition_alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.no_definition_threshold]
                 if self.disambiguate:
                     kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
                     
@@ -156,6 +160,12 @@ class AnnLinker:
         cg = CandidateGenerator().from_disk(path)
         self.set_cg(cg)
 
+        cfg = srsly.read_json(path / "cfg")
+        
+        self.threshold = cfg.get("threshold", 0.7)
+        self.no_definition_threshold = cfg.get("no_definition_threshold", 0.7)
+        self.disambiguate = cfg.get("disambiguate", True)
+
         return self
 
     def to_disk(self, path: Path, exclude: Tuple = tuple(), **kwargs):
@@ -167,5 +177,15 @@ class AnnLinker:
         path = util.ensure_path(path)
         if not path.exists():
             path.mkdir()
+
+        cfg = {
+            "threshold": self.threshold,
+            "no_definition_threshold": self.no_definition_threshold,
+            "disambiguate": self.disambiguate
+        }
+        srsly.write_json(path / "cfg", cfg)
+
         self.kb.dump(path / "kb")
         self.cg.to_disk(path)
+
+        

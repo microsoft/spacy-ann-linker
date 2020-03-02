@@ -33,13 +33,11 @@ class CandidateGenerator:
     amount of total aliases than a typical wikidata/DBPedia like KnowledgeBase.
 
     When you call an initialized CandidateGenerator with a batch of entity mentions,
-    it will return a list of `AliasCandidate` objects for each entity mention above a 
-    specified similarity threshold.
+    it will return a list of `AliasCandidate` objects for each entity mention.
     """
     def __init__(self,
                  *,
                  k: int = 5,
-                 similarity_threshold: float = 0.65,
                  m_parameter: int = 100,
                  ef_search: int = 200,
                  ef_construction: int = 2000,
@@ -47,7 +45,6 @@ class CandidateGenerator:
         """Initialize a CandidateGenerator
         
         k (int): Number of neighbors to query
-        similarity_threshold (float): Threshold of similarity with neighbors
         m_parameter (int): M parameter value for nmslib hnsw algorithm
         ef_search (int): Set to the maximum recommended value. 
             Improves recall at the expense of longer **inference** time
@@ -57,7 +54,6 @@ class CandidateGenerator:
             Change based on your machine.
         """
         self.k = k
-        self.similarity_threshold = similarity_threshold
         self.m_parameter = m_parameter
         self.ef_search = ef_search
         self.ef_construction = ef_construction
@@ -258,8 +254,7 @@ class CandidateGenerator:
             for neighbor_index, distance in zip(neighbors, distances):
                 alias = self.aliases[neighbor_index]
                 similarity = 1.0 - distance
-                if similarity > self.similarity_threshold:
-                    alias_candidates.append(AliasCandidate(alias=alias, similarity=similarity))
+                alias_candidates.append(AliasCandidate(alias=alias, similarity=similarity))
 
             batch_candidates.append(alias_candidates)
 
@@ -283,7 +278,6 @@ class CandidateGenerator:
         from_disk(path, deserializers, {})
 
         self.k = cfg.get("k", 5)
-        self.similarity_threshold = cfg.get("similarity_threshold", 0.65)
         self.m_parameter = cfg.get("m_parameter", 100)
         self.ef_search = cfg.get("ef_search", 200)
         self.ef_construction = cfg.get("ef_construction", 2000)
@@ -312,7 +306,6 @@ class CandidateGenerator:
         """
         cfg = {
             "k": self.k,
-            "similarity_threshold": self.similarity_threshold,
             "m_parameter": self.m_parameter,
             "ef_search": self.ef_search,
             "ef_construction": self.ef_construction,
