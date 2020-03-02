@@ -86,13 +86,12 @@ class AnnLinker:
                 if self.disambiguate:
                     kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
                     
-
                     # create candidate matrix
                     entity_encodings = np.asarray([c.entity_vector for c in kb_candidates])
                     candidate_norm = np.linalg.norm(entity_encodings, axis=1)
 
                     sims = np.dot(entity_encodings, doc.vector.T) / (
-                        candidate_norm * doc.vector_norm
+                        (candidate_norm * doc.vector_norm) + 1e-8
                     )
                     ent._.kb_candidates = [
                         KnowledgeBaseCandidate(entity=cand.entity_, context_similarity=sim)
@@ -100,9 +99,9 @@ class AnnLinker:
                     ]
 
                     # TODO: Add thresholding here
-                    likely = kb_candidates[np.argmax(sims)]
+                    best_candidate = kb_candidates[np.argmax(sims)]
                     for t in ent:
-                        t.ent_kb_id = likely.entity
+                        t.ent_kb_id = best_candidate.entity
 
                 # Set aliases for a later pipeline component
                 ent._.alias_candidates = alias_candidates
