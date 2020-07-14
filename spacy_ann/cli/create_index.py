@@ -115,9 +115,8 @@ def create_index(model: str,
     nlp.add_pipe(ann_linker, last=True)
 
     nlp.meta["name"] = new_model_name
-    with nlp.disable_pipes("tagger", "parser", "ner"):
-        nlp.to_disk(output_dir)
-        nlp_loaded = nlp.from_disk(output_dir)
+    nlp.to_disk(output_dir)
+    nlp_loaded = nlp.from_disk(output_dir)
 
 if __name__ == "__main__":
     typer.run(create_index)

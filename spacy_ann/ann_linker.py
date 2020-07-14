@@ -55,6 +55,9 @@ class AnnLinker:
         self.threshold = cfg.get("threshold", 0.7)
         self.no_description_threshold = cfg.get("no_description_threshold", 0.95)
         self.disambiguate = cfg.get("disambiguate", True)
+        if not self.nlp.vocab.lookups.has_table("mentions_to_alias_cand"):
+            self.nlp.vocab.lookups.add_table("mentions_to_alias_cand")
+
 
     @property
     def aliases(self) -> List[str]:
@@ -89,6 +92,9 @@ class AnnLinker:
             if len(alias_candidates) == 0:
                 continue
             else:
+                mentions_table = self.nlp.vocab.lookups.get_table("mentions_to_alias_cand")
+                mentions_table.set(ent.text, alias_candidates[0].alias)
+
                 if self.disambiguate:
                     kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
                     
