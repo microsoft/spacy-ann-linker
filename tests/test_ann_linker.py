@@ -1,16 +1,13 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-import pytest
-from spacy_ann.ann_linker import AnnLinker
-
 
 def test_ann_linker(trained_linker):
     nlp = trained_linker
-    ruler = nlp.create_pipe('entity_ruler')
+    ruler = nlp.create_pipe("entity_ruler")
     patterns = [
         {"label": "SKILL", "pattern": alias}
-        for alias in ['NLP', 'researched', 'machine learning']
+        for alias in ["NLP", "researched", "machine learning"]
     ]
     ruler.add_patterns(patterns)
     nlp.add_pipe(ruler, before="ann_linker")

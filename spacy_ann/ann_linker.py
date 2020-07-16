@@ -1,20 +1,15 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-from collections import defaultdict
-import os
-import json
 from pathlib import Path
 from typing import List, Tuple
+
 import numpy as np
-import spacy
-from spacy.errors import Errors
-from spacy.compat import basestring_
-from spacy.language import component
-from spacy.kb import Candidate, KnowledgeBase
-from spacy.tokens import Doc, Span
-from spacy import util
 import srsly
+from spacy import util
+from spacy.kb import KnowledgeBase
+from spacy.language import component
+from spacy.tokens import Doc, Span
 from spacy_ann.candidate_generator import CandidateGenerator
 from spacy_ann.types import KnowledgeBaseCandidate
 
@@ -37,7 +32,7 @@ class AnnLinker:
         nlp (Language): spaCy Language object
         
         RETURNS (AnnLinker): Initialized AnnLinker.
-        """        
+        """
         return cls(nlp, **cfg)
 
     def __init__(self, nlp, **cfg):
@@ -57,13 +52,12 @@ class AnnLinker:
         if not self.nlp.vocab.lookups.has_table("mentions_to_alias_cand"):
             self.nlp.vocab.lookups.add_table("mentions_to_alias_cand")
 
-
     @property
     def aliases(self) -> List[str]:
         """Get all aliases
         
         RETURNS (List[str]): List of aliases
-        """        
+        """
         return self.kb.get_alias_strings()
 
     def __call__(self, doc: Doc) -> Doc:
@@ -74,7 +68,7 @@ class AnnLinker:
         doc (Doc): spaCy Doc
         
         RETURNS (Doc): spaCy Doc with updated annotations
-        """           
+        """
 
         self.require_kb()
         self.require_cg()
@@ -82,30 +76,42 @@ class AnnLinker:
         mentions = doc.ents
         mention_strings = [e.text for e in mentions]
         batch_candidates = self.cg(mention_strings)
-        
+
         for ent, alias_candidates in zip(doc.ents, batch_candidates):
-            alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.threshold]
-            no_definition_alias_candidates = [ac for ac in alias_candidates if ac.similarity > self.no_description_threshold]
+            alias_candidates = [
+                ac for ac in alias_candidates if ac.similarity > self.threshold
+            ]
+            [
+                ac
+                for ac in alias_candidates
+                if ac.similarity > self.no_description_threshold
+            ]
             ent._.alias_candidates = alias_candidates
-            
+
             if len(alias_candidates) == 0:
                 continue
             else:
-                mentions_table = self.nlp.vocab.lookups.get_table("mentions_to_alias_cand")
+                mentions_table = self.nlp.vocab.lookups.get_table(
+                    "mentions_to_alias_cand"
+                )
                 mentions_table.set(ent.text, alias_candidates[0].alias)
 
                 if self.disambiguate:
                     kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
-                    
+
                     # create candidate matrix
-                    entity_encodings = np.asarray([c.entity_vector for c in kb_candidates])
+                    entity_encodings = np.asarray(
+                        [c.entity_vector for c in kb_candidates]
+                    )
                     candidate_norm = np.linalg.norm(entity_encodings, axis=1)
 
                     sims = np.dot(entity_encodings, doc.vector.T) / (
                         (candidate_norm * doc.vector_norm) + 1e-8
                     )
                     ent._.kb_candidates = [
-                        KnowledgeBaseCandidate(entity=cand.entity_, context_similarity=sim)
+                        KnowledgeBaseCandidate(
+                            entity=cand.entity_, context_similarity=sim
+                        )
                         for cand, sim in zip(kb_candidates, sims)
                     ]
 
@@ -120,7 +126,7 @@ class AnnLinker:
         """Set the KnowledgeBase
         
         kb (KnowledgeBase): spaCy KnowledgeBase
-        """        
+        """
         self.kb = kb
 
     def set_cg(self, cg: CandidateGenerator):
@@ -154,7 +160,7 @@ class AnnLinker:
         path (Path): directory to deserialize from
         
         RETURNS (AnnLinker): Initialized AnnLinker
-        """        
+        """
         path = util.ensure_path(path)
 
         kb = KnowledgeBase(self.nlp.vocab, 300)
@@ -165,7 +171,7 @@ class AnnLinker:
         self.set_cg(cg)
 
         cfg = srsly.read_json(path / "cfg")
-        
+
         self.threshold = cfg.get("threshold", 0.7)
         self.no_description_threshold = cfg.get("no_description_threshold", 0.95)
         self.disambiguate = cfg.get("disambiguate", True)
@@ -177,7 +183,7 @@ class AnnLinker:
         
         path (Path): directory to serialize to
         exclude (Tuple, optional): config to exclude. Defaults to tuple().
-        """        
+        """
         path = util.ensure_path(path)
         if not path.exists():
             path.mkdir()
@@ -185,11 +191,9 @@ class AnnLinker:
         cfg = {
             "threshold": self.threshold,
             "no_description_threshold": self.no_description_threshold,
-            "disambiguate": self.disambiguate
+            "disambiguate": self.disambiguate,
         }
         srsly.write_json(path / "cfg", cfg)
 
         self.kb.dump(path / "kb")
         self.cg.to_disk(path)
-
-        

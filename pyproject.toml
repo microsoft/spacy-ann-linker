@@ -50,6 +50,7 @@ api = [
     "python-dotenv"
 ]
 test = [
+    "autoflake",
     "click-completion",
     "pytest >=4.4.0",
     "pytest-cov",

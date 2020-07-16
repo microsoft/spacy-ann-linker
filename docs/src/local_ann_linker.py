@@ -1,5 +1,4 @@
 import spacy
-from spacy.tokens import Span
 
 if __name__ == "__main__":
 
@@ -9,12 +8,13 @@ if __name__ == "__main__":
     nlp = spacy.load(model_dir)
 
     # The NER component of the en_core_web_md model doesn't actually
-    # recognize the aliases as entities so we'll add a 
+    # recognize the aliases as entities so we'll add a
     # spaCy EntityRuler component for now to extract them.
-    ruler = nlp.create_pipe('entity_ruler')
+    ruler = nlp.create_pipe("entity_ruler")
     patterns = [
         {"label": "SKILL", "pattern": alias}
-        for alias in nlp.get_pipe('ann_linker').kb.get_alias_strings() + ['machine learn']
+        for alias in nlp.get_pipe("ann_linker").kb.get_alias_strings()
+        + ["machine learn"]
     ]
     ruler.add_patterns(patterns)
     nlp.add_pipe(ruler, before="ann_linker")

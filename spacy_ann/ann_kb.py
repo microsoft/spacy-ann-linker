@@ -1,35 +1,31 @@
-from typing import List, Dict, Set, Tuple
-import json
-from collections import defaultdict
 from pathlib import Path
+from timeit import default_timer as timer
+from typing import List, Set, Tuple
 
 import joblib
 import nmslib
-from nmslib.dist import FloatIndex
 import numpy as np
-from preshed.maps import PreshMap
 import scipy
-from sklearn.feature_extraction.text import TfidfVectorizer
-import spacy
-from spacy.kb import Candidate, KnowledgeBase
-from spacy.tokens import Doc, Span
-from spacy.util import ensure_path, to_disk, from_disk
-from spacy.vocab import Vocab
 import srsly
-from timeit import default_timer as timer
-from wasabi import Printer
+from nmslib.dist import FloatIndex
+from sklearn.feature_extraction.text import TfidfVectorizer
+from spacy.kb import KnowledgeBase
+from spacy.util import ensure_path, from_disk, to_disk
+from spacy.vocab import Vocab
 from spacy_ann.types import AliasCandidate
+from wasabi import Printer
 
 
 class AnnKnowledgeBase(KnowledgeBase):
-    def __init__(self, 
+    def __init__(
+        self,
         vocab: Vocab,
         entity_vector_length: int = 64,
         k: int = 1,
         m_parameter: int = 100,
         ef_search: int = 200,
         ef_construction: int = 2000,
-        n_threads: int = 60
+        n_threads: int = 60,
     ):
         """Initialize a CandidateGenerator
         
@@ -56,7 +52,7 @@ class AnnKnowledgeBase(KnowledgeBase):
         short_aliases: Set[str],
         ann_index: FloatIndex,
         vectorizer: TfidfVectorizer,
-        alias_tfidfs: scipy.sparse.csr_matrix
+        alias_tfidfs: scipy.sparse.csr_matrix,
     ):
         """Used in `fit` and `from_disk` to initialize the CandidateGenerator with computed
         # TF-IDF Vectorizer and ANN Index
@@ -97,7 +93,7 @@ class AnnKnowledgeBase(KnowledgeBase):
         # resulting vectors using float16, meaning they take up half the memory on disk. Unfortunately
         # we can't use the float16 format to actually run the vectorizer, because of this bug in sparse
         # matrix representations in scipy: https://github.com/scipy/scipy/issues/7408
-        
+
         msg.text(f"Fitting tfidf vectorizer on {len(kb_aliases)} aliases")
         tfidf_vectorizer = TfidfVectorizer(
             analyzer="char_wb", ngram_range=(3, 3), min_df=2, dtype=np.float32
@@ -109,7 +105,9 @@ class AnnKnowledgeBase(KnowledgeBase):
         msg.text(f"Fitting and saving vectorizer took {round(total_time)} seconds")
 
         msg.text(f"Finding empty (all zeros) tfidf vectors")
-        empty_tfidfs_boolean_flags = np.array(alias_tfidfs.sum(axis=1) != 0).reshape(-1,)
+        empty_tfidfs_boolean_flags = np.array(alias_tfidfs.sum(axis=1) != 0).reshape(
+            -1,
+        )
         number_of_non_empty_tfidfs = sum(
             empty_tfidfs_boolean_flags == False
         )  # pylint: disable=singleton-comparison
@@ -119,14 +117,18 @@ class AnnKnowledgeBase(KnowledgeBase):
             f"Deleting {number_of_non_empty_tfidfs}/{total_number_of_tfidfs} aliases because their tfidf is empty"
         )
         # remove empty tfidf vectors, otherwise nmslib will crash
-        aliases = [alias for alias, flag in zip(kb_aliases, empty_tfidfs_boolean_flags) if flag]
+        aliases = [
+            alias for alias, flag in zip(kb_aliases, empty_tfidfs_boolean_flags) if flag
+        ]
         alias_tfidfs = alias_tfidfs[empty_tfidfs_boolean_flags]
         assert len(aliases) == np.size(alias_tfidfs, 0)
 
         msg.text(f"Fitting ann index on {len(aliases)} aliases")
         start_time = timer()
         ann_index = nmslib.init(
-            method="hnsw", space="cosinesimil_sparse", data_type=nmslib.DataType.SPARSE_VECTOR
+            method="hnsw",
+            space="cosinesimil_sparse",
+            data_type=nmslib.DataType.SPARSE_VECTOR,
         )
         ann_index.addDataPointBatch(alias_tfidfs)
         ann_index.createIndex(index_params, print_progress=verbose)
@@ -136,7 +138,9 @@ class AnnKnowledgeBase(KnowledgeBase):
         total_time = end_time - start_time
         msg.text(f"Fitting ann index took {round(total_time)} seconds")
 
-        self._initialize(aliases, short_aliases, ann_index, tfidf_vectorizer, alias_tfidfs)
+        self._initialize(
+            aliases, short_aliases, ann_index, tfidf_vectorizer, alias_tfidfs
+        )
         return self
 
     def _nmslib_knn_with_zero_vectors(
@@ -154,7 +158,7 @@ class AnnKnowledgeBase(KnowledgeBase):
         k (int): k neighbors to consider
         
         RETURNS (Tuple[np.ndarray, np.ndarray]): Tuple of [neighbors, distances]
-        """                
+        """
 
         empty_vectors_boolean_flags = np.array(vectors.sum(axis=1) != 0).reshape(-1,)
         empty_vectors_count = vectors.shape[0] - sum(empty_vectors_boolean_flags)
@@ -172,7 +176,9 @@ class AnnKnowledgeBase(KnowledgeBase):
         # call `knnQueryBatch` to get neighbors
         original_neighbours = self.ann_index.knnQueryBatch(vectors, k=k)
 
-        neighbors, distances = zip(*[(x[0].tolist(), x[1].tolist()) for x in original_neighbours])
+        neighbors, distances = zip(
+            *[(x[0].tolist(), x[1].tolist()) for x in original_neighbours]
+        )
         neighbors = list(neighbors)
         distances = list(distances)
 
@@ -205,9 +211,11 @@ class AnnKnowledgeBase(KnowledgeBase):
         # `ann_index.knnQueryBatch` crashes if one of the vectors is all zeros.
         # `nmslib_knn_with_zero_vectors` is a wrapper around `ann_index.knnQueryBatch`
         # that addresses this issue.
-        batch_neighbors, batch_distances = self._nmslib_knn_with_zero_vectors(tfidfs, self.k)
+        batch_neighbors, batch_distances = self._nmslib_knn_with_zero_vectors(
+            tfidfs, self.k
+        )
         end_time = timer()
-        total_time = end_time - start_time
+        end_time - start_time
 
         batch_candidates = []
         for mention, neighbors, distances in zip(
@@ -225,7 +233,9 @@ class AnnKnowledgeBase(KnowledgeBase):
             for neighbor_index, distance in zip(neighbors, distances):
                 alias = self.aliases[neighbor_index]
                 similarity = 1.0 - distance
-                alias_candidates.append(AliasCandidate(alias=alias, similarity=similarity))
+                alias_candidates.append(
+                    AliasCandidate(alias=alias, similarity=similarity)
+                )
 
             batch_candidates.append(alias_candidates)
 
@@ -258,14 +268,18 @@ class AnnKnowledgeBase(KnowledgeBase):
             "m_parameter": self.m_parameter,
             "ef_search": self.ef_search,
             "ef_construction": self.ef_construction,
-            "n_threads": self.n_threads
+            "n_threads": self.n_threads,
         }
         serializers = {
             "cg_cfg": lambda p: srsly.write_json(p, cfg),
             "aliases": lambda p: srsly.write_json(p.with_suffix(".json"), self.aliases),
-            "short_aliases": lambda p: srsly.write_json(p.with_suffix(".json"), self.short_aliases),
+            "short_aliases": lambda p: srsly.write_json(
+                p.with_suffix(".json"), self.short_aliases
+            ),
             "ann_index": lambda p: self.ann_index.saveIndex(str(p.with_suffix(".bin"))),
-            "tfidf_vectorizer": lambda p: joblib.dump(self.vectorizer, p.with_suffix(".joblib")),
+            "tfidf_vectorizer": lambda p: joblib.dump(
+                self.vectorizer, p.with_suffix(".joblib")
+            ),
             "tfidf_vectors_sparse": lambda p: scipy.sparse.save_npz(
                 p.with_suffix(".npz"), self.alias_tfidfs.astype(np.float16)
             ),
@@ -275,7 +289,7 @@ class AnnKnowledgeBase(KnowledgeBase):
 
     def load_bulk(self, path: Path):
         path = ensure_path(path)
-        
+
         super().load_bulk(path)
 
         aliases_path = path / "aliases.json"
@@ -299,13 +313,17 @@ class AnnKnowledgeBase(KnowledgeBase):
         tfidf_vectorizer = joblib.load(tfidf_vectorizer_path)
         alias_tfidfs = scipy.sparse.load_npz(tfidf_vectors_path).astype(np.float32)
         ann_index = nmslib.init(
-            method="hnsw", space="cosinesimil_sparse", data_type=nmslib.DataType.SPARSE_VECTOR
+            method="hnsw",
+            space="cosinesimil_sparse",
+            data_type=nmslib.DataType.SPARSE_VECTOR,
         )
         ann_index.addDataPointBatch(alias_tfidfs)
         ann_index.loadIndex(str(ann_index_path))
         query_time_params = {"efSearch": self.ef_search}
         ann_index.setQueryTimeParams(query_time_params)
 
-        self._initialize(aliases, short_aliases, ann_index, tfidf_vectorizer, alias_tfidfs)
+        self._initialize(
+            aliases, short_aliases, ann_index, tfidf_vectorizer, alias_tfidfs
+        )
 
         return self

@@ -2,6 +2,7 @@
 # Licensed under the MIT License.
 
 from typing import List, Optional
+
 from pydantic import BaseModel
 # from spacy.kb import Candidate
 from spacy_ann.types import AliasCandidate, KnowledgeBaseCandidate

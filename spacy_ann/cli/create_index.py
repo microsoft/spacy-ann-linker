@@ -1,31 +1,28 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 
-from collections import defaultdict
 from pathlib import Path
-from typing import Callable
+
 import spacy
-from spacy.kb import KnowledgeBase
-from spacy.language import Language
-from spacy.util import ensure_path
 import srsly
 import typer
-from wasabi import Printer
-
-from spacy_ann import AnnLinker
+from spacy.kb import KnowledgeBase
 from spacy_ann.candidate_generator import CandidateGenerator
+from wasabi import Printer
 
 INPUT_DIM = 300  # dimension of pretrained input vectors
 DESC_WIDTH = 300  # dimension of output entity vectors
 
 
-def create_index(model: str,
-                 kb_dir: Path,
-                 output_dir: Path,
-                 new_model_name: str = "ann_linker",
-                 cg_threshold: float = 0.8,
-                 n_iter: int = 5,
-                 verbose: bool = True):
+def create_index(
+    model: str,
+    kb_dir: Path,
+    output_dir: Path,
+    new_model_name: str = "ann_linker",
+    cg_threshold: float = 0.8,
+    n_iter: int = 5,
+    verbose: bool = True,
+):
 
     """Create an AnnLinker based on the Character N-Gram
     TF-IDF vectors for aliases in a KnowledgeBase
@@ -45,7 +42,7 @@ def create_index(model: str,
     e.g. aliases.jsonl
     {"alias": "ML", "entities": ["a1", "a2"], "probabilities": [0.5, 0.5]}
     """
-    msg = Printer(hide_animation = not verbose)
+    msg = Printer(hide_animation=not verbose)
 
     msg.divider("Load Model")
     with msg.loading(f"Loading model {model}"):
@@ -65,7 +62,6 @@ def create_index(model: str,
     entity_ids = []
     descriptions = []
     freqs = []
-    n_no_desc = 0
     for e in entities:
         entity_ids.append(e["id"])
         descriptions.append(e.get("description", ""))
@@ -95,14 +91,14 @@ def create_index(model: str,
                 kb.add_entity(entity, freqs[i], embeddings[i])
 
         for a in aliases:
-            ents = [e for e in a['entities'] if kb.contains_entity(e)]
+            ents = [e for e in a["entities"] if kb.contains_entity(e)]
             n_ents = len(ents)
             if n_ents > 0:
                 prior_prob = [1.0 / n_ents] * n_ents
                 kb.add_alias(alias=a["alias"], entities=ents, probabilities=prior_prob)
 
         msg.good("Done adding entities and aliases to kb")
-    
+
     msg.divider("Create ANN Index")
 
     cg = CandidateGenerator().fit(kb.get_alias_strings(), verbose=True)
@@ -115,7 +111,8 @@ def create_index(model: str,
 
     nlp.meta["name"] = new_model_name
     nlp.to_disk(output_dir)
-    nlp_loaded = nlp.from_disk(output_dir)
+    nlp.from_disk(output_dir)
+
 
 if __name__ == "__main__":
     typer.run(create_index)

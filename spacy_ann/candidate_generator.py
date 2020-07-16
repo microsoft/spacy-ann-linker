@@ -4,25 +4,20 @@
 # Adapted from https://github.com/allenai/scispacy/blob/master/scispacy/candidate_generation.py
 # for use with spaCy KnowledgeBase
 
-from typing import List, Dict, Set, Tuple
-import json
-from collections import defaultdict
 from pathlib import Path
+from timeit import default_timer as timer
+from typing import List, Set, Tuple
 
 import joblib
 import nmslib
-from nmslib.dist import FloatIndex
 import numpy as np
 import scipy
-from sklearn.feature_extraction.text import TfidfVectorizer
-import spacy
-from spacy.kb import Candidate, KnowledgeBase
-from spacy.tokens import Doc, Span
-from spacy.util import ensure_path, to_disk, from_disk
 import srsly
-from timeit import default_timer as timer
-from wasabi import Printer
+from nmslib.dist import FloatIndex
+from sklearn.feature_extraction.text import TfidfVectorizer
+from spacy.util import from_disk, to_disk
 from spacy_ann.types import AliasCandidate
+from wasabi import Printer
 
 
 class CandidateGenerator:
@@ -35,13 +30,16 @@ class CandidateGenerator:
     When you call an initialized CandidateGenerator with a batch of entity mentions,
     it will return a list of `AliasCandidate` objects for each entity mention.
     """
-    def __init__(self,
-                 *,
-                 k: int = 5,
-                 m_parameter: int = 100,
-                 ef_search: int = 200,
-                 ef_construction: int = 2000,
-                 n_threads: int = 60):
+
+    def __init__(
+        self,
+        *,
+        k: int = 5,
+        m_parameter: int = 100,
+        ef_search: int = 200,
+        ef_construction: int = 2000,
+        n_threads: int = 60,
+    ):
         """Initialize a CandidateGenerator
         
         k (int): Number of neighbors to query
@@ -60,13 +58,15 @@ class CandidateGenerator:
         self.n_threads = n_threads
 
         self.ann_index = True
-        
-    def _initialize(self,
-                    aliases: List[str],
-                    short_aliases: Set[str],
-                    ann_index: FloatIndex,
-                    vectorizer: TfidfVectorizer,
-                    alias_tfidfs: scipy.sparse.csr_matrix):
+
+    def _initialize(
+        self,
+        aliases: List[str],
+        short_aliases: Set[str],
+        ann_index: FloatIndex,
+        vectorizer: TfidfVectorizer,
+        alias_tfidfs: scipy.sparse.csr_matrix,
+    ):
         """Used in `fit` and `from_disk` to initialize the CandidateGenerator with computed
         # TF-IDF Vectorizer and ANN Index
         
@@ -91,7 +91,7 @@ class CandidateGenerator:
         verbose (bool, optional): Set to True to get print updates while fitting the index. Defaults to False.
         
         RETURNS (CandidateGenerator): An initialized CandidateGenerator
-        """        
+        """
         msg = Printer(no_print=verbose)
 
         # kb_aliases = self.kb.get_alias_strings()
@@ -115,7 +115,7 @@ class CandidateGenerator:
         # resulting vectors using float16, meaning they take up half the memory on disk. Unfortunately
         # we can't use the float16 format to actually run the vectorizer, because of this bug in sparse
         # matrix representations in scipy: https://github.com/scipy/scipy/issues/7408
-        
+
         msg.text(f"Fitting tfidf vectorizer on {len(kb_aliases)} aliases")
         tfidf_vectorizer = TfidfVectorizer(
             analyzer="char_wb", ngram_range=(3, 3), min_df=2, dtype=np.float32
@@ -127,7 +127,9 @@ class CandidateGenerator:
         msg.text(f"Fitting and saving vectorizer took {round(total_time)} seconds")
 
         msg.text(f"Finding empty (all zeros) tfidf vectors")
-        empty_tfidfs_boolean_flags = np.array(alias_tfidfs.sum(axis=1) != 0).reshape(-1,)
+        empty_tfidfs_boolean_flags = np.array(alias_tfidfs.sum(axis=1) != 0).reshape(
+            -1,
+        )
         number_of_non_empty_tfidfs = sum(
             empty_tfidfs_boolean_flags == False
         )  # pylint: disable=singleton-comparison
@@ -137,14 +139,18 @@ class CandidateGenerator:
             f"Deleting {number_of_non_empty_tfidfs}/{total_number_of_tfidfs} aliases because their tfidf is empty"
         )
         # remove empty tfidf vectors, otherwise nmslib will crash
-        aliases = [alias for alias, flag in zip(kb_aliases, empty_tfidfs_boolean_flags) if flag]
+        aliases = [
+            alias for alias, flag in zip(kb_aliases, empty_tfidfs_boolean_flags) if flag
+        ]
         alias_tfidfs = alias_tfidfs[empty_tfidfs_boolean_flags]
         assert len(aliases) == np.size(alias_tfidfs, 0)
 
         msg.text(f"Fitting ann index on {len(aliases)} aliases")
         start_time = timer()
         ann_index = nmslib.init(
-            method="hnsw", space="cosinesimil_sparse", data_type=nmslib.DataType.SPARSE_VECTOR
+            method="hnsw",
+            space="cosinesimil_sparse",
+            data_type=nmslib.DataType.SPARSE_VECTOR,
         )
         ann_index.addDataPointBatch(alias_tfidfs)
         ann_index.createIndex(index_params, print_progress=verbose)
@@ -154,7 +160,9 @@ class CandidateGenerator:
         total_time = end_time - start_time
         msg.text(f"Fitting ann index took {round(total_time)} seconds")
 
-        self._initialize(aliases, short_aliases, ann_index, tfidf_vectorizer, alias_tfidfs)
+        self._initialize(
+            aliases, short_aliases, ann_index, tfidf_vectorizer, alias_tfidfs
+        )
         return self
 
     def _nmslib_knn_with_zero_vectors(
@@ -172,7 +180,7 @@ class CandidateGenerator:
         k (int): k neighbors to consider
         
         RETURNS (Tuple[np.ndarray, np.ndarray]): Tuple of [neighbors, distances]
-        """                
+        """
 
         empty_vectors_boolean_flags = np.array(vectors.sum(axis=1) != 0).reshape(-1,)
         empty_vectors_count = vectors.shape[0] - sum(empty_vectors_boolean_flags)
@@ -190,7 +198,9 @@ class CandidateGenerator:
         # call `knnQueryBatch` to get neighbors
         original_neighbours = self.ann_index.knnQueryBatch(vectors, k=k)
 
-        neighbors, distances = zip(*[(x[0].tolist(), x[1].tolist()) for x in original_neighbours])
+        neighbors, distances = zip(
+            *[(x[0].tolist(), x[1].tolist()) for x in original_neighbours]
+        )
         neighbors = list(neighbors)
         distances = list(distances)
 
@@ -204,14 +214,14 @@ class CandidateGenerator:
         extended_distances[empty_vectors_boolean_flags] = np.array(distances)[:-1]
 
         return extended_neighbors, extended_distances
-    
+
     def require_ann_index(self):
         """Raise an error if the ann_index is not initialized
         
         RAISES:
             ValueError: ann_index not initialized
-        """        
-        # 
+        """
+        #
         if getattr(self, "ann_index", None) in (None, True, False):
             raise ValueError(f"ann_index not initialized. Have you run `cg.train` yet?")
 
@@ -221,7 +231,7 @@ class CandidateGenerator:
         mention_texts (List[str]): List of entity mentions to generate AliasCandidates for
         
         RETURNS (List[List[AliasCandidate]]): List of AliasCandidates for each mention
-        """        
+        """
         self.require_ann_index()
 
         # tfidf vectorizer crashes on an empty array, so we return early here
@@ -234,9 +244,11 @@ class CandidateGenerator:
         # `ann_index.knnQueryBatch` crashes if one of the vectors is all zeros.
         # `nmslib_knn_with_zero_vectors` is a wrapper around `ann_index.knnQueryBatch`
         # that addresses this issue.
-        batch_neighbors, batch_distances = self._nmslib_knn_with_zero_vectors(tfidfs, self.k)
+        batch_neighbors, batch_distances = self._nmslib_knn_with_zero_vectors(
+            tfidfs, self.k
+        )
         end_time = timer()
-        total_time = end_time - start_time
+        end_time - start_time
 
         batch_candidates = []
         for mention, neighbors, distances in zip(
@@ -254,7 +266,9 @@ class CandidateGenerator:
             for neighbor_index, distance in zip(neighbors, distances):
                 alias = self.aliases[neighbor_index]
                 similarity = 1.0 - distance
-                alias_candidates.append(AliasCandidate(alias=alias, similarity=similarity))
+                alias_candidates.append(
+                    AliasCandidate(alias=alias, similarity=similarity)
+                )
 
             batch_candidates.append(alias_candidates)
 
@@ -266,7 +280,7 @@ class CandidateGenerator:
         path (Path): Directory to deserialize data from
         
         RETURNS (CandidateGenerator): Initialized Candidate Generator
-        """        
+        """
         aliases_path = f"{path}/aliases.json"
         short_aliases_path = f"{path}/short_aliases.json"
         ann_index_path = f"{path}/ann_index.bin"
@@ -288,14 +302,18 @@ class CandidateGenerator:
         tfidf_vectorizer = joblib.load(tfidf_vectorizer_path)
         alias_tfidfs = scipy.sparse.load_npz(tfidf_vectors_path).astype(np.float32)
         ann_index = nmslib.init(
-            method="hnsw", space="cosinesimil_sparse", data_type=nmslib.DataType.SPARSE_VECTOR
+            method="hnsw",
+            space="cosinesimil_sparse",
+            data_type=nmslib.DataType.SPARSE_VECTOR,
         )
         ann_index.addDataPointBatch(alias_tfidfs)
         ann_index.loadIndex(str(ann_index_path))
         query_time_params = {"efSearch": self.ef_search}
         ann_index.setQueryTimeParams(query_time_params)
 
-        self._initialize(aliases, short_aliases, ann_index, tfidf_vectorizer, alias_tfidfs)
+        self._initialize(
+            aliases, short_aliases, ann_index, tfidf_vectorizer, alias_tfidfs
+        )
 
         return self
 
@@ -309,14 +327,18 @@ class CandidateGenerator:
             "m_parameter": self.m_parameter,
             "ef_search": self.ef_search,
             "ef_construction": self.ef_construction,
-            "n_threads": self.n_threads
+            "n_threads": self.n_threads,
         }
         serializers = {
             "cg_cfg": lambda p: srsly.write_json(p, cfg),
             "aliases": lambda p: srsly.write_json(p.with_suffix(".json"), self.aliases),
-            "short_aliases": lambda p: srsly.write_json(p.with_suffix(".json"), self.short_aliases),
+            "short_aliases": lambda p: srsly.write_json(
+                p.with_suffix(".json"), self.short_aliases
+            ),
             "ann_index": lambda p: self.ann_index.saveIndex(str(p.with_suffix(".bin"))),
-            "tfidf_vectorizer": lambda p: joblib.dump(self.vectorizer, p.with_suffix(".joblib")),
+            "tfidf_vectorizer": lambda p: joblib.dump(
+                self.vectorizer, p.with_suffix(".joblib")
+            ),
             "tfidf_vectors_sparse": lambda p: scipy.sparse.save_npz(
                 p.with_suffix(".npz"), self.alias_tfidfs.astype(np.float16)
             ),

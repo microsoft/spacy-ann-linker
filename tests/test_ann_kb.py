@@ -1,15 +1,11 @@
-import pytest
-import spacy
-import srsly
-from wasabi import msg
-
 from spacy_ann.ann_kb import AnnKnowledgeBase
+from wasabi import msg
 
 
 def test_fit_index(nlp, entities, aliases):
     kb = AnnKnowledgeBase(nlp.vocab, entity_vector_length=300)
     print(vars(kb))
-    
+
     entity_ids = []
     descriptions = []
     freqs = []
@@ -33,7 +29,7 @@ def test_fit_index(nlp, entities, aliases):
                 kb.add_entity(entity, freqs[i], embeddings[i])
 
         for a in aliases:
-            ents = [e for e in a['entities'] if kb.contains_entity(e)]
+            ents = [e for e in a["entities"] if kb.contains_entity(e)]
             n_ents = len(ents)
             if n_ents > 0:
                 prior_prob = [1.0 / n_ents] * n_ents
@@ -42,8 +38,6 @@ def test_fit_index(nlp, entities, aliases):
     kb.fit_index(verbose=True)
 
     assert kb.get_candidates("research")[0].entity_ == "a15"
-    
+
     assert kb.get_candidates("researched")[0].alias_ == "Research"
     assert kb.get_candidates("researched")[0].entity_ == "a15"
-
-

@@ -3,15 +3,11 @@
 
 import os
 
-from dotenv import load_dotenv, find_dotenv
-from fastapi import FastAPI, Body
-from starlette.middleware.cors import CORSMiddleware
-from starlette.responses import RedirectResponse
 import spacy
-import uvicorn
-
-from models import LinkingRequest, LinkingResponse, LinkingRecord
-
+from dotenv import find_dotenv, load_dotenv
+from fastapi import Body, FastAPI
+from models import LinkingRecord, LinkingRequest, LinkingResponse
+from starlette.responses import RedirectResponse
 
 load_dotenv(find_dotenv())
 prefix = os.getenv("CLUSTER_ROUTE_PREFIX")
@@ -27,7 +23,7 @@ app = FastAPI(
     openapi_prefix=prefix,
 )
 
-example_request = list(srsly.read_json('./example_request.json'))
+example_request = list(srsly.read_json("./example_request.json"))
 
 nlp = spacy.load("../tutorial/models/ann_linker")
 
@@ -44,18 +40,13 @@ async def link(body: LinkingRequest = Body(..., example=example_request)):
     res = LinkingResponse(documents=[])
     for doc in body.documents:
         spacy_doc = nlp.make_doc(doc.context)
-        spans = [
-            spacy_doc.char_span(s.start, s.end, label=s.label)
-            for s in doc.spans
-        ]
+        spans = [spacy_doc.char_span(s.start, s.end, label=s.label) for s in doc.spans]
         spacy_doc.ents = [s for s in spans if s]
-        spacy_doc = nlp.get_pipe('ann_linker')(spacy_doc)
+        spacy_doc = nlp.get_pipe("ann_linker")(spacy_doc)
 
         for i, ent in enumerate(spacy_doc.ents):
             doc.spans[i].id = ent.kb_id_
 
-        res.documents.append(
-            LinkingRecord(spans=doc.spans, context=doc.context)
-        )
-            
+        res.documents.append(LinkingRecord(spans=doc.spans, context=doc.context))
+
     return res
