@@ -10,9 +10,19 @@ import spacy
 from spacy_ann import AnnLinker
 
 
-@pytest.fixture()
+@pytest.fixture
+def entities():
+    return list(srsly.read_jsonl("examples/tutorial/data/entities.jsonl"))
+
+
+@pytest.fixture
+def aliases():
+    return list(srsly.read_jsonl("examples/tutorial/data/aliases.jsonl"))
+
+
+@pytest.fixture
 def nlp():
-    return spacy.blank('en')
+    return spacy.load("en_core_web_md")
 
 
 @pytest.fixture()

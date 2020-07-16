@@ -1,13 +1,28 @@
-from timeit import default_timer as timer
-from spacy.kb import KnowledgeBase
-from spacy.vocab import Vocab
-from spacy.util import ensure_path, to_disk, from_disk
-from .candidate_generator import CandidateGenerator
+from typing import List, Dict, Set, Tuple
+import json
+from collections import defaultdict
+from pathlib import Path
 
+import joblib
+import nmslib
+from nmslib.dist import FloatIndex
+import numpy as np
+from preshed.maps import PreshMap
+import scipy
+from sklearn.feature_extraction.text import TfidfVectorizer
+import spacy
+from spacy.kb import Candidate, KnowledgeBase
+from spacy.tokens import Doc, Span
+from spacy.util import ensure_path, to_disk, from_disk
+from spacy.vocab import Vocab
+import srsly
+from timeit import default_timer as timer
+from wasabi import Printer
+from spacy_ann.types import AliasCandidate
 
 
 class AnnKnowledgeBase(KnowledgeBase):
-     def __init__(self, 
+    def __init__(self, 
         vocab: Vocab,
         entity_vector_length: int = 64,
         k: int = 1,
@@ -35,12 +50,14 @@ class AnnKnowledgeBase(KnowledgeBase):
         self.n_threads = n_threads
         self.ann_index = None
 
-    def _initialize(self,
-                    aliases: List[str],
-                    short_aliases: Set[str],
-                    ann_index: FloatIndex,
-                    vectorizer: TfidfVectorizer,
-                    alias_tfidfs: scipy.sparse.csr_matrix):
+    def _initialize(
+        self,
+        aliases: List[str],
+        short_aliases: Set[str],
+        ann_index: FloatIndex,
+        vectorizer: TfidfVectorizer,
+        alias_tfidfs: scipy.sparse.csr_matrix
+    ):
         """Used in `fit` and `from_disk` to initialize the CandidateGenerator with computed
         # TF-IDF Vectorizer and ANN Index
         
@@ -122,6 +139,54 @@ class AnnKnowledgeBase(KnowledgeBase):
         self._initialize(aliases, short_aliases, ann_index, tfidf_vectorizer, alias_tfidfs)
         return self
 
+    def _nmslib_knn_with_zero_vectors(
+        self, vectors: np.ndarray, k: int
+    ) -> Tuple[np.ndarray, np.ndarray]:
+        """ann_index.knnQueryBatch crashes if any of the vectors is all zeros.
+        This function is a wrapper around `ann_index.knnQueryBatch` that solves this problem. It works as follows:
+        - remove empty vectors from `vectors`.
+        - call `ann_index.knnQueryBatch` with the non-empty vectors only. This returns `neighbors`,
+        a list of list of neighbors. `len(neighbors)` equals the length of the non-empty vectors.
+        - extend the list `neighbors` with `None`s in place of empty vectors.
+        - return the extended list of neighbors and distances.
+        
+        vectors (np.ndarray): Vectors used to query index for neighbors and distances
+        k (int): k neighbors to consider
+        
+        RETURNS (Tuple[np.ndarray, np.ndarray]): Tuple of [neighbors, distances]
+        """                
+
+        empty_vectors_boolean_flags = np.array(vectors.sum(axis=1) != 0).reshape(-1,)
+        empty_vectors_count = vectors.shape[0] - sum(empty_vectors_boolean_flags)
+
+        # init extended_neighbors with a list of Nones
+        extended_neighbors = np.empty((len(empty_vectors_boolean_flags),), dtype=object)
+        extended_distances = np.empty((len(empty_vectors_boolean_flags),), dtype=object)
+
+        if vectors.shape[0] - empty_vectors_count == 0:
+            return extended_neighbors, extended_distances
+
+        # remove empty vectors before calling `ann_index.knnQueryBatch`
+        vectors = vectors[empty_vectors_boolean_flags]
+
+        # call `knnQueryBatch` to get neighbors
+        original_neighbours = self.ann_index.knnQueryBatch(vectors, k=k)
+
+        neighbors, distances = zip(*[(x[0].tolist(), x[1].tolist()) for x in original_neighbours])
+        neighbors = list(neighbors)
+        distances = list(distances)
+
+        # neighbors need to be converted to an np.array of objects instead of ndarray of dimensions len(vectors)xk
+        # Solution: add a row to `neighbors` with any length other than k. This way, calling np.array(neighbors)
+        # returns an np.array of objects
+        neighbors.append([])
+        distances.append([])
+        # interleave `neighbors` and Nones in `extended_neighbors`
+        extended_neighbors[empty_vectors_boolean_flags] = np.array(neighbors)[:-1]
+        extended_distances[empty_vectors_boolean_flags] = np.array(distances)[:-1]
+
+        return extended_neighbors, extended_distances
+
     def require_ann_index(self):
         """Raise an error if the ann_index is not initialized
         
@@ -172,28 +237,16 @@ class AnnKnowledgeBase(KnowledgeBase):
         and the prior probability of that alias resolving to that entity.
         If the alias is not known in the KB, and empty list is returned.
         """
-        alias_hash = self.vocab.strings[alias]
-        if not alias_hash in self._alias_index:
-            return []
-        alias_index = self._alias_index.get(alias_hash)
-        if not alias_index:
-            # If we can't find the alias then search for the closest alias 
-            # in the kb using the ann_index
+        if self.contains_alias(alias):
+            candidates = super().get_candidates(alias)
+        else:
             alias_candidates = self.get_alias_candidates([alias])[0]
-            nearest_alias = alias_candidates[0].alias
-            alias_hash = self.vocab.strings[nearest_alias]
-            alias_index = self._alias_index.get(alias_hash)
-
-        alias_entry = self._aliases_table[alias_index]
-
-        return [Candidate(kb=self,
-                          entity_hash=self._entries[entry_index].entity_hash,
-                          entity_freq=self._entries[entry_index].freq,
-                          entity_vector=self._vectors_table[self._entries[entry_index].vector_index],
-                          alias_hash=alias_hash,
-                          prior_prob=prior_prob)
-                for (entry_index, prior_prob) in zip(alias_entry.entry_indices, alias_entry.probs)
-                if entry_index != 0]
+            if alias_candidates:
+                nearest_alias = alias_candidates[0].alias
+                candidates = self.get_candidates(nearest_alias)
+            else:
+                candidates = []
+        return candidates
 
     def dump(self, path: Path):
         path = ensure_path(path)
