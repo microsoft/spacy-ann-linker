@@ -6,7 +6,7 @@ from .candidate_generator import CandidateGenerator
 
 
 
-class ANNKnowledgeBase(KnowledgeBase):
+class AnnKnowledgeBase(KnowledgeBase):
      def __init__(self, 
         vocab: Vocab,
         entity_vector_length: int = 64,
