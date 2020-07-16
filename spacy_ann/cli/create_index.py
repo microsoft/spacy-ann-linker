@@ -11,7 +11,6 @@ from spacy.util import ensure_path
 import srsly
 import typer
 from wasabi import Printer
-from bin.wiki_entity_linking.train_descriptions import EntityEncoder
 
 from spacy_ann import AnnLinker
 from spacy_ann.candidate_generator import CandidateGenerator
