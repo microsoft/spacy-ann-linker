@@ -15,7 +15,6 @@ from spacy.kb import Candidate, KnowledgeBase
 from spacy.tokens import Doc, Span
 from spacy import util
 import srsly
-from bin.wiki_entity_linking.train_descriptions import EntityEncoder
 from spacy_ann.candidate_generator import CandidateGenerator
 from spacy_ann.types import KnowledgeBaseCandidate
 
