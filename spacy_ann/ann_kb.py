@@ -28,14 +28,14 @@ class AnnKnowledgeBase(KnowledgeBase):
         n_threads: int = 60,
     ):
         """Initialize a CandidateGenerator
-        
+
         k (int): Number of neighbors to query
         m_parameter (int): M parameter value for nmslib hnsw algorithm
-        ef_search (int): Set to the maximum recommended value. 
+        ef_search (int): Set to the maximum recommended value.
             Improves recall at the expense of longer **inference** time
-        ef_construction (int): Set to the maximum recommended value. 
+        ef_construction (int): Set to the maximum recommended value.
             Improves recall at the expense of longer **indexing** time
-        n_threads (int): Number of threads to use when creating the index. 
+        n_threads (int): Number of threads to use when creating the index.
             Change based on your machine.
         """
         super().__init__(vocab, entity_vector_length)
@@ -56,7 +56,7 @@ class AnnKnowledgeBase(KnowledgeBase):
     ):
         """Used in `fit` and `from_disk` to initialize the CandidateGenerator with computed
         # TF-IDF Vectorizer and ANN Index
-        
+
         aliases (List[str]): Aliases with vectors contained in the ANN Index
         short_aliases (Set[str]): Aliases too short for a TF-IDF representation
         ann_index (FloatIndex): Computed ANN Index of TF-IDF representations for aliases
@@ -153,10 +153,10 @@ class AnnKnowledgeBase(KnowledgeBase):
         a list of list of neighbors. `len(neighbors)` equals the length of the non-empty vectors.
         - extend the list `neighbors` with `None`s in place of empty vectors.
         - return the extended list of neighbors and distances.
-        
+
         vectors (np.ndarray): Vectors used to query index for neighbors and distances
         k (int): k neighbors to consider
-        
+
         RETURNS (Tuple[np.ndarray, np.ndarray]): Tuple of [neighbors, distances]
         """
 
@@ -188,14 +188,14 @@ class AnnKnowledgeBase(KnowledgeBase):
         neighbors.append([])
         distances.append([])
         # interleave `neighbors` and Nones in `extended_neighbors`
-        extended_neighbors[empty_vectors_boolean_flags] = np.array(neighbors)[:-1]
-        extended_distances[empty_vectors_boolean_flags] = np.array(distances)[:-1]
+        extended_neighbors[empty_vectors_boolean_flags] = np.array(neighbors, dtype=object)[:-1]
+        extended_distances[empty_vectors_boolean_flags] = np.array(distances, dtype=object)[:-1]
 
         return extended_neighbors, extended_distances
 
     def require_ann_index(self):
         """Raise an error if the ann_index is not initialized
-        
+
         RAISES:
             ValueError: ann_index not initialized
         """
@@ -261,7 +261,7 @@ class AnnKnowledgeBase(KnowledgeBase):
     def dump(self, path: Path):
         path = ensure_path(path)
 
-        super().dump(path)
+        super().dump(path / "kb")
 
         cfg = {
             "k": self.k,
@@ -290,7 +290,7 @@ class AnnKnowledgeBase(KnowledgeBase):
     def load_bulk(self, path: Path):
         path = ensure_path(path)
 
-        super().load_bulk(path)
+        super().load_bulk(path / "kb")
 
         aliases_path = path / "aliases.json"
         short_aliases_path = path / "short_aliases.json"

@@ -1,8 +1,13 @@
-from spacy_ann.ann_kb import AnnKnowledgeBase
+from pathlib import Path
+
+import pytest
 from wasabi import msg
 
+from spacy_ann.ann_kb import AnnKnowledgeBase
 
-def test_fit_index(nlp, entities, aliases):
+
+@pytest.fixture()
+def fitted_ann_kb(nlp, entities, aliases):
     kb = AnnKnowledgeBase(nlp.vocab, entity_vector_length=300)
     print(vars(kb))
 
@@ -37,7 +42,20 @@ def test_fit_index(nlp, entities, aliases):
 
     kb.fit_index(verbose=True)
 
-    assert kb.get_candidates("research")[0].entity_ == "a15"
+    return kb
 
-    assert kb.get_candidates("researched")[0].alias_ == "Research"
-    assert kb.get_candidates("researched")[0].entity_ == "a15"
+
+def test_get_candidates(fitted_ann_kb):
+    assert fitted_ann_kb.get_candidates("research")[0].entity_ == "a15"
+    assert fitted_ann_kb.get_candidates("researched")[0].alias_ == "Research"
+    assert fitted_ann_kb.get_candidates("researched")[0].entity_ == "a15"
+
+
+def test_to_from_disk(fitted_ann_kb, tmp_path):
+    assert isinstance(tmp_path, Path)
+    fitted_ann_kb.dump(tmp_path)
+
+    kb = AnnKnowledgeBase(fitted_ann_kb.vocab, entity_vector_length=fitted_ann_kb.entity_vector_length)
+    kb.load_bulk(tmp_path)
+
+    assert kb.get_candidates("research")[0].entity_ == fitted_ann_kb.get_candidates("research")[0].entity_
