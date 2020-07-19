@@ -261,7 +261,7 @@ class AnnKnowledgeBase(KnowledgeBase):
     def dump(self, path: Path):
         path = ensure_path(path)
 
-        super().dump(path / "kb")
+        super().dump(str(path / "kb"))
 
         cfg = {
             "k": self.k,
@@ -270,27 +270,26 @@ class AnnKnowledgeBase(KnowledgeBase):
             "ef_construction": self.ef_construction,
             "n_threads": self.n_threads,
         }
-        serializers = {
-            "cg_cfg": lambda p: srsly.write_json(p, cfg),
-            "aliases": lambda p: srsly.write_json(p.with_suffix(".json"), self.aliases),
-            "short_aliases": lambda p: srsly.write_json(
-                p.with_suffix(".json"), self.short_aliases
-            ),
-            "ann_index": lambda p: self.ann_index.saveIndex(str(p.with_suffix(".bin"))),
-            "tfidf_vectorizer": lambda p: joblib.dump(
-                self.vectorizer, p.with_suffix(".joblib")
-            ),
-            "tfidf_vectors_sparse": lambda p: scipy.sparse.save_npz(
-                p.with_suffix(".npz"), self.alias_tfidfs.astype(np.float16)
-            ),
-        }
 
-        to_disk(path, serializers, {})
+        cg_cfg_path = path / "cg_cfg"
+        aliases_path = path / "aliases.json"
+        short_aliases_path = path / "short_aliases.json"
+        ann_index_path = path / "ann_index.bin"
+        tfidf_vectorizer_path = path / "tfidf_vectorizer.joblib"
+        tfidf_vectors_path = path / "tfidf_vectors_sparse.npz"
+
+        srsly.write_json(cg_cfg_path, cfg)
+        srsly.write_json(aliases_path, self.aliases)
+        srsly.write_json(short_aliases_path, self.short_aliases)
+
+        self.ann_index.saveIndex(str(ann_index_path))
+        joblib.dump(self.vectorizer, tfidf_vectorizer_path)
+        scipy.sparse.save_npz(tfidf_vectors_path, self.alias_tfidfs.astype(np.float16))
 
     def load_bulk(self, path: Path):
         path = ensure_path(path)
 
-        super().load_bulk(path / "kb")
+        super().load_bulk(str(path / "kb"))
 
         aliases_path = path / "aliases.json"
         short_aliases_path = path / "short_aliases.json"
@@ -298,9 +297,7 @@ class AnnKnowledgeBase(KnowledgeBase):
         tfidf_vectorizer_path = path / "tfidf_vectorizer.joblib"
         tfidf_vectors_path = path / "tfidf_vectors_sparse.npz"
 
-        cfg = {}
-        deserializers = {"cg_cfg": lambda p: cfg.update(srsly.read_json(p))}
-        from_disk(path, deserializers, {})
+        cfg = srsly.read_json(path / "cg_cfg")
 
         self.k = cfg.get("k", 5)
         self.m_parameter = cfg.get("m_parameter", 100)
