@@ -298,7 +298,7 @@ class CandidateGenerator:
         self.n_threads = cfg.get("n_threads", 60)
 
         aliases = srsly.read_json(aliases_path)
-        short_aliases = srsly.read_json(short_aliases_path)
+        short_aliases = set(srsly.read_json(short_aliases_path))
         tfidf_vectorizer = joblib.load(tfidf_vectorizer_path)
         alias_tfidfs = scipy.sparse.load_npz(tfidf_vectors_path).astype(np.float32)
         ann_index = nmslib.init(
@@ -333,7 +333,7 @@ class CandidateGenerator:
             "cg_cfg": lambda p: srsly.write_json(p, cfg),
             "aliases": lambda p: srsly.write_json(p.with_suffix(".json"), self.aliases),
             "short_aliases": lambda p: srsly.write_json(
-                p.with_suffix(".json"), self.short_aliases
+                p.with_suffix(".json"), list(self.short_aliases)
             ),
             "ann_index": lambda p: self.ann_index.saveIndex(str(p.with_suffix(".bin"))),
             "tfidf_vectorizer": lambda p: joblib.dump(
