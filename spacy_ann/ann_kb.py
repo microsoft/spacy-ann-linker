@@ -280,7 +280,7 @@ class AnnKnowledgeBase(KnowledgeBase):
 
         srsly.write_json(cg_cfg_path, cfg)
         srsly.write_json(aliases_path, self.aliases)
-        srsly.write_json(short_aliases_path, self.short_aliases)
+        srsly.write_json(short_aliases_path, list(self.short_aliases))
 
         self.ann_index.saveIndex(str(ann_index_path))
         joblib.dump(self.vectorizer, tfidf_vectorizer_path)
@@ -306,7 +306,7 @@ class AnnKnowledgeBase(KnowledgeBase):
         self.n_threads = cfg.get("n_threads", 60)
 
         aliases = srsly.read_json(aliases_path)
-        short_aliases = srsly.read_json(short_aliases_path)
+        short_aliases = set(srsly.read_json(short_aliases_path))
         tfidf_vectorizer = joblib.load(tfidf_vectorizer_path)
         alias_tfidfs = scipy.sparse.load_npz(tfidf_vectors_path).astype(np.float32)
         ann_index = nmslib.init(
