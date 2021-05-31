@@ -8,13 +8,13 @@ import numpy as np
 import srsly
 from spacy import util
 from spacy.kb import KnowledgeBase
-from spacy.language import component
+from spacy.language import Language
 from spacy.tokens import Doc, Span
 from spacy_ann.candidate_generator import CandidateGenerator
 from spacy_ann.types import KnowledgeBaseCandidate
 
 
-@component(
+@Language.component(
     "ann_linker",
     requires=["doc.ents", "doc.sents", "token.ent_iob", "token.ent_type"],
     assigns=["span._.kb_alias"],

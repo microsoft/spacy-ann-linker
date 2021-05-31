@@ -7,12 +7,12 @@ from typing import Any, Dict, Generator, List, Tuple
 import requests
 import srsly
 from requests import HTTPError
-from spacy.language import component
+from spacy.language import Language
 from spacy.tokens import Doc, Span
 from spacy.util import ensure_path, from_disk, minibatch, to_disk
 
 
-@component(
+@Language.component(
     "remote_ann_linker",
     requires=["doc.ents", "doc.sents", "token.ent_iob", "token.ent_type"],
     assigns=["span._.kb_alias"],
