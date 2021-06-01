@@ -8,32 +8,45 @@ import requests
 import srsly
 from requests import HTTPError
 from spacy.language import Language
+from spacy.pipeline import Pipe
 from spacy.tokens import Doc, Span
 from spacy.util import ensure_path, from_disk, minibatch, to_disk
 
 
-@Language.component(
+@Language.factory(
     "remote_ann_linker",
     requires=["doc.ents", "doc.sents", "token.ent_iob", "token.ent_type"],
     assigns=["span._.kb_alias"],
+    default_config={
+        'base_url': 'http://localhost:8080',
+        'headers': {}
+    },
+    default_score_weights={
+        "ents_f": 1.0,
+        "ents_p": 0.0,
+        "ents_r": 0.0,
+        "ents_per_type": None,
+    },
 )
-class RemoteAnnLinker:
+def make_remobe_ann_linker(
+    nlp: Language,
+    name: str,
+    base_url: str,
+    headers: dict
+):
+    return RemoteAnnLinker(
+        nlp,
+        name,
+        base_url = base_url,
+        headers = headers
+    )
+
+class RemoteAnnLinker(Pipe):
     """The RemoteAnnLinker interfaces with a Remote Server to handle 
     Entity Linking when the KnowledgeBase and ANN Index cannot be in memory.
     """
 
-    @classmethod
-    def from_nlp(cls, nlp, **cfg):
-        """Used in spacy.language.Language when constructing this pipeline.
-        Tells spaCy that this pipe requires the nlp object
-        
-        nlp (Language): spaCy Language object
-        
-        RETURNS (RemoteAnnLinker): Initialized RemoteAnnLinker.
-        """
-        return cls(nlp, **cfg)
-
-    def __init__(self, nlp, **cfg):
+    def __init__(self, nlp, name, **cfg):
         """Initialize the RemoteAnnLinker
         
         nlp (Language): spaCy Language object
@@ -41,6 +54,7 @@ class RemoteAnnLinker:
         Span.set_extension("kb_alias", default="", force=True)
 
         self.nlp = nlp
+        self.name = name
         self.cfg = dict(cfg)
         self.base_url = cfg.get("base_url")
         self.headers = cfg.get("headers", {})

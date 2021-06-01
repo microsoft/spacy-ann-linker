@@ -248,7 +248,7 @@ class AnnKnowledgeBase(KnowledgeBase):
         If the alias is not known in the KB, and empty list is returned.
         """
         if self.contains_alias(alias):
-            candidates = super().get_candidates(alias)
+            candidates = super().get_alias_candidates(alias)
         else:
             alias_candidates = self.get_alias_candidates([alias])[0]
             if alias_candidates:
@@ -261,7 +261,7 @@ class AnnKnowledgeBase(KnowledgeBase):
     def dump(self, path: Path):
         path = ensure_path(path)
 
-        super().dump(str(path / "kb"))
+        super().to_disk(str(path / "kb"))
 
         cfg = {
             "k": self.k,
@@ -286,10 +286,10 @@ class AnnKnowledgeBase(KnowledgeBase):
         joblib.dump(self.vectorizer, tfidf_vectorizer_path)
         scipy.sparse.save_npz(tfidf_vectors_path, self.alias_tfidfs.astype(np.float16))
 
-    def load_bulk(self, path: Path):
+    def from_disk(self, path: Path):
         path = ensure_path(path)
 
-        super().load_bulk(str(path / "kb"))
+        super().from_disk(str(path / "kb"))
 
         aliases_path = path / "aliases.json"
         short_aliases_path = path / "short_aliases.json"

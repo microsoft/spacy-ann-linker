@@ -201,7 +201,7 @@ First, load a model capable of extracting the Entities in your KnowledgeBase. Th
 
 ### Create a `remote_ann_linker` pipe
 
-Now create a `remote_ann_linker` pipe using `nlp.create_pipe` and set the `base_url` config value to the batch linking url of your web service. If you're testing the service locally from the last step this should be `http://localhost:8080/link`
+Now create a `remote_ann_linker` pipe using `nlp.add_pipe` and set the `base_url` config value to the batch linking url of your web service. If you're testing the service locally from the last step this should be `http://localhost:8080/link`
 
 ```Python hl_lines="10 11 12 13"
 {!./src/remote_ann_linker.py!}

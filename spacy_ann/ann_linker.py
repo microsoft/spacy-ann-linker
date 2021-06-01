@@ -7,6 +7,7 @@ from typing import List, Tuple
 import numpy as np
 import srsly
 from spacy import util
+from spacy.pipeline import Pipe
 from spacy.kb import KnowledgeBase
 from spacy.language import Language
 from spacy.tokens import Doc, Span
@@ -14,12 +15,39 @@ from spacy_ann.candidate_generator import CandidateGenerator
 from spacy_ann.types import KnowledgeBaseCandidate
 
 
-@Language.component(
+
+@Language.factory(
     "ann_linker",
-    requires=["doc.ents", "doc.sents", "token.ent_iob", "token.ent_type"],
     assigns=["span._.kb_alias"],
+    default_config={
+        'threshold': 0.7,
+        'no_description_threshold': 0.5,
+        'disambiguate': True
+    },
+    default_score_weights={
+        "ents_f": 1.0,
+        "ents_p": 0.0,
+        "ents_r": 0.0,
+        "ents_per_type": None,
+    },
 )
-class AnnLinker:
+def make_ann_linker(
+    nlp: Language,
+    name: str,
+    threshold: float,
+    no_description_threshold: float,
+    disambiguate: bool
+):
+    return AnnLinker(
+        nlp,
+        name,
+        threshold,
+        no_description_threshold,
+        disambiguate
+    )
+
+
+class AnnLinker(Pipe):
     """The AnnLinker adds Entity Linking capabilities
     to map NER mentions to KnowledgeBase Aliases or directly to KnowledgeBase Ids
     """
@@ -35,7 +63,7 @@ class AnnLinker:
         """
         return cls(nlp, **cfg)
 
-    def __init__(self, nlp, **cfg):
+    def __init__(self, nlp, name = "entity_linker", threshold=0.7, no_description_threshold=0.95, disambiguate=True):
         """Initialize the AnnLinker
         
         nlp (Language): spaCy Language object
@@ -44,11 +72,12 @@ class AnnLinker:
         Span.set_extension("kb_candidates", default=[], force=True)
 
         self.nlp = nlp
+        self.name = name
         self.kb = None
         self.cg = None
-        self.threshold = cfg.get("threshold", 0.7)
-        self.no_description_threshold = cfg.get("no_description_threshold", 0.95)
-        self.disambiguate = cfg.get("disambiguate", True)
+        self.threshold = threshold
+        self.no_description_threshold = no_description_threshold
+        self.disambiguate = disambiguate
         if not self.nlp.vocab.lookups.has_table("mentions_to_alias_cand"):
             self.nlp.vocab.lookups.add_table("mentions_to_alias_cand")
 
@@ -97,7 +126,7 @@ class AnnLinker:
                 mentions_table.set(ent.text, alias_candidates[0].alias)
 
                 if self.disambiguate:
-                    kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
+                    kb_candidates = self.kb.get_alias_candidates(alias_candidates[0].alias)
 
                     # create candidate matrix
                     entity_encodings = np.asarray(
@@ -164,7 +193,7 @@ class AnnLinker:
         path = util.ensure_path(path)
 
         kb = KnowledgeBase(self.nlp.vocab, 300)
-        kb.load_bulk(path / "kb")
+        kb.from_disk(path / "kb")
         self.set_kb(kb)
 
         cg = CandidateGenerator().from_disk(path)
@@ -195,5 +224,5 @@ class AnnLinker:
         }
         srsly.write_json(path / "cfg", cfg)
 
-        self.kb.dump(path / "kb")
+        self.kb.to_disk(path / "kb")
         self.cg.to_disk(path)

@@ -4,13 +4,12 @@
 
 def test_ann_linker(trained_linker):
     nlp = trained_linker
-    ruler = nlp.create_pipe("entity_ruler")
+    ruler = nlp.add_pipe("entity_ruler", before="ann_linker")
     patterns = [
         {"label": "SKILL", "pattern": alias}
         for alias in ["NLP", "researched", "machine learning"]
     ]
     ruler.add_patterns(patterns)
-    nlp.add_pipe(ruler, before="ann_linker")
 
     doc = nlp("NLP is a highly researched subset of machine learning.")
 

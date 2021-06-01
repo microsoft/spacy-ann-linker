@@ -53,9 +53,9 @@ def test_get_candidates(fitted_ann_kb):
 
 def test_to_from_disk(fitted_ann_kb, tmp_path):
     assert isinstance(tmp_path, Path)
-    fitted_ann_kb.dump(tmp_path)
+    fitted_ann_kb.to_disk(tmp_path)
 
     kb = AnnKnowledgeBase(fitted_ann_kb.vocab, entity_vector_length=fitted_ann_kb.entity_vector_length)
-    kb.load_bulk(tmp_path)
+    kb.from_disk(tmp_path)
 
     assert kb.get_candidates("research")[0].entity_ == fitted_ann_kb.get_candidates("research")[0].entity_

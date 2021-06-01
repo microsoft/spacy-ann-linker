@@ -10,14 +10,14 @@ if __name__ == "__main__":
     # The NER component of the en_core_web_md model doesn't actually
     # recognize the aliases as entities so we'll add a
     # spaCy EntityRuler component for now to extract them.
-    ruler = nlp.create_pipe("entity_ruler")
+    ruler=nlp.add_pipe('entity_ruler', before="ann_linker")
     patterns = [
         {"label": "SKILL", "pattern": alias}
         for alias in nlp.get_pipe("ann_linker").kb.get_alias_strings()
         + ["machine learn"]
     ]
     ruler.add_patterns(patterns)
-    nlp.add_pipe(ruler, before="ann_linker")
+    
 
     doc = nlp("NLP is a subset of machine learn.")
 
