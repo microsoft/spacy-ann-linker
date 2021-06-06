@@ -118,7 +118,7 @@ class CandidateGenerator:
 
         msg.text(f"Fitting tfidf vectorizer on {len(kb_aliases)} aliases")
         tfidf_vectorizer = TfidfVectorizer(
-            analyzer="char_wb", ngram_range=(3, 3), min_df=2, dtype=np.float32
+            analyzer="char_wb", ngram_range=(2, 2), min_df=1, dtype=np.float32, binary=True
         )
         start_time = timer()
         alias_tfidfs = tfidf_vectorizer.fit_transform(kb_aliases)
