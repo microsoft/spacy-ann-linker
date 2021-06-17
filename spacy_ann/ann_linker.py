@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 
 from pathlib import Path
-from typing import List, Tuple
+from typing import Callable, List, Tuple
 
 import numpy as np
 import srsly
@@ -89,6 +89,15 @@ class AnnLinker(Pipe):
         """
         return self.kb.get_alias_strings()
 
+    def set_span_text_callback(self, callback: Callable[[Span],str]):
+        self.span_text_get_func = callback
+
+    def _get_span_text(self, span):
+        text = span.text
+        if hasattr(self, 'span_text_get_func'):
+            text = self.span_text_get_func(span) or text
+        return text
+
     def __call__(self, doc: Doc) -> Doc:
         """Annotate spaCy doc.ents with candidate info.
         If disambiguate is True, use entity vectors and doc context
@@ -103,7 +112,7 @@ class AnnLinker(Pipe):
         self.require_cg()
 
         mentions = doc.ents
-        mention_strings = [e.text for e in mentions]
+        mention_strings = [self._get_span_text(e) for e in mentions]
         batch_candidates = self.cg(mention_strings)
 
         for ent, alias_candidates in zip(doc.ents, batch_candidates):
