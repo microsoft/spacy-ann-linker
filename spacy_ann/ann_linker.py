@@ -14,6 +14,7 @@ from spacy.tokens import Doc, Span
 from spacy_ann.candidate_generator import CandidateGenerator
 from spacy_ann.types import KnowledgeBaseCandidate
 from spacy_ann.consts import stopwords
+from spacy_ann.utils import normalize_text
 
 
 @Language.factory(
@@ -111,6 +112,7 @@ class AnnLinker(Pipe):
             loc_ents = [ent for ent in doc.ents if ent.label_ == 'GPE']
             for ent in loc_ents:
                 text = text.replace(ent.text, '')
+            text = normalize_text(text)
         return text.strip() or span.text
 
     def __call__(self, doc: Doc) -> Doc:
