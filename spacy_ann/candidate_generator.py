@@ -18,6 +18,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from spacy.util import from_disk, to_disk
 from spacy_ann.types import AliasCandidate
 from wasabi import Printer
+from spacy_ann.consts import stopwords
 
 
 class CandidateGenerator:
@@ -41,7 +42,7 @@ class CandidateGenerator:
         n_threads: int = 60,
     ):
         """Initialize a CandidateGenerator
-        
+
         k (int): Number of neighbors to query
         m_parameter (int): M parameter value for nmslib hnsw algorithm
         ef_search (int): Set to the maximum recommended value. 
@@ -69,7 +70,7 @@ class CandidateGenerator:
     ):
         """Used in `fit` and `from_disk` to initialize the CandidateGenerator with computed
         # TF-IDF Vectorizer and ANN Index
-        
+
         aliases (List[str]): Aliases with vectors contained in the ANN Index
         short_aliases (Set[str]): Aliases too short for a TF-IDF representation
         ann_index (FloatIndex): Computed ANN Index of TF-IDF representations for aliases
@@ -85,11 +86,11 @@ class CandidateGenerator:
     def fit(self, kb_aliases: List[str], verbose: bool = False):
         """Build tfidf vectorizer and ann index.
         Warning: Running this function can take a lot of memory
-        
+
         kb_aliases (List[str]): Aliases in the KnoweledgeBase to fit 
             the ANN index on.
         verbose (bool, optional): Set to True to get print updates while fitting the index. Defaults to False.
-        
+
         RETURNS (CandidateGenerator): An initialized CandidateGenerator
         """
         msg = Printer(no_print=verbose)
@@ -118,13 +119,14 @@ class CandidateGenerator:
 
         msg.text(f"Fitting tfidf vectorizer on {len(kb_aliases)} aliases")
         tfidf_vectorizer = TfidfVectorizer(
-            analyzer="char_wb", ngram_range=(2, 2), min_df=1, dtype=np.float32, binary=True
+            analyzer="char_wb", ngram_range=(1, 2), min_df=1, dtype=np.float32, binary=True, stop_words=stopwords+["是", "的", " ", "\t"]
         )
         start_time = timer()
         alias_tfidfs = tfidf_vectorizer.fit_transform(kb_aliases)
         end_time = timer()
         total_time = end_time - start_time
-        msg.text(f"Fitting and saving vectorizer took {round(total_time)} seconds")
+        msg.text(
+            f"Fitting and saving vectorizer took {round(total_time)} seconds")
 
         msg.text(f"Finding empty (all zeros) tfidf vectors")
         empty_tfidfs_boolean_flags = np.array(alias_tfidfs.sum(axis=1) != 0).reshape(
@@ -175,19 +177,23 @@ class CandidateGenerator:
         a list of list of neighbors. `len(neighbors)` equals the length of the non-empty vectors.
         - extend the list `neighbors` with `None`s in place of empty vectors.
         - return the extended list of neighbors and distances.
-        
+
         vectors (np.ndarray): Vectors used to query index for neighbors and distances
         k (int): k neighbors to consider
-        
+
         RETURNS (Tuple[np.ndarray, np.ndarray]): Tuple of [neighbors, distances]
         """
 
-        empty_vectors_boolean_flags = np.array(vectors.sum(axis=1) != 0).reshape(-1,)
-        empty_vectors_count = vectors.shape[0] - sum(empty_vectors_boolean_flags)
+        empty_vectors_boolean_flags = np.array(
+            vectors.sum(axis=1) != 0).reshape(-1,)
+        empty_vectors_count = vectors.shape[0] - \
+            sum(empty_vectors_boolean_flags)
 
         # init extended_neighbors with a list of Nones
-        extended_neighbors = np.empty((len(empty_vectors_boolean_flags),), dtype=object)
-        extended_distances = np.empty((len(empty_vectors_boolean_flags),), dtype=object)
+        extended_neighbors = np.empty(
+            (len(empty_vectors_boolean_flags),), dtype=object)
+        extended_distances = np.empty(
+            (len(empty_vectors_boolean_flags),), dtype=object)
 
         if vectors.shape[0] - empty_vectors_count == 0:
             return extended_neighbors, extended_distances
@@ -210,26 +216,29 @@ class CandidateGenerator:
         neighbors.append([])
         distances.append([])
         # interleave `neighbors` and Nones in `extended_neighbors`
-        extended_neighbors[empty_vectors_boolean_flags] = np.array(neighbors)[:-1]
-        extended_distances[empty_vectors_boolean_flags] = np.array(distances)[:-1]
+        extended_neighbors[empty_vectors_boolean_flags] = np.array(neighbors)[
+            :-1]
+        extended_distances[empty_vectors_boolean_flags] = np.array(distances)[
+            :-1]
 
         return extended_neighbors, extended_distances
 
     def require_ann_index(self):
         """Raise an error if the ann_index is not initialized
-        
+
         RAISES:
             ValueError: ann_index not initialized
         """
         #
         if getattr(self, "ann_index", None) in (None, True, False):
-            raise ValueError(f"ann_index not initialized. Have you run `cg.train` yet?")
+            raise ValueError(
+                f"ann_index not initialized. Have you run `cg.train` yet?")
 
     def __call__(self, mention_texts: List[str]) -> List[List[AliasCandidate]]:
         """Generate AliasCandidates for each mention in a batch of entity mentions.
-        
+
         mention_texts (List[str]): List of entity mentions to generate AliasCandidates for
-        
+
         RETURNS (List[List[AliasCandidate]]): List of AliasCandidates for each mention
         """
         self.require_ann_index()
@@ -255,7 +264,8 @@ class CandidateGenerator:
             mention_texts, batch_neighbors, batch_distances
         ):
             if mention in self.short_aliases:
-                batch_candidates.append([AliasCandidate(alias=mention, similarity=1.0)])
+                batch_candidates.append(
+                    [AliasCandidate(alias=mention, similarity=1.0)])
                 continue
             if neighbors is None:
                 neighbors = []
@@ -276,9 +286,9 @@ class CandidateGenerator:
 
     def from_disk(self, path: Path, **kwargs):
         """Deserialize CandidateGenerator data from disk
-        
+
         path (Path): Directory to deserialize data from
-        
+
         RETURNS (CandidateGenerator): Initialized Candidate Generator
         """
         aliases_path = f"{path}/aliases.json"
@@ -300,7 +310,8 @@ class CandidateGenerator:
         aliases = srsly.read_json(aliases_path)
         short_aliases = set(srsly.read_json(short_aliases_path))
         tfidf_vectorizer = joblib.load(tfidf_vectorizer_path)
-        alias_tfidfs = scipy.sparse.load_npz(tfidf_vectors_path).astype(np.float32)
+        alias_tfidfs = scipy.sparse.load_npz(
+            tfidf_vectors_path).astype(np.float32)
         ann_index = nmslib.init(
             method="hnsw",
             space="cosinesimil_sparse",
@@ -319,7 +330,7 @@ class CandidateGenerator:
 
     def to_disk(self, path: Path, **kwargs):
         """Serialize CandidateGenerator to disk
-        
+
         path (Path): Directory to serialize to
         """
         cfg = {

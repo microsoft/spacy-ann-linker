@@ -23,7 +23,8 @@ app = FastAPI(
     description="Remote Entity Linking with Approximate Nearest Neighbors index lookup for Aliases",
     openapi_prefix=openapi_prefix,
 )
-example_request = srsly.read_json(Path(__file__).parent / "example_request.json")
+example_request = srsly.read_json(
+    Path(__file__).parent / "example_request.json")
 
 
 security = APIKeyHeader(name="api-key")
@@ -62,7 +63,8 @@ async def link(
     res = LinkingResponse(documents=[])
     for doc in body.documents:
         spacy_doc = nlp.make_doc(doc.context)
-        spans = [spacy_doc.char_span(s.start_char, s.end_char, label=s.label,alignment_mode='contract') for s in doc.spans]
+        spans = [spacy_doc.char_span(
+            s.start_char, s.end_char, label=s.label, alignment_mode='contract') for s in doc.spans]
         spacy_doc.ents = [s for s in spans if s]
         ann_linker = nlp.get_pipe("ann_linker")
         ann_linker.cg.threshold = similarity_threshold
@@ -73,7 +75,8 @@ async def link(
             doc.spans[i].alias_candidates = ent._.alias_candidates
             doc.spans[i].kb_candidates = ent._.kb_candidates
 
-        print(doc)
-        res.documents.append(LinkingRecord(spans=doc.spans, context=doc.context))
+        # print(doc)
+        res.documents.append(LinkingRecord(
+            spans=doc.spans, context=doc.context))
 
     return res

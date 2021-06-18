@@ -1,6 +1,6 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
-
+import re
 from pathlib import Path
 from typing import Callable, List, Tuple
 
@@ -13,7 +13,7 @@ from spacy.language import Language
 from spacy.tokens import Doc, Span
 from spacy_ann.candidate_generator import CandidateGenerator
 from spacy_ann.types import KnowledgeBaseCandidate
-
+from spacy_ann.consts import stopwords
 
 
 @Language.factory(
@@ -56,16 +56,16 @@ class AnnLinker(Pipe):
     def from_nlp(cls, nlp, **cfg):
         """Used in spacy.language.Language when constructing this pipeline.
         Tells spaCy that this pipe requires the nlp object
-        
+
         nlp (Language): spaCy Language object
-        
+
         RETURNS (AnnLinker): Initialized AnnLinker.
         """
         return cls(nlp, **cfg)
 
-    def __init__(self, nlp, name = "entity_linker", threshold=0.7, no_description_threshold=0.95, disambiguate=True):
+    def __init__(self, nlp, name="entity_linker", threshold=0.7, no_description_threshold=0.95, disambiguate=True):
         """Initialize the AnnLinker
-        
+
         nlp (Language): spaCy Language object
         """
         Span.set_extension("alias_candidates", default=[], force=True)
@@ -84,27 +84,42 @@ class AnnLinker(Pipe):
     @property
     def aliases(self) -> List[str]:
         """Get all aliases
-        
+
         RETURNS (List[str]): List of aliases
         """
         return self.kb.get_alias_strings()
 
-    def set_span_text_callback(self, callback: Callable[[Span],str]):
-        self.span_text_get_func = callback
-
     def _get_span_text(self, span):
+        """ transform span text by delete redundency words
+
+        Args:
+            span ([type]): entity
+
+        Returns:
+            span text
+        """
         text = span.text
-        if hasattr(self, 'span_text_get_func'):
-            text = self.span_text_get_func(span) or text
-        return text
+
+        if len(text) > 3:
+            if span.label_ == 'ingredient':
+                exc_words = stopwords
+                text = re.sub('|'.join(exc_words), '', text)
+            elif span.label_ == 'brand' and '/' in text:
+                text = text.split('/')[0]
+            # replace GPE
+            doc = self.nlp.get_pipe('ner')(self.nlp.make_doc(span.text))
+            loc_ents = [ent for ent in doc.ents if ent.label_ == 'GPE']
+            for ent in loc_ents:
+                text = text.replace(ent.text, '')
+        return text.strip() or span.text
 
     def __call__(self, doc: Doc) -> Doc:
         """Annotate spaCy doc.ents with candidate info.
         If disambiguate is True, use entity vectors and doc context
         to pick the most likely Candidate
-        
+
         doc (Doc): spaCy Doc
-        
+
         RETURNS (Doc): spaCy Doc with updated annotations
         """
 
@@ -135,7 +150,8 @@ class AnnLinker(Pipe):
                 mentions_table.set(ent.text, alias_candidates[0].alias)
 
                 if self.disambiguate:
-                    kb_candidates = self.kb.get_alias_candidates(alias_candidates[0].alias)
+                    kb_candidates = self.kb.get_alias_candidates(
+                        alias_candidates[0].alias)
 
                     # create candidate matrix
                     entity_encodings = np.asarray(
@@ -162,21 +178,21 @@ class AnnLinker(Pipe):
 
     def set_kb(self, kb: KnowledgeBase):
         """Set the KnowledgeBase
-        
+
         kb (KnowledgeBase): spaCy KnowledgeBase
         """
         self.kb = kb
 
     def set_cg(self, cg: CandidateGenerator):
         """Set the CandidateGenerator
-        
+
         cg (CandidateGenerator): Initialized CandidateGenerator 
         """
         self.cg = cg
 
     def require_kb(self):
         """Raise an error if the kb is not set.
-        
+
         RAISES:
             ValueError: kb required
         """
@@ -185,18 +201,19 @@ class AnnLinker(Pipe):
 
     def require_cg(self):
         """Raise an error if the cg is not set.
-        
+
         RAISES:
             ValueError: cg required
         """
         if getattr(self, "cg", None) in (None, True, False):
-            raise ValueError(f"CandidateGenerator `cg` required for {self.name}")
+            raise ValueError(
+                f"CandidateGenerator `cg` required for {self.name}")
 
     def from_disk(self, path: Path, **kwargs):
         """Deserialize saved AnnLinker from disk.
-        
+
         path (Path): directory to deserialize from
-        
+
         RETURNS (AnnLinker): Initialized AnnLinker
         """
         path = util.ensure_path(path)
@@ -211,14 +228,15 @@ class AnnLinker(Pipe):
         cfg = srsly.read_json(path / "cfg")
 
         self.threshold = cfg.get("threshold", 0.7)
-        self.no_description_threshold = cfg.get("no_description_threshold", 0.95)
+        self.no_description_threshold = cfg.get(
+            "no_description_threshold", 0.95)
         self.disambiguate = cfg.get("disambiguate", True)
 
         return self
 
     def to_disk(self, path: Path, exclude: Tuple = tuple(), **kwargs):
         """Serialize AnnLinker to disk.
-        
+
         path (Path): directory to serialize to
         exclude (Tuple, optional): config to exclude. Defaults to tuple().
         """
