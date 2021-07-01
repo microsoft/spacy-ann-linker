@@ -2,6 +2,18 @@ import re
 from typing import Callable, List, Tuple
 from spacy.tokens import Doc, Span
 from spacy_ann.consts import stopwords
+import string
+
+def normalize_text(text):
+    # remove special characters
+    PUNCTABLE = str.maketrans("", "", string.punctuation)
+    ascii_punc_chars = dict(
+        [it for it in PUNCTABLE.items() if chr(it[0])])
+    text = text.translate(ascii_punc_chars)
+    # remove space if not english
+    if not all([c for c in text if ord(c)>127]):
+        text = text.replace(' ', '')
+    return text
 
 def get_spans(doc: Doc)-> List[Span]:
     """get all spans from doc"""
@@ -31,4 +43,5 @@ def get_span_text(nlp, span):
         loc_ents = [ent for ent in doc.ents if ent.label_ == 'GPE']
         for ent in loc_ents:
             text = text.replace(ent.text, '')
+        text = normalize_text(text)
     return text.strip() or span.text

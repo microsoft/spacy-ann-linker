@@ -80,16 +80,6 @@ class AnnLinker(Pipe):
         if not self.nlp.vocab.lookups.has_table("mentions_to_alias_cand"):
             self.nlp.vocab.lookups.add_table("mentions_to_alias_cand")
 
-    @property
-    def aliases(self) -> List[str]:
-        """Get all aliases
-
-        RETURNS (List[str]): List of aliases
-        """
-        return self.kb.get_alias_strings()
-
-
-
     def __call__(self, doc: Doc) -> Doc:
         """Annotate spaCy doc.ents with candidate info.
         If disambiguate is True, use entity vectors and doc context
