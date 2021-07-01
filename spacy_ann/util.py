@@ -17,7 +17,7 @@ def normalize_text(text):
 
 def get_spans(doc: Doc)-> List[Span]:
     """get all spans from doc"""
-    link_spans =doc.spans.get('annlink',[])
+    link_spans =list(doc.spans.get('annlink',[]))
     return list(doc.ents) + link_spans
 
 
