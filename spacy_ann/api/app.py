@@ -64,7 +64,7 @@ async def link(
     for doc in body.documents:
         spacy_doc = nlp.make_doc(doc.context)
         spans = [spacy_doc.char_span(
-            s.start_char, s.end_char, label=s.label, alignment_mode='contract') for s in doc.spans]
+            s.start, s.end, label=s.label, alignment_mode='contract') for s in doc.spans]
         spacy_doc.ents = [s for s in spans if s]
         ann_linker = nlp.get_pipe("ann_linker")
         ann_linker.cg.threshold = similarity_threshold

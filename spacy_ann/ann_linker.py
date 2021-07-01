@@ -1,6 +1,5 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
-import re
 from pathlib import Path
 from typing import Callable, List, Tuple
 
@@ -13,7 +12,7 @@ from spacy.language import Language
 from spacy.tokens import Doc, Span
 from spacy_ann.candidate_generator import CandidateGenerator
 from spacy_ann.types import KnowledgeBaseCandidate
-from spacy_ann.consts import stopwords
+from spacy_ann.util import get_spans, get_span_text
 
 
 @Language.factory(
@@ -89,29 +88,7 @@ class AnnLinker(Pipe):
         """
         return self.kb.get_alias_strings()
 
-    def _get_span_text(self, span):
-        """ transform span text by delete redundency words
 
-        Args:
-            span ([type]): entity
-
-        Returns:
-            span text
-        """
-        text = span.text
-
-        if len(text) > 3:
-            if span.label_ == 'ingredient':
-                exc_words = stopwords
-                text = re.sub('|'.join(exc_words), '', text)
-            elif span.label_ == 'brand' and '/' in text:
-                text = text.split('/')[0]
-            # replace GPE
-            doc = self.nlp.get_pipe('ner')(self.nlp.make_doc(span.text))
-            loc_ents = [ent for ent in doc.ents if ent.label_ == 'GPE']
-            for ent in loc_ents:
-                text = text.replace(ent.text, '')
-        return text.strip() or span.text
 
     def __call__(self, doc: Doc) -> Doc:
         """Annotate spaCy doc.ents with candidate info.
@@ -126,11 +103,11 @@ class AnnLinker(Pipe):
         self.require_kb()
         self.require_cg()
 
-        mentions = doc.ents
-        mention_strings = [self._get_span_text(e) for e in mentions]
+        mentions = get_spans(doc)
+        mention_strings = [get_span_text(self.nlp, e) for e in mentions]
         batch_candidates = self.cg(mention_strings)
 
-        for ent, alias_candidates in zip(doc.ents, batch_candidates):
+        for ent, alias_candidates in zip(mentions, batch_candidates):
             alias_candidates = [
                 ac for ac in alias_candidates if ac.similarity > self.threshold
             ]
