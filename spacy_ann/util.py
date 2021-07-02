@@ -11,7 +11,7 @@ def normalize_text(text):
         [it for it in PUNCTABLE.items() if chr(it[0])])
     text = text.translate(ascii_punc_chars)
     # remove space if not all english
-    if not all([c for c in text if ord(c)<127]):
+    if not all([c for c in text if ord(c)<128]):
         text = text.replace(' ', '')
     return text
 
