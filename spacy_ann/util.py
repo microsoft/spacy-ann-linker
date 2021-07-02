@@ -11,7 +11,7 @@ def normalize_text(text):
         [it for it in PUNCTABLE.items() if chr(it[0])])
     text = text.translate(ascii_punc_chars)
     # remove space if not all english
-    if not all([c for c in text if ord(c)<128]):
+    if not all([ord(c)<128 for c in text]):
         text = text.replace(' ', '')
     return text
 
@@ -43,5 +43,5 @@ def get_span_text(nlp, span):
         loc_ents = [ent for ent in doc.ents if ent.label_ == 'GPE']
         for ent in loc_ents:
             text = text.replace(ent.text, '')
-        text = normalize_text(text)
+    text = normalize_text(text)
     return text.strip() or span.text
