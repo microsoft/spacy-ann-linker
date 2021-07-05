@@ -3,6 +3,7 @@
 from pathlib import Path
 from typing import Callable, List, Tuple
 
+import itertools as it
 import numpy as np
 import srsly
 from spacy import util
@@ -21,6 +22,7 @@ from spacy_ann.util import get_spans, get_span_text
     default_config={
         'threshold': 0.7,
         'no_description_threshold': 0.5,
+        'enable_context_similarity': False,
         'disambiguate': True
     },
     default_score_weights={
@@ -35,13 +37,14 @@ def make_ann_linker(
     name: str,
     threshold: float,
     no_description_threshold: float,
+    enable_context_similarity: bool,
     disambiguate: bool
 ):
     return AnnLinker(
         nlp,
         name,
         threshold,
-        no_description_threshold,
+        enable_context_similarity,
         disambiguate
     )
 
@@ -62,7 +65,7 @@ class AnnLinker(Pipe):
         """
         return cls(nlp, **cfg)
 
-    def __init__(self, nlp, name="entity_linker", threshold=0.7, no_description_threshold=0.95, disambiguate=True):
+    def __init__(self, nlp, name="entity_linker", threshold=0.7, enable_context_similarity=False, disambiguate=True):
         """Initialize the AnnLinker
 
         nlp (Language): spaCy Language object
@@ -75,7 +78,7 @@ class AnnLinker(Pipe):
         self.kb = None
         self.cg = None
         self.threshold = threshold
-        self.no_description_threshold = no_description_threshold
+        self.enable_context_similarity = enable_context_similarity
         self.disambiguate = disambiguate
         if not self.nlp.vocab.lookups.has_table("mentions_to_alias_cand"):
             self.nlp.vocab.lookups.add_table("mentions_to_alias_cand")
@@ -101,11 +104,7 @@ class AnnLinker(Pipe):
             alias_candidates = [
                 ac for ac in alias_candidates if ac.similarity > self.threshold
             ]
-            [
-                ac
-                for ac in alias_candidates
-                if ac.similarity > self.no_description_threshold
-            ]
+
             ent._.alias_candidates = alias_candidates
 
             if len(alias_candidates) == 0:
@@ -117,29 +116,38 @@ class AnnLinker(Pipe):
                 mentions_table.set(ent.text, alias_candidates[0].alias)
 
                 if self.disambiguate:
-                    kb_candidates = self.kb.get_alias_candidates(
-                        alias_candidates[0].alias)
-
-                    # create candidate matrix
-                    entity_encodings = np.asarray(
-                        [c.entity_vector for c in kb_candidates]
-                    )
-                    candidate_norm = np.linalg.norm(entity_encodings, axis=1)
-
-                    sims = np.dot(entity_encodings, doc.vector.T) / (
-                        (candidate_norm * doc.vector_norm) + 1e-8
-                    )
-                    ent._.kb_candidates = [
-                        KnowledgeBaseCandidate(
-                            entity=cand.entity_, context_similarity=sim
-                        )
-                        for cand, sim in zip(kb_candidates, sims)
+                    # return all kb entities of candidates
+                    kb_candidates = [
+                        self.kb.get_alias_candidates(ac.alias)[0] for ac in alias_candidates
                     ]
+                    candicate_similarity =  [
+                        ac.similarity for ac in alias_candidates
+                    ]
+                    if self.enable_context_similarity:
+                        # create candidate matrix
+                        entity_encodings = np.asarray(
+                            [c.entity_vector for c in kb_candidates]
+                        )
+                        candidate_norm = np.linalg.norm(entity_encodings, axis=1)
+                        sims = np.dot(entity_encodings, doc.vector.T) / (
+                            (candidate_norm * doc.vector_norm) + 1e-8
+                        )
+                    else:
+                        sims = np.ones(len(kb_candidates))
+                    kb_candidates = [
+                        KnowledgeBaseCandidate(
+                            entity=cand.entity_, context_similarity=csim, alias_similarity= asim
+                        )
+                        for cand, csim,asim in zip(kb_candidates, sims, candicate_similarity)
+                    ]
+                    kb_candidates = sorted(kb_candidates, key=lambda x: x.alias_similarity*2+x.context_similarity, reverse=True)
+                    # sort by alias_similarity and context_similarity
+                    ent._.kb_candidates = kb_candidates
 
                     # TODO: Add thresholding here
-                    best_candidate = kb_candidates[np.argmax(sims)]
+                    best_candidate = kb_candidates[0]
                     for t in ent:
-                        t.ent_kb_id = best_candidate.entity
+                        t.ent_kb_id_ = best_candidate.entity
 
         return doc
 
@@ -195,8 +203,8 @@ class AnnLinker(Pipe):
         cfg = srsly.read_json(path / "cfg")
 
         self.threshold = cfg.get("threshold", 0.7)
-        self.no_description_threshold = cfg.get(
-            "no_description_threshold", 0.95)
+        self.enable_context_similarity = cfg.get(
+            "enable_context_similarity", False)
         self.disambiguate = cfg.get("disambiguate", True)
 
         return self
@@ -213,7 +221,7 @@ class AnnLinker(Pipe):
 
         cfg = {
             "threshold": self.threshold,
-            "no_description_threshold": self.no_description_threshold,
+            "enable_context_similarity": self.enable_context_similarity,
             "disambiguate": self.disambiguate,
         }
         srsly.write_json(path / "cfg", cfg)
