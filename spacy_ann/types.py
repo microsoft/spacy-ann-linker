@@ -15,5 +15,6 @@ class AliasCandidate(BaseModel):
 
 class KnowledgeBaseCandidate(BaseModel):
     entity: str
+    label: str
     context_similarity: float
     alias_similarity: float

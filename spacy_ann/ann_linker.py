@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # Licensed under the MIT License.
 from pathlib import Path
-from typing import Callable, List, Tuple
+from typing import Callable, List, Tuple, Dict
 
 import itertools as it
 import numpy as np
@@ -77,6 +77,7 @@ class AnnLinker(Pipe):
         self.name = name
         self.kb = None
         self.cg = None
+        self.ent_label_map = {}
         self.threshold = threshold
         self.enable_context_similarity = enable_context_similarity
         self.disambiguate = disambiguate
@@ -134,9 +135,11 @@ class AnnLinker(Pipe):
                         )
                     else:
                         sims = np.ones(len(kb_candidates))
+                    
                     kb_candidates = [
                         KnowledgeBaseCandidate(
-                            entity=cand.entity_, context_similarity=csim, alias_similarity= asim
+                            entity=cand.entity_, label = self.ent_label_map.get(cand.entity_),
+                            context_similarity=csim, alias_similarity= asim
                         )
                         for cand, csim,asim in zip(kb_candidates, sims, candicate_similarity)
                     ]
@@ -164,6 +167,9 @@ class AnnLinker(Pipe):
         cg (CandidateGenerator): Initialized CandidateGenerator 
         """
         self.cg = cg
+
+    def set_entity_lables(self, ent_label_map: Dict[str,str]):
+        self.ent_label_map = ent_label_map
 
     def require_kb(self):
         """Raise an error if the kb is not set.
@@ -206,7 +212,7 @@ class AnnLinker(Pipe):
         self.enable_context_similarity = cfg.get(
             "enable_context_similarity", False)
         self.disambiguate = cfg.get("disambiguate", True)
-
+        self.ent_label_map = srsly.read_json(path / "el")
         return self
 
     def to_disk(self, path: Path, exclude: Tuple = tuple(), **kwargs):
@@ -228,3 +234,4 @@ class AnnLinker(Pipe):
 
         self.kb.to_disk(path / "kb")
         self.cg.to_disk(path)
+        srsly.write_json(path / "el", self.ent_label_map)

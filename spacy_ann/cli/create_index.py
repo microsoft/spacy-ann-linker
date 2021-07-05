@@ -61,10 +61,13 @@ def create_index(
     # set up the data
     entity_ids = []
     descriptions = []
+    ent_label_map = {}
     freqs = []
     for e in entities:
         entity_ids.append(e["id"])
         descriptions.append(e.get("description", ""))
+        if e.get("label"):
+            ent_label_map[e["id"]]=e["label"]
         freqs.append(100)
 
     # msg.divider("Train EntityEncoder")
@@ -106,6 +109,7 @@ def create_index(
     ann_linker = nlp.add_pipe("ann_linker", last=True)
     ann_linker.set_kb(kb)
     ann_linker.set_cg(cg)
+    ann_linker.set_entity_lables(ent_label_map)
 
     nlp.meta["name"] = new_model_name
     nlp.to_disk(output_dir)
