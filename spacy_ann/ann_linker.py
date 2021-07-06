@@ -2,7 +2,7 @@
 # Licensed under the MIT License.
 from pathlib import Path
 from typing import Callable, List, Tuple, Dict
-
+import os.path as osp
 import itertools as it
 import numpy as np
 import srsly
@@ -138,7 +138,7 @@ class AnnLinker(Pipe):
                     
                     kb_candidates = [
                         KnowledgeBaseCandidate(
-                            entity=cand.entity_, label = self.ent_label_map.get(cand.entity_),
+                            entity=cand.entity_, label = self.ent_label_map.get(cand.entity_,''),
                             context_similarity=csim, alias_similarity= asim
                         )
                         for cand, csim,asim in zip(kb_candidates, sims, candicate_similarity)
@@ -212,7 +212,8 @@ class AnnLinker(Pipe):
         self.enable_context_similarity = cfg.get(
             "enable_context_similarity", False)
         self.disambiguate = cfg.get("disambiguate", True)
-        self.ent_label_map = srsly.read_json(path / "el")
+        if osp.exists(path / "el"):
+            self.ent_label_map = srsly.read_json(path / "el")
         return self
 
     def to_disk(self, path: Path, exclude: Tuple = tuple(), **kwargs):

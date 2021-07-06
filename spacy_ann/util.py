@@ -1,5 +1,6 @@
 import re
 from typing import Callable, List, Tuple
+import spacy
 from spacy.tokens import Doc, Span
 from spacy_ann.consts import stopwords
 import string
