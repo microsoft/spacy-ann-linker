@@ -124,7 +124,7 @@ class AnnLinker(Pipe):
                     candicate_similarity = [
                         ac.similarity for ac in alias_candidates
                     ]
-                    if self.enable_context_similarity:
+                    if self.enable_context_similarity and ent.vector.sum() > 0:
                         # create candidate matrix
                         entity_encodings = np.asarray(
                             [c.entity_vector for c in kb_candidates]
@@ -135,19 +135,27 @@ class AnnLinker(Pipe):
                             (candidate_norm * doc.vector_norm) + 1e-8
                         )
                     else:
-                        sims = np.ones(len(kb_candidates))
+                        sims = np.zeros(len(kb_candidates))
 
                     kb_candidates = [
                         KnowledgeBaseCandidate(
                             entity=cand.entity_, label=self.ent_label_map.get(
                                 cand.entity_, ''),
-                            context_similarity=csim, alias_similarity=asim
+                            similarity=max(
+                                csim, asim) if csim > 0 else asim,
+                            context_similarity=csim,
+                            alias_similarity=asim
                         )
                         for cand, csim, asim in zip(kb_candidates, sims, candicate_similarity)
                     ]
+                    # dedup by entity, keep max item for each entity
+                    kb_candidates = sorted(kb_candidates, key=lambda x: (
+                        x.entity, x.similarity), reverse=True)
+                    kb_candidates = [list(v)[0] for k, v in it.groupby(
+                        kb_candidates, key=lambda x: x.entity)]
+                    # sort by similarity
                     kb_candidates = sorted(
-                        kb_candidates, key=lambda x: x.alias_similarity*2 + x.context_similarity, reverse=True)
-                    # sort by alias_similarity and context_similarity
+                        kb_candidates, key=lambda x: x.similarity, reverse=True)
                     ent._.kb_candidates = kb_candidates
 
                     # TODO: Add thresholding here
@@ -167,7 +175,7 @@ class AnnLinker(Pipe):
     def set_cg(self, cg: CandidateGenerator):
         """Set the CandidateGenerator
 
-        cg (CandidateGenerator): Initialized CandidateGenerator 
+        cg (CandidateGenerator): Initialized CandidateGenerator
         """
         self.cg = cg
 
