@@ -118,9 +118,9 @@ class AnnLinker(Pipe):
 
                 if self.disambiguate:
                     # return all kb entities of candidates
-                    kb_candidates = [
-                        self.kb.get_alias_candidates(ac.alias)[0] for ac in alias_candidates
-                    ]
+                    kb_candidates = list(it.chain(*[
+                        self.kb.get_alias_candidates(ac.alias) for ac in alias_candidates
+                    ]))
                     candicate_similarity = [
                         ac.similarity for ac in alias_candidates
                     ]
