@@ -39,4 +39,5 @@ def trained_linker():
         )
     # if not TRAINED_LINKER:
     TRAINED_LINKER = spacy.load("examples/tutorial/models/ann_linker")
+
     return TRAINED_LINKER

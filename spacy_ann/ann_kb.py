@@ -10,7 +10,7 @@ import srsly
 from nmslib.dist import FloatIndex
 from sklearn.feature_extraction.text import TfidfVectorizer
 from spacy.kb import KnowledgeBase
-from spacy.util import ensure_path, from_disk, to_disk
+from spacy.util import ensure_path
 from spacy.vocab import Vocab
 from spacy_ann.types import AliasCandidate
 from wasabi import Printer
@@ -102,7 +102,8 @@ class AnnKnowledgeBase(KnowledgeBase):
         alias_tfidfs = tfidf_vectorizer.fit_transform(kb_aliases)
         end_time = timer()
         total_time = end_time - start_time
-        msg.text(f"Fitting and saving vectorizer took {round(total_time)} seconds")
+        msg.text(
+            f"Fitting and saving vectorizer took {round(total_time)} seconds")
 
         msg.text(f"Finding empty (all zeros) tfidf vectors")
         empty_tfidfs_boolean_flags = np.array(alias_tfidfs.sum(axis=1) != 0).reshape(
@@ -160,12 +161,16 @@ class AnnKnowledgeBase(KnowledgeBase):
         RETURNS (Tuple[np.ndarray, np.ndarray]): Tuple of [neighbors, distances]
         """
 
-        empty_vectors_boolean_flags = np.array(vectors.sum(axis=1) != 0).reshape(-1,)
-        empty_vectors_count = vectors.shape[0] - sum(empty_vectors_boolean_flags)
+        empty_vectors_boolean_flags = np.array(
+            vectors.sum(axis=1) != 0).reshape(-1,)
+        empty_vectors_count = vectors.shape[0] - \
+            sum(empty_vectors_boolean_flags)
 
         # init extended_neighbors with a list of Nones
-        extended_neighbors = np.empty((len(empty_vectors_boolean_flags),), dtype=object)
-        extended_distances = np.empty((len(empty_vectors_boolean_flags),), dtype=object)
+        extended_neighbors = np.empty(
+            (len(empty_vectors_boolean_flags),), dtype=object)
+        extended_distances = np.empty(
+            (len(empty_vectors_boolean_flags),), dtype=object)
 
         if vectors.shape[0] - empty_vectors_count == 0:
             return extended_neighbors, extended_distances
@@ -188,8 +193,10 @@ class AnnKnowledgeBase(KnowledgeBase):
         neighbors.append([])
         distances.append([])
         # interleave `neighbors` and Nones in `extended_neighbors`
-        extended_neighbors[empty_vectors_boolean_flags] = np.array(neighbors, dtype=object)[:-1]
-        extended_distances[empty_vectors_boolean_flags] = np.array(distances, dtype=object)[:-1]
+        extended_neighbors[empty_vectors_boolean_flags] = np.array(
+            neighbors, dtype=object)[:-1]
+        extended_distances[empty_vectors_boolean_flags] = np.array(
+            distances, dtype=object)[:-1]
 
         return extended_neighbors, extended_distances
 
@@ -200,7 +207,8 @@ class AnnKnowledgeBase(KnowledgeBase):
             ValueError: ann_index not initialized
         """
         if self.ann_index is None:
-            raise ValueError(f"ann_index not initialized. Have you run `cg.train` yet?")
+            raise ValueError(
+                f"ann_index not initialized. Have you run `cg.train` yet?")
 
     def get_alias_candidates(self, mention_texts: List[str]):
         self.require_ann_index()
@@ -222,7 +230,8 @@ class AnnKnowledgeBase(KnowledgeBase):
             mention_texts, batch_neighbors, batch_distances
         ):
             if mention in self.short_aliases:
-                batch_candidates.append([AliasCandidate(alias=mention, similarity=1.0)])
+                batch_candidates.append(
+                    [AliasCandidate(alias=mention, similarity=1.0)])
                 continue
             if neighbors is None:
                 neighbors = []
@@ -258,7 +267,7 @@ class AnnKnowledgeBase(KnowledgeBase):
                 candidates = []
         return candidates
 
-    def dump(self, path: Path):
+    def to_disk(self, path: Path):
         path = ensure_path(path)
 
         super().to_disk(str(path / "kb"))
@@ -284,7 +293,8 @@ class AnnKnowledgeBase(KnowledgeBase):
 
         self.ann_index.saveIndex(str(ann_index_path))
         joblib.dump(self.vectorizer, tfidf_vectorizer_path)
-        scipy.sparse.save_npz(tfidf_vectors_path, self.alias_tfidfs.astype(np.float16))
+        scipy.sparse.save_npz(tfidf_vectors_path,
+                              self.alias_tfidfs.astype(np.float16))
 
     def from_disk(self, path: Path):
         path = ensure_path(path)
@@ -308,7 +318,8 @@ class AnnKnowledgeBase(KnowledgeBase):
         aliases = srsly.read_json(aliases_path)
         short_aliases = set(srsly.read_json(short_aliases_path))
         tfidf_vectorizer = joblib.load(tfidf_vectorizer_path)
-        alias_tfidfs = scipy.sparse.load_npz(tfidf_vectors_path).astype(np.float32)
+        alias_tfidfs = scipy.sparse.load_npz(
+            tfidf_vectors_path).astype(np.float32)
         ann_index = nmslib.init(
             method="hnsw",
             space="cosinesimil_sparse",

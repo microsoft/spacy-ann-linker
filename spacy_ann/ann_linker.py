@@ -117,17 +117,21 @@ class AnnLinker(Pipe):
                 mentions_table.set(ent.text, alias_candidates[0].alias)
 
                 if self.disambiguate:
-                    # return all kb entities of candidates
-                    kb_candidates = list(it.chain(*[
+                    # return all kb entities of each candidate
+                    alias_kb_lst = [
                         self.kb.get_alias_candidates(ac.alias) for ac in alias_candidates
-                    ]))
+                    ]
+                    # flatten to list of candidates
+                    kba_candidates = list(it.chain(*alias_kb_lst))
+                    kba_alias_idx = list(
+                        it.chain(*[[i] * len(items) for i, items in enumerate(alias_kb_lst)]))
                     candicate_similarity = [
                         ac.similarity for ac in alias_candidates
                     ]
-                    if self.enable_context_similarity and ent.vector.sum() > 0:
+                    if self.enable_context_similarity and ent.vector.sum() != 0:
                         # create candidate matrix
                         entity_encodings = np.asarray(
-                            [c.entity_vector for c in kb_candidates]
+                            [c.entity_vector for c in kba_candidates]
                         )
                         candidate_norm = np.linalg.norm(
                             entity_encodings, axis=1)
@@ -135,19 +139,20 @@ class AnnLinker(Pipe):
                             (candidate_norm * doc.vector_norm) + 1e-8
                         )
                     else:
-                        sims = np.zeros(len(kb_candidates))
+                        sims = np.zeros(len(kba_candidates))
 
-                    kb_candidates = [
-                        KnowledgeBaseCandidate(
-                            entity=cand.entity_, label=self.ent_label_map.get(
-                                cand.entity_, ''),
-                            similarity=max(
-                                csim, asim) if csim > 0 else asim,
-                            context_similarity=csim,
-                            alias_similarity=asim
+                    kb_candidates = []
+                    for cand, alias_idx, csim in zip(kba_candidates, kba_alias_idx, sims):
+                        asim = candicate_similarity[alias_idx]
+                        kb_candidates.append(
+                            KnowledgeBaseCandidate(
+                                entity=cand.entity_, label=self.ent_label_map.get(
+                                    cand.entity_, ''),
+                                similarity=csim if self.enable_context_similarity and csim > 0 else asim,
+                                context_similarity=csim,
+                                alias_similarity=asim
+                            )
                         )
-                        for cand, csim, asim in zip(kb_candidates, sims, candicate_similarity)
-                    ]
                     # dedup by entity, keep max item for each entity
                     kb_candidates = sorted(kb_candidates, key=lambda x: (
                         x.entity, x.similarity), reverse=True)

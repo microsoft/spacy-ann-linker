@@ -4,6 +4,8 @@
 
 def test_ann_linker(trained_linker):
     nlp = trained_linker
+    ann_linker = nlp.get_pipe('ann_linker')
+    ann_linker.enable_context_similarity = True
     ruler = nlp.add_pipe("entity_ruler", before="ann_linker")
     patterns = [
         {"label": "SKILL", "pattern": alias}
