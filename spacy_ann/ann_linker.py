@@ -155,9 +155,9 @@ class AnnLinker(Pipe):
                         )
                     # dedup by entity, keep max item for each entity
                     kb_candidates = sorted(kb_candidates, key=lambda x: (
-                        x.entity, x.similarity), reverse=True)
+                        x.label, x.similarity), reverse=True)
                     kb_candidates = [list(v)[0] for k, v in it.groupby(
-                        kb_candidates, key=lambda x: x.entity)]
+                        kb_candidates, key=lambda x: x.label)]
                     # sort by similarity
                     kb_candidates = sorted(
                         kb_candidates, key=lambda x: x.similarity, reverse=True)
