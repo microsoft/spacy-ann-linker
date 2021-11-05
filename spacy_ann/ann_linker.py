@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import Callable, List, Tuple, Dict
 import os.path as osp
 import itertools as it
+import cupy
 import numpy as np
 import srsly
 from spacy import util
@@ -128,14 +129,15 @@ class AnnLinker(Pipe):
                     candicate_similarity = [
                         ac.similarity for ac in alias_candidates
                     ]
-                    if self.enable_context_similarity and ent.vector.sum() != 0:
+                    if self.enable_context_similarity and ent.has_vector:
                         # create candidate matrix
                         entity_encodings = np.asarray(
                             [c.entity_vector for c in kba_candidates]
                         )
+                        doc_vector = doc.vector.T.get() if type(doc.vector) == cupy.ndarray else doc.vector.T
                         candidate_norm = np.linalg.norm(
                             entity_encodings, axis=1)
-                        sims = np.dot(entity_encodings, doc.vector.T) / (
+                        sims = np.dot(entity_encodings, doc_vector) / (
                             (candidate_norm * doc.vector_norm) + 1e-8
                         )
                     else:
@@ -157,7 +159,7 @@ class AnnLinker(Pipe):
                     kb_candidates = sorted(kb_candidates, key=lambda x: (
                         x.label, x.similarity), reverse=True)
                     kb_candidates = [list(v)[0] for k, v in it.groupby(
-                        kb_candidates, key=lambda x: x.label)]
+                        kb_candidates, key=lambda x: x.entity)]
                     # sort by similarity
                     kb_candidates = sorted(
                         kb_candidates, key=lambda x: x.similarity, reverse=True)
