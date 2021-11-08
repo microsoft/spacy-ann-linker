@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import Callable, List, Tuple, Dict
 import os.path as osp
 import itertools as it
-import cupy
 import numpy as np
 import srsly
 from spacy import util
@@ -134,7 +133,7 @@ class AnnLinker(Pipe):
                         entity_encodings = np.asarray(
                             [c.entity_vector for c in kba_candidates]
                         )
-                        doc_vector = doc.vector.T.get() if type(doc.vector) == cupy.ndarray else doc.vector.T
+                        doc_vector = doc.vector.T.get() if str(type(doc.vector)).count('cupy') else doc.vector.T
                         candidate_norm = np.linalg.norm(
                             entity_encodings, axis=1)
                         sims = np.dot(entity_encodings, doc_vector) / (
