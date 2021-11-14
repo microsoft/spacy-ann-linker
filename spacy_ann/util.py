@@ -41,13 +41,13 @@ def get_span_text(nlp, span):
         if span.label_ in ('ingredient', 'sensorial', 'flavor', 'fragrance'):
             exc_words = stopwords
             text = re.sub('|'.join(exc_words), '', text)
+            # replace GPE
+            if len(text) > 3:
+                doc = nlp.get_pipe('ner')(nlp.make_doc(span.text))
+                loc_ents = [ent for ent in doc.ents if ent.label_ in ('ORG', 'GPE')]
+                for ent in loc_ents:
+                    text = text.replace(ent.text, '')
         elif span.label_ == 'brand' and '/' in text:
             text = text.split('/')[0]
-        # replace GPE
-        if len(text) > 3:
-            doc = nlp.get_pipe('ner')(nlp.make_doc(span.text))
-            loc_ents = [ent for ent in doc.ents if ent.label_ == 'GPE']
-            for ent in loc_ents:
-                text = text.replace(ent.text, '')
     text = normalize_text(text)
     return text.strip() or span.text
