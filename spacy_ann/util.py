@@ -8,7 +8,7 @@ import string
 
 def normalize_text(text):
     # remove special characters
-    PUNCTABLE = str.maketrans("", "", string.punctuation)
+    PUNCTABLE = str.maketrans("", "", '!"#$\()*+,:;<=>?@[\\]^_`{|}~')
     ascii_punc_chars = dict(
         [it for it in PUNCTABLE.items() if chr(it[0])])
     text = text.translate(ascii_punc_chars)
@@ -51,3 +51,5 @@ def get_span_text(nlp, span):
             text = text.split('/')[0]
     text = normalize_text(text)
     return text.strip() or span.text
+
+
