@@ -7,16 +7,29 @@ from typing import Any, Dict, Generator, List, Tuple
 import requests
 import srsly
 from requests import HTTPError
-from spacy.language import component
+from spacy.language import Language
 from spacy.tokens import Doc, Span
 from spacy.util import ensure_path, from_disk, minibatch, to_disk
+from typing import List, Tuple, Dict, Any, Optional
 
 
-@component(
+@Language.factory(
     "remote_ann_linker",
     requires=["doc.ents", "doc.sents", "token.ent_iob", "token.ent_type"],
     assigns=["span._.kb_alias"],
 )
+def make_remote_ann_linker(
+    nlp: Language,
+    name: str = 'remote_ann_linker', 
+    cfg: Optional[Dict[str, Any]] = dict(),
+):
+    """Construct an ANNLinker component.
+    """
+    return RemoteAnnLinker(
+        nlp, name, cfg
+    )
+
+
 class RemoteAnnLinker:
     """The RemoteAnnLinker interfaces with a Remote Server to handle 
     Entity Linking when the KnowledgeBase and ANN Index cannot be in memory.
@@ -33,7 +46,10 @@ class RemoteAnnLinker:
         """
         return cls(nlp, **cfg)
 
-    def __init__(self, nlp, **cfg):
+    def __init__(self, 
+                 nlp: Language, 
+                 name: str = 'remote_ann_linker', 
+                 cfg: Optional[Dict[str, Any]] = dict()):
         """Initialize the RemoteAnnLinker
         
         nlp (Language): spaCy Language object
@@ -41,6 +57,7 @@ class RemoteAnnLinker:
         Span.set_extension("kb_alias", default="", force=True)
 
         self.nlp = nlp
+        self.name = name
         self.cfg = dict(cfg)
         self.base_url = cfg.get("base_url")
         self.headers = cfg.get("headers", {})
