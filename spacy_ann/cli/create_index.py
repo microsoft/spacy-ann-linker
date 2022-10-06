@@ -103,12 +103,16 @@ def create_index(
 
     cg = CandidateGenerator().fit(kb.get_alias_strings(), verbose=True)
 
-    ann_linker = nlp.create_pipe("ann_linker")
+    # ann_linker = nlp.create_pipe("ann_linker")
+    # ann_linker.set_kb(kb)
+    # ann_linker.set_cg(cg)    
+    # nlp.add_pipe(ann_linker, last=True)
+    
+    # You can then run `nlp.add_pipe('your_name')` to add it to the pipeline.
+    ann_linker = nlp.add_pipe('ann_linker', last=True)
     ann_linker.set_kb(kb)
     ann_linker.set_cg(cg)
-
-    nlp.add_pipe(ann_linker, last=True)
-
+    
     nlp.meta["name"] = new_model_name
     nlp.to_disk(output_dir)
     nlp.from_disk(output_dir)

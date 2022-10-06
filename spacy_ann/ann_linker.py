@@ -2,23 +2,35 @@
 # Licensed under the MIT License.
 
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Tuple, Dict, Any, Optional
 
 import numpy as np
 import srsly
 from spacy import util
 from spacy.kb import KnowledgeBase
-from spacy.language import component
+from spacy.language import Language
 from spacy.tokens import Doc, Span
 from spacy_ann.candidate_generator import CandidateGenerator
 from spacy_ann.types import KnowledgeBaseCandidate
 
 
-@component(
+@Language.factory(
     "ann_linker",
     requires=["doc.ents", "doc.sents", "token.ent_iob", "token.ent_type"],
     assigns=["span._.kb_alias"],
 )
+def make_ann_linker(
+    nlp: Language,
+    name: str = "ann_linker",
+    cfg: Optional[Dict[str, Any]] = dict(),
+):
+    """Construct an ANNLinker component.
+    """
+    return AnnLinker(
+        nlp, name, cfg
+    )
+
+
 class AnnLinker:
     """The AnnLinker adds Entity Linking capabilities
     to map NER mentions to KnowledgeBase Aliases or directly to KnowledgeBase Ids
@@ -35,7 +47,10 @@ class AnnLinker:
         """
         return cls(nlp, **cfg)
 
-    def __init__(self, nlp, **cfg):
+    def __init__(self, 
+                 nlp: Language, 
+                 name: str = "ann_linker",
+                 cfg: Optional[Dict[str, Any]] = dict()):
         """Initialize the AnnLinker
         
         nlp (Language): spaCy Language object
@@ -44,6 +59,7 @@ class AnnLinker:
         Span.set_extension("kb_candidates", default=[], force=True)
 
         self.nlp = nlp
+        self.name = name
         self.kb = None
         self.cg = None
         self.threshold = cfg.get("threshold", 0.7)
@@ -97,7 +113,7 @@ class AnnLinker:
                 mentions_table.set(ent.text, alias_candidates[0].alias)
 
                 if self.disambiguate:
-                    kb_candidates = self.kb.get_candidates(alias_candidates[0].alias)
+                    kb_candidates = self.kb.get_alias_candidates(alias_candidates[0].alias)
 
                     # create candidate matrix
                     entity_encodings = np.asarray(
@@ -164,7 +180,7 @@ class AnnLinker:
         path = util.ensure_path(path)
 
         kb = KnowledgeBase(self.nlp.vocab, 300)
-        kb.load_bulk(path / "kb")
+        kb.from_disk(path / "kb")
         self.set_kb(kb)
 
         cg = CandidateGenerator().from_disk(path)
@@ -194,6 +210,6 @@ class AnnLinker:
             "disambiguate": self.disambiguate,
         }
         srsly.write_json(path / "cfg", cfg)
-
-        self.kb.dump(path / "kb")
+        
+        self.kb.to_disk(path / "kb")
         self.cg.to_disk(path)
